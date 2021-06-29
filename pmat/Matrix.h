@@ -1,0 +1,54 @@
+#pragma once
+#include <stdexcept>
+#include <cmath>
+#include<random>
+#include "Messages.h"
+#include "utils.h"
+#include "Vector.h"
+
+class Matrix
+{
+
+
+protected:
+	double** _matrix = NULL;
+	unsigned int _rowSize = 0, _columnSize = 0;
+
+	Matrix() {};
+	void validadeIndex(const unsigned int& rowIndex, const unsigned int& columnIndex) const;
+	void validateOperands(const Matrix& matrix) const;
+	void validadeResponse(Matrix& resp) const;
+	void validadeOperandMult(const Matrix& matrix) const;
+	void validadeResponseMult(const Matrix& matrix, const Matrix& resp) const;
+	void validadeVectorMult(const Vector& vector) const;
+	void validadeVectorRespMult(Vector& resp) const;
+
+public:
+	Matrix(const unsigned int& rowSize, const unsigned int& columnSize);
+	Matrix(const Matrix& matrix);
+	virtual ~Matrix();
+	virtual const double& operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const;
+	virtual void setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex);
+	inline virtual const unsigned int& getRowSize(void) const { return _rowSize; };
+	inline virtual const unsigned int& getColumnSize(void) const { return _columnSize; };
+	virtual Matrix& operator=(const Matrix& matrix);
+	virtual bool operator==(const Matrix& matrix) const;
+	double dotProduct(const Matrix& matrix) const;
+	void plus(const Matrix& matrix, Matrix& resp) const;
+	Matrix operator+(const Matrix& matrix) const;
+	virtual void addBy(const Matrix& matrix);
+	void minus(const Matrix& matrix, Matrix& resp) const;
+	Matrix operator-(const Matrix& matrix) const;
+	virtual void subtractBy(const Matrix& matrix);
+	void times(const Matrix& matrix, Matrix& resp) const;
+	Matrix operator*(const Matrix& matrix) const;
+	void times(const Vector& vector, Vector& resp) const;
+	Vector operator*(const Vector& vector) const;
+	void times(const double& scalar, Matrix& resp) const;
+	Matrix operator*(const double& scalar) const;
+	virtual void multiplyBy(const double& scalar);
+	virtual double frobeniusNorm() const;
+	virtual void fillRandomly(const double& min, const double& max);
+
+};
+
