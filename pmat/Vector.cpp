@@ -16,6 +16,12 @@ Vector::Vector(const Vector& vector)
 		_vector[i] = vector(i);
 }
 
+Vector::Vector(Vector&& vector) noexcept
+{
+	_size = vector.getSize();
+	_vector = std::exchange(vector._vector, nullptr);
+}
+
 Vector::~Vector()
 {
 	delete[] _vector;

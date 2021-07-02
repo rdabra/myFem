@@ -13,6 +13,7 @@ private:
 public:
 	Vector(unsigned int size);
 	Vector(const Vector& vector);
+	Vector(Vector&& vector) noexcept;
 	virtual ~Vector();
 	const double& operator()(const unsigned int& index) const;
 	void setValue(const double& coef, const unsigned int& index);
