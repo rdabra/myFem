@@ -21,6 +21,7 @@ MatrixDiagonal::MatrixDiagonal(const MatrixDiagonal& matrix)
 	}
 }
 
+
 void MatrixDiagonal::setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex)
 {
 	Matrix::validadeIndex(rowIndex, columnIndex);

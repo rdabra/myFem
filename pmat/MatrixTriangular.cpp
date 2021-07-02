@@ -56,14 +56,13 @@ void MatrixTriangular::setValue(const double& value, const unsigned int& rowInde
 
 MatrixTriangular& MatrixTriangular::operator=(const MatrixTriangular& matrix)
 {
-	if (_isLower != matrix.isLower())
-		throw std::out_of_range(messages::NONCOMPT_ARG);
 
 	for (unsigned int i = 0; i < _rowSize; i++)
 		delete[] _matrix[i];
 	delete[] _matrix;
 	_rowSize = matrix.getSize();
 	_columnSize = matrix.getSize();
+	_isLower = matrix.isLower();
 	_matrix = new double* [_rowSize];
 	for (unsigned int i = 0; i < _rowSize; i++) {
 		_matrix[i] = new double[i + (int64_t)1];
@@ -74,6 +73,19 @@ MatrixTriangular& MatrixTriangular::operator=(const MatrixTriangular& matrix)
 			for (unsigned int j = i; j < _rowSize; j++)
 				_matrix[j][i] = matrix(i, j);
 	}
+	return (*this);
+}
+
+MatrixTriangular& MatrixTriangular::operator=(MatrixTriangular&& matrix) noexcept
+{
+	for (unsigned int i = 0; i < _rowSize; i++)
+		delete[] _matrix[i];
+	delete[] _matrix;
+	_rowSize = matrix.getSize();
+	_columnSize = matrix.getSize();
+	_isLower = matrix.isLower();
+	_matrix = std::exchange(matrix._matrix, nullptr);
+
 	return (*this);
 }
 

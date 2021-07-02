@@ -119,7 +119,7 @@ TEST(TestMatrix, TestPlus) {
 
 	Matrix x1(4, 3);
 	z.plus(v, x1);
-	Matrix& x2 = z + v;
+	Matrix x2(z + v);
 	z.addBy(v);
 
 	EXPECT_TRUE(resp == x1);
@@ -173,7 +173,7 @@ TEST(TestMatrix, TestMinus) {
 
 	Matrix x1(4, 3);
 	z.minus(v, x1);
-	Matrix& x2 = z - v;
+	Matrix x2(z - v);
 	z.subtractBy(v);
 
 	EXPECT_TRUE(resp == x1);
@@ -249,11 +249,11 @@ TEST(TestMatrix, TestTimes) {
 
 	Matrix x1(4, 4);
 	z.times(v, x1);
-	Matrix& x2 = z * v;
+	Matrix x2(z * v);
 
 	Matrix x3(4, 3);
 	z.times(2.0, x3);
-	Matrix& x4 = z * 2.0;
+	Matrix x4(z * 2.0);
 	z.multiplyBy(2.0);
 
 	EXPECT_TRUE(resp == x1);

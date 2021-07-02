@@ -9,8 +9,8 @@ private:
 	Matrix* _matP = NULL;
 	Matrix* _matL = NULL;
 	Matrix* _matU = NULL;
-	bool _calcLU = false;
-	bool _createLU = false;
+	bool _calcLU{ false };
+	bool _createLU{ false };
 	void fillLU();
 
 protected:
@@ -20,6 +20,7 @@ protected:
 public:
 	MatrixSquare(const unsigned int& size) : Matrix(size, size) {};
 	MatrixSquare(const MatrixSquare& matrix) : Matrix(matrix) {};
+	MatrixSquare(MatrixSquare&& matrix) noexcept : Matrix(matrix) {} ;
 	virtual ~MatrixSquare();
 	inline const unsigned int& getSize() const { return this->getRowSize(); };
 	virtual void setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex);

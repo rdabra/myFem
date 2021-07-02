@@ -15,8 +15,8 @@ Matrix::Matrix(const unsigned int& rowSize, const unsigned int& columnSize)
 
 Matrix::Matrix(const Matrix& matrix)
 {
-	_rowSize = matrix.getRowSize();
-	_columnSize = matrix.getColumnSize();
+	_rowSize = matrix._rowSize;
+	_columnSize = matrix._columnSize;
 	_matrix = new double* [_rowSize];
 
 	for (unsigned int i = 0; i < _rowSize; i++) {
@@ -26,11 +26,20 @@ Matrix::Matrix(const Matrix& matrix)
 	}
 }
 
+Matrix::Matrix(Matrix&& matrix) noexcept
+{
+	_rowSize = matrix._rowSize;
+	_columnSize = matrix._columnSize;
+	_matrix = std::exchange(matrix._matrix, nullptr);
+}
+
 Matrix::~Matrix()
 {
-	for (unsigned int i = 0; i < _rowSize; i++)
-		delete[] _matrix[i];
-	delete[] _matrix;
+	if (_matrix != nullptr) {
+		for (unsigned int i = 0; i < _rowSize; i++)
+			delete[] _matrix[i];
+		delete[] _matrix;
+	}
 }
 
 const double& Matrix::operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const
@@ -61,6 +70,19 @@ Matrix& Matrix::operator=(const Matrix& matrix)
 		for (unsigned int j = 0; j < _columnSize; j++)
 			_matrix[i][j] = matrix(i, j);
 	}
+
+	return (*this);
+}
+
+Matrix& Matrix::operator=(Matrix&& matrix) noexcept
+{
+	for (unsigned int i = 0; i < _rowSize; i++)
+		delete[] _matrix[i];
+	delete[] _matrix;
+
+	_rowSize = matrix.getRowSize();
+	_columnSize = matrix.getColumnSize();
+	_matrix = std::exchange(matrix._matrix, nullptr);
 
 	return (*this);
 }
@@ -162,7 +184,7 @@ void Matrix::times(const Matrix& matrix, Matrix& resp) const
 		for (unsigned int j = 0; j < matrix.getColumnSize(); j++)
 		{
 			double aux = 0.0;
-			for (unsigned int k = 0; k < this->getColumnSize(); k++) 
+			for (unsigned int k = 0; k < this->getColumnSize(); k++)
 				aux += (*this)(i, k) * matrix(k, j);
 			resp.setValue(aux, i, j);
 		}
@@ -189,7 +211,7 @@ void Matrix::times(const Vector& vector, Vector& resp) const
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
 	{
 		double aux = 0.0;
-		for (unsigned int k = 0; k < this->getColumnSize(); k++) 
+		for (unsigned int k = 0; k < this->getColumnSize(); k++)
 			aux += (*this)(i, k) * vector(k);
 		resp.setValue(aux, i);
 	}
@@ -209,7 +231,7 @@ void Matrix::times(const double& scalar, Matrix& resp) const
 {
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
 		for (unsigned int j = 0; j < this->getColumnSize(); j++)
-			resp.setValue((*this)(i,j) * scalar, i, j);
+			resp.setValue((*this)(i, j) * scalar, i, j);
 }
 
 

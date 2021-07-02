@@ -50,6 +50,16 @@ Vector& Vector::operator=(const Vector& vector)
 	return (*this);
 }
 
+Vector& Vector::operator=(Vector&& vector) noexcept
+{
+	_size = vector._size;
+	delete[] _vector;
+	_vector = std::exchange(vector._vector, nullptr);
+
+	return (*this);
+}
+
+
 bool Vector::operator==(const Vector& vector) const
 {
 	bool resp = _size == vector.getSize();

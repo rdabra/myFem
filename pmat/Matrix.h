@@ -11,9 +11,8 @@ class Matrix
 
 
 protected:
-	double** _matrix = NULL;
-	unsigned int _rowSize = 0, _columnSize = 0;
-
+	double** _matrix{ nullptr };
+	unsigned int _rowSize{ 0 }, _columnSize{ 0 };
 	Matrix() {};
 	void validadeIndex(const unsigned int& rowIndex, const unsigned int& columnIndex) const;
 	void validateOperands(const Matrix& matrix) const;
@@ -26,12 +25,14 @@ protected:
 public:
 	Matrix(const unsigned int& rowSize, const unsigned int& columnSize);
 	Matrix(const Matrix& matrix);
+	Matrix(Matrix&& matrix) noexcept;
 	virtual ~Matrix();
 	virtual const double& operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const;
 	virtual void setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex);
 	inline virtual const unsigned int& getRowSize(void) const { return _rowSize; };
 	inline virtual const unsigned int& getColumnSize(void) const { return _columnSize; };
 	virtual Matrix& operator=(const Matrix& matrix);
+	virtual Matrix& operator=(Matrix&& matrix) noexcept;
 	virtual bool operator==(const Matrix& matrix) const;
 	double dotProduct(const Matrix& matrix) const;
 	void plus(const Matrix& matrix, Matrix& resp) const;
