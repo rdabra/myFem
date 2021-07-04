@@ -48,6 +48,7 @@ public:
 	void times(const double& scalar, Matrix& resp) const;
 	Matrix operator*(const double& scalar) const;
 	virtual void multiplyBy(const double& scalar);
+//	virtual void transpose();
 	virtual double frobeniusNorm() const;
 	virtual void fillRandomly(const double& min, const double& max);
 

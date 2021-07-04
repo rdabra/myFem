@@ -54,3 +54,123 @@ MatrixDiagonal& MatrixDiagonal::operator=(const MatrixDiagonal& matrix)
 
 	return (*this);
 }
+
+double MatrixDiagonal::dotProduct(const Matrix& matrix) const
+{
+	this->validateOperands(matrix);
+
+	double resp = 0.0;
+	for (unsigned int i = 0; i < this->getRowSize(); i++)
+		resp += (*this)(i, i) * matrix(i, i);
+
+	return resp;
+}
+
+void MatrixDiagonal::plus(const MatrixDiagonal& matrix, MatrixDiagonal& resp) const
+{
+	this->validateOperands(matrix);
+	this->validadeResponse(resp);
+
+	for (unsigned int i = 0; i < this->getRowSize(); i++)
+		resp.setValue((*this)(i, i) + matrix(i, i), i, i);
+
+}
+
+void MatrixDiagonal::addBy(const MatrixDiagonal& matrix)
+{
+	this->validateOperands(matrix);
+
+	for (unsigned int i = 0; i < this->getRowSize(); i++)
+		this->setValue((*this)(i, i) + matrix(i, i), i, i);
+
+}
+
+void MatrixDiagonal::minus(const MatrixDiagonal& matrix, MatrixDiagonal& resp) const
+{
+	this->validateOperands(matrix);
+	this->validadeResponse(resp);
+
+	for (unsigned int i = 0; i < this->getRowSize(); i++)
+		resp.setValue((*this)(i, i) - matrix(i, i), i, i);
+
+}
+
+void MatrixDiagonal::subtractBy(const MatrixDiagonal& matrix)
+{
+	this->validateOperands(matrix);
+
+	for (unsigned int i = 0; i < this->getRowSize(); i++)
+		this->setValue((*this)(i, i) - matrix(i, i), i, i);
+
+}
+
+void MatrixDiagonal::times(const MatrixDiagonal& matrix, MatrixDiagonal& resp) const
+{
+	this->validadeOperandMult(matrix);
+	this->validadeResponseMult(matrix, resp);
+
+	for (unsigned int i = 0; i < this->getRowSize(); i++)
+		resp.setValue((*this)(i, i) * matrix(i, i), i, i);
+
+}
+
+void MatrixDiagonal::times(const Vector& vector, Vector& resp) const
+{
+	this->validadeVectorMult(vector);
+	this->validadeVectorRespMult(resp);
+
+
+	for (unsigned int i = 0; i < this->getRowSize(); i++)
+		resp.setValue((*this)(i, i) * vector(i), i);
+
+}
+
+void MatrixDiagonal::times(const double& scalar, MatrixDiagonal& resp) const
+{
+	for (unsigned int i = 0; i < this->getRowSize(); i++)
+			resp.setValue((*this)(i, i) * scalar, i, i);
+}
+
+void MatrixDiagonal::multiplyBy(const double& scalar)
+{
+	for (unsigned int i = 0; i < this->getRowSize(); i++)
+		this->setValue((*this)(i, i) * scalar, i, i);
+
+}
+
+double MatrixDiagonal::frobeniusNorm() const
+{
+	double resp = 0.0;
+
+	for (unsigned int i = 0; i < this->getRowSize(); i++)
+		resp += (*this)(i, i) * (*this)(i, i);
+
+	return sqrt(resp);
+
+}
+
+void MatrixDiagonal::fillRandomly(const double& min, const double& max)
+{
+	//Type of random number distribution
+	std::uniform_real_distribution<double> dist(min, max);
+
+	//Mersenne Twister: Good quality random number generator
+	std::mt19937 rng;
+
+	//Initialize with non-deterministic seeds
+	rng.seed(std::random_device{}());
+
+	for (unsigned int i = 0; i < this->getRowSize(); i++)
+		this->setValue(dist(rng), i, i);
+
+}
+
+double MatrixDiagonal::determinant() const
+{
+	double resp = 1.0;
+
+	for (unsigned int i = 0; i < this->getSize(); i++)
+		resp *= (*this)(i, i);
+
+	return resp;
+}

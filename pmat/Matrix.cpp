@@ -115,7 +115,7 @@ double Matrix::dotProduct(const Matrix& matrix) const
 	return resp;
 }
 
-void Matrix::plus(const Matrix& matrix, Matrix& resp) const
+void Matrix::plus(const Matrix& matrix, Matrix& resp) const  
 {
 	this->validateOperands(matrix);
 	this->validadeResponse(resp);
