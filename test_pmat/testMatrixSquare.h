@@ -5,9 +5,7 @@
 #include "MatrixSquare.h"
 #include "MatrixSquare.cpp"
 
-
 TEST(TestMatrixSquare, TestDeterminant) {
-
 	MatrixSquare A(5);
 
 	A.setValue(4.0, 0, 0);
@@ -44,7 +42,6 @@ TEST(TestMatrixSquare, TestDeterminant) {
 }
 
 TEST(TestMatrixSquare, TestTrace) {
-
 	MatrixSquare A(5);
 
 	A.setValue(4.0, 0, 0);

@@ -4,14 +4,9 @@
 class MatrixDiagonal :
 	public MatrixSquare
 {
-
 protected:
-	inline virtual unsigned int getVectorIndex(const unsigned int& i, const unsigned int& j) const
-	{
-		return i;
-	}
-	inline virtual unsigned int getVectorSize()  const { return _rowSize ; };
-
+	inline virtual unsigned int getVectorIndex(const unsigned int& i, const unsigned int& j) const { return i; };
+	inline virtual unsigned int getVectorSize()  const { return _rowSize; };
 
 public:
 	MatrixDiagonal(const unsigned int& size);
@@ -33,6 +28,4 @@ public:
 	virtual double frobeniusNorm() const;
 	virtual void fillRandomly(const double& min, const double& max);
 	virtual double determinant() const;
-
 };
-

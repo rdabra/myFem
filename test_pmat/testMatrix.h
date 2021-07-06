@@ -3,9 +3,7 @@
 #include "Matrix.h"
 #include "Matrix.cpp"
 
-
 TEST(TestMatrix, TestEqualityOperator) {
-
 	Matrix z(4, 3);
 	z.setValue(1.0, 0, 0);
 	z.setValue(2.0, 0, 1);
@@ -19,7 +17,6 @@ TEST(TestMatrix, TestEqualityOperator) {
 	z.setValue(10.0, 3, 0);
 	z.setValue(11.0, 3, 1);
 	z.setValue(12.0, 3, 2);
-
 
 	Matrix v(4, 3);
 	v.setValue(1.0, 0, 0);
@@ -39,7 +36,6 @@ TEST(TestMatrix, TestEqualityOperator) {
 }
 
 TEST(TestMatrix, TestDotProduct) {
-
 	Matrix z(4, 3);
 	z.setValue(1.0, 0, 0);
 	z.setValue(2.0, 0, 1);
@@ -53,7 +49,6 @@ TEST(TestMatrix, TestDotProduct) {
 	z.setValue(10.0, 3, 0);
 	z.setValue(11.0, 3, 1);
 	z.setValue(12.0, 3, 2);
-
 
 	Matrix v(4, 3);
 	v.setValue(1.0, 0, 0);
@@ -74,7 +69,6 @@ TEST(TestMatrix, TestDotProduct) {
 }
 
 TEST(TestMatrix, TestPlus) {
-
 	Matrix z(4, 3);
 	z.setValue(1.0, 0, 0);
 	z.setValue(2.0, 0, 1);
@@ -128,7 +122,6 @@ TEST(TestMatrix, TestPlus) {
 }
 
 TEST(TestMatrix, TestMinus) {
-
 	Matrix z(4, 3);
 	z.setValue(1.0, 0, 0);
 	z.setValue(2.0, 0, 1);
@@ -181,9 +174,7 @@ TEST(TestMatrix, TestMinus) {
 	EXPECT_TRUE(resp == z);
 }
 
-
 TEST(TestMatrix, TestTimes) {
-
 	Matrix z(4, 3);
 	z.setValue(1.0, 0, 0);
 	z.setValue(2.0, 0, 1);
@@ -197,7 +188,6 @@ TEST(TestMatrix, TestTimes) {
 	z.setValue(10.0, 3, 0);
 	z.setValue(11.0, 3, 1);
 	z.setValue(12.0, 3, 2);
-
 
 	Matrix v(3, 4);
 	v.setValue(1.0, 0, 0);
@@ -231,7 +221,6 @@ TEST(TestMatrix, TestTimes) {
 	resp.setValue(239.0, 3, 2);
 	resp.setValue(272.0, 3, 3);
 
-
 	Matrix resp2(4, 3);
 	resp2.setValue(2.0, 0, 0);
 	resp2.setValue(4.0, 0, 1);
@@ -245,7 +234,6 @@ TEST(TestMatrix, TestTimes) {
 	resp2.setValue(20.0, 3, 0);
 	resp2.setValue(22.0, 3, 1);
 	resp2.setValue(24.0, 3, 2);
-
 
 	Matrix x1(4, 4);
 	z.times(v, x1);
@@ -264,7 +252,6 @@ TEST(TestMatrix, TestTimes) {
 }
 
 TEST(TestMatrix, TestFrobenius) {
-
 	Matrix z(4, 3);
 	z.setValue(1.0, 0, 0);
 	z.setValue(2.0, 0, 1);

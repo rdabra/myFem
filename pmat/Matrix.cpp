@@ -2,7 +2,6 @@
 
 #include "Matrix.h"
 
-
 Matrix::Matrix(const unsigned int& rowSize, const unsigned int& columnSize)
 {
 	_rowSize = rowSize;
@@ -28,13 +27,11 @@ Matrix::Matrix(Matrix&& matrix) noexcept
 	_matrix = std::move(matrix._matrix);
 }
 
-
 const double& Matrix::operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const
 {
 	this->validadeIndex(rowIndex, columnIndex);
 	return _matrix[this->getVectorIndex(rowIndex, columnIndex)];
 }
-
 
 void Matrix::setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex)
 {
@@ -108,7 +105,6 @@ void Matrix::plus(const Matrix& matrix, Matrix& resp) const
 
 Matrix Matrix::operator+(const Matrix& matrix) const
 {
-
 	Matrix resp(this->getRowSize(), this->getColumnSize());
 	this->plus(matrix, resp);
 
@@ -122,7 +118,6 @@ void Matrix::addBy(const Matrix& matrix)
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
 		for (unsigned int j = 0; j < this->getColumnSize(); j++)
 			this->setValue((*this)(i, j) + matrix(i, j), i, j);
-
 }
 
 void Matrix::minus(const Matrix& matrix, Matrix& resp) const
@@ -135,10 +130,8 @@ void Matrix::minus(const Matrix& matrix, Matrix& resp) const
 			resp.setValue((*this)(i, j) - matrix(i, j), i, j);
 }
 
-
 Matrix Matrix::operator-(const Matrix& matrix) const
 {
-
 	Matrix resp(this->getRowSize(), this->getColumnSize());
 
 	this->minus(matrix, resp);
@@ -153,7 +146,6 @@ void Matrix::subtractBy(const Matrix& matrix)
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
 		for (unsigned int j = 0; j < this->getColumnSize(); j++)
 			this->setValue((*this)(i, j) - matrix(i, j), i, j);
-
 }
 
 void Matrix::times(const Matrix& matrix, Matrix& resp) const
@@ -169,25 +161,20 @@ void Matrix::times(const Matrix& matrix, Matrix& resp) const
 				aux += (*this)(i, k) * matrix(k, j);
 			resp.setValue(aux, i, j);
 		}
-
 }
-
 
 Matrix Matrix::operator*(const Matrix& matrix) const
 {
-
 	Matrix resp(this->getRowSize(), matrix.getColumnSize());
 	this->times(matrix, resp);
 
 	return resp;
 }
 
-
 void Matrix::times(const Vector& vector, Vector& resp) const
 {
 	this->validadeVectorMult(vector);
 	this->validadeVectorRespMult(resp);
-
 
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
 	{
@@ -198,10 +185,8 @@ void Matrix::times(const Vector& vector, Vector& resp) const
 	}
 }
 
-
 Vector Matrix::operator*(const Vector& vector) const
 {
-
 	Vector resp(this->getRowSize());
 	this->times(vector, resp);
 
@@ -215,10 +200,8 @@ void Matrix::times(const double& scalar, Matrix& resp) const
 			resp.setValue((*this)(i, j) * scalar, i, j);
 }
 
-
 Matrix Matrix::operator*(const double& scalar) const
 {
-
 	Matrix resp(this->getRowSize(), this->getColumnSize());
 	this->times(scalar, resp);
 
@@ -241,7 +224,6 @@ double Matrix::frobeniusNorm() const
 			resp += (*this)(i, j) * (*this)(i, j);
 
 	return sqrt(resp);
-
 }
 
 void Matrix::fillRandomly(const double& min, const double& max)
@@ -258,9 +240,7 @@ void Matrix::fillRandomly(const double& min, const double& max)
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
 		for (unsigned int j = 0; j < this->getColumnSize(); j++)
 			this->setValue(dist(rng), i, j);
-
 }
-
 
 void Matrix::validateOperands(const Matrix& matrix) const
 {
@@ -271,7 +251,6 @@ void Matrix::validadeResponse(Matrix& resp) const
 {
 	if (this->getRowSize() != resp.getRowSize() || this->getColumnSize() != resp.getColumnSize()) throw std::length_error(messages::NONCOMPT_RESP);
 }
-
 
 void Matrix::validadeIndex(const unsigned int& rowIndex, const unsigned int& columnIndex) const
 {

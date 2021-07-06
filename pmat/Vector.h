@@ -33,4 +33,3 @@ public:
 	void multiplyBy(const double& scalar);
 	double frobeniusNorm() const;
 };
-

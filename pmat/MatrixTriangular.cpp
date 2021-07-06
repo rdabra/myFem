@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "MatrixTriangular.h"
 
-
 const double& MatrixTriangular::operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const
 {
 	Matrix::validadeIndex(rowIndex, columnIndex);
@@ -17,7 +16,6 @@ MatrixTriangular::MatrixTriangular(const unsigned int& size, bool isLower)
 	_columnSize = size;
 	_isLower = isLower;
 	_matrix.resize(this->getVectorSize());
-
 }
 
 MatrixTriangular::MatrixTriangular(const MatrixTriangular& matrix)
@@ -28,7 +26,6 @@ MatrixTriangular::MatrixTriangular(const MatrixTriangular& matrix)
 
 	for (unsigned int i = 0; i < matrix.getVectorSize(); i++)
 		_matrix.push_back(matrix._matrix[i]);
-
 }
 
 MatrixTriangular::MatrixTriangular(MatrixTriangular&& matrix) noexcept
@@ -44,19 +41,17 @@ void MatrixTriangular::setValue(const double& value, const unsigned int& rowInde
 	Matrix::validadeIndex(rowIndex, columnIndex);
 	if (_isLower) {
 		if (columnIndex > rowIndex) throw std::out_of_range(messages::INDEX_OUT);
-		_matrix[this->getVectorIndex(rowIndex,columnIndex)] = value;
+		_matrix[this->getVectorIndex(rowIndex, columnIndex)] = value;
 	}
 	else
 	{
 		if (columnIndex < rowIndex) throw std::out_of_range(messages::INDEX_OUT);
-		_matrix[this->getVectorIndex(columnIndex,rowIndex)] = value;
+		_matrix[this->getVectorIndex(columnIndex, rowIndex)] = value;
 	}
 }
 
-
 MatrixTriangular& MatrixTriangular::operator=(const MatrixTriangular& matrix)
 {
-
 	_matrix.clear();
 	_rowSize = matrix.getSize();
 	_columnSize = matrix.getSize();
@@ -225,7 +220,6 @@ void MatrixTriangular::times(const MatrixSquare& matrix, MatrixSquare& resp) con
 				resp.setValue(aux, i, j);
 			}
 	}
-
 }
 
 void MatrixTriangular::times(const Vector& vector, Vector& resp) const
@@ -249,7 +243,6 @@ void MatrixTriangular::times(const Vector& vector, Vector& resp) const
 				aux += (*this)(i, k) * vector(k);
 			resp.setValue(aux, i);
 		}
-
 }
 
 void MatrixTriangular::times(const double& scalar, MatrixTriangular& resp) const
@@ -292,7 +285,6 @@ double MatrixTriangular::frobeniusNorm() const
 			for (unsigned int j = 0; j < this->getSize(); j++)
 				resp += (*this)(i, j) * (*this)(i, j);
 
-
 	return sqrt(resp);
 }
 
@@ -326,5 +318,3 @@ double MatrixTriangular::determinant() const
 
 	return resp;
 }
-
-

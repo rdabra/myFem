@@ -3,9 +3,7 @@
 #include "MatrixTriangular.h"
 #include "MatrixTriangular.cpp"
 
-
 TEST(MatrixTriangular, TestEqualityOperator) {
-
 	MatrixTriangular z(4, true);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
@@ -17,7 +15,6 @@ TEST(MatrixTriangular, TestEqualityOperator) {
 	z.setValue(11.0, 3, 1);
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
-
 
 	MatrixTriangular v(4, true);
 	v.setValue(1.0, 0, 0);
@@ -35,7 +32,6 @@ TEST(MatrixTriangular, TestEqualityOperator) {
 }
 
 TEST(MatrixTriangular, TestDotProduct) {
-
 	MatrixTriangular z(4, false);
 	z.setValue(1.0, 3, 3);
 	z.setValue(4.0, 2, 2);
@@ -47,7 +43,6 @@ TEST(MatrixTriangular, TestDotProduct) {
 	z.setValue(11.0, 0, 1);
 	z.setValue(12.0, 0, 2);
 	z.setValue(13.0, 0, 3);
-
 
 	MatrixTriangular v(4, false);
 	v.setValue(1.5, 3, 3);
@@ -66,7 +61,6 @@ TEST(MatrixTriangular, TestDotProduct) {
 }
 
 TEST(MatrixTriangular, TestPlus) {
-
 	MatrixTriangular z(4, true);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
@@ -138,7 +132,6 @@ TEST(MatrixTriangular, TestPlus) {
 }
 
 TEST(MatrixTriangular, TestMinus) {
-
 	MatrixTriangular z(4, true);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
@@ -209,9 +202,7 @@ TEST(MatrixTriangular, TestMinus) {
 	EXPECT_TRUE(resp2 == z);
 }
 
-
 TEST(MatrixTriangular, TestTimes) {
-
 	MatrixTriangular z(4, true);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
@@ -269,12 +260,11 @@ TEST(MatrixTriangular, TestTimes) {
 	resp2.setValue(24.0, 3, 2);
 	resp2.setValue(26.0, 3, 3);
 
-
 	MatrixSquare x1(4);
 	z.times(v, x1);
 	Matrix x2(z * v);
 
-	MatrixTriangular x3(4,true);
+	MatrixTriangular x3(4, true);
 	z.times(2.0, x3);
 	Matrix x4(z * 2.0);
 	z.multiplyBy(2.0);
@@ -288,7 +278,6 @@ TEST(MatrixTriangular, TestTimes) {
 
 TEST(MatrixTriangular, TestFrobenius)
 {
-
 	MatrixTriangular z(4, true);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
@@ -306,7 +295,6 @@ TEST(MatrixTriangular, TestFrobenius)
 
 TEST(MatrixTriangular, TestDeterminant)
 {
-
 	MatrixTriangular z(4, true);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);

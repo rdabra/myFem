@@ -1,12 +1,9 @@
-
 #include "pch.h"
 
 #include "Vector.h"
 #include "Vector.cpp"
 
-
 TEST(TestVector, TestEqualityOperator) {
-
 	Vector v(7);
 	v.setValue(1.0, 0);
 	v.setValue(2.0, 1);
@@ -39,7 +36,6 @@ TEST(TestVector, TestEqualityOperator) {
 }
 
 TEST(TestVector, TestDotProduct) {
-
 	Vector v(7);
 	v.setValue(1.0, 0);
 	v.setValue(2.0, 1);
@@ -58,12 +54,10 @@ TEST(TestVector, TestDotProduct) {
 	z.setValue(2.0, 5);
 	z.setValue(1.0, 6);
 
-
 	EXPECT_TRUE(v.dotProduct(z) == 84.0);
 }
 
 TEST(TestVector, TestPlus) {
-
 	Vector v(7);
 	v.setValue(1.0, 0);
 	v.setValue(2.0, 1);
@@ -102,7 +96,6 @@ TEST(TestVector, TestPlus) {
 }
 
 TEST(TestVector, TestMinus) {
-
 	Vector v(7);
 	v.setValue(1.0, 0);
 	v.setValue(2.0, 1);
@@ -141,7 +134,6 @@ TEST(TestVector, TestMinus) {
 }
 
 TEST(TestVector, TestTimes) {
-
 	Vector v(7);
 	v.setValue(1.0, 0);
 	v.setValue(2.0, 1);
@@ -173,7 +165,6 @@ TEST(TestVector, TestTimes) {
 }
 
 TEST(TestVector, TestFrobenius) {
-
 	Vector v(7);
 	v.setValue(1.0, 0);
 	v.setValue(2.0, 1);

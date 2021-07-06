@@ -9,7 +9,6 @@
 
 class Matrix
 {
-
 protected:
 	std::vector <double> _matrix;
 	unsigned int _rowSize{ 0 }, _columnSize{ 0 };
@@ -56,6 +55,4 @@ public:
 	//	virtual void transpose();
 	virtual double frobeniusNorm() const;
 	virtual void fillRandomly(const double& min, const double& max);
-
 };
-

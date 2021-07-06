@@ -1,6 +1,5 @@
 #pragma once
 
-
 namespace messages {
 	constexpr const char* OPERANDS_EQUAL{ "Operands must have same size" };
 	constexpr const char* INDEX_OUT{ "Index out of bounds" };

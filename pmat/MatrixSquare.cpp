@@ -1,17 +1,9 @@
 #include "pch.h"
 #include "MatrixSquare.h"
 
-
-
-
 void MatrixSquare::fillLU()
 {
 	if (!_calcLU) {
-
-
-
-
-
 		_calcLU = true;
 	}
 }
@@ -19,7 +11,7 @@ void MatrixSquare::fillLU()
 void MatrixSquare::createLU()
 {
 	if (!_createLU) {
-//		_matP = new MatrixTriangular(_rowSize, true);
+		//		_matP = new MatrixTriangular(_rowSize, true);
 		_matL = new MatrixTriangular(_rowSize, true);
 		_matU = new MatrixTriangular(_rowSize, false);
 		_createLU = true;
@@ -51,6 +43,5 @@ double MatrixSquare::trace() const
 
 double MatrixSquare::determinant() const
 {
-
 	return 0.0;
 }

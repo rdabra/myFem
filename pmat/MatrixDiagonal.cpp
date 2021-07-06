@@ -18,7 +18,6 @@ MatrixDiagonal::MatrixDiagonal(const MatrixDiagonal& matrix)
 		_matrix.push_back(matrix(i, i));
 }
 
-
 void MatrixDiagonal::setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex)
 {
 	Matrix::validadeIndex(rowIndex, columnIndex);
@@ -37,7 +36,6 @@ const double& MatrixDiagonal::operator()(const unsigned int& rowIndex, const uns
 
 MatrixDiagonal& MatrixDiagonal::operator=(const MatrixDiagonal& matrix)
 {
-
 	_matrix.clear();
 	_rowSize = matrix.getSize();
 	_columnSize = matrix.getSize();
@@ -66,7 +64,6 @@ void MatrixDiagonal::plus(const MatrixDiagonal& matrix, MatrixDiagonal& resp) co
 
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
 		resp.setValue((*this)(i, i) + matrix(i, i), i, i);
-
 }
 
 void MatrixDiagonal::addBy(const MatrixDiagonal& matrix)
@@ -75,7 +72,6 @@ void MatrixDiagonal::addBy(const MatrixDiagonal& matrix)
 
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
 		this->setValue((*this)(i, i) + matrix(i, i), i, i);
-
 }
 
 void MatrixDiagonal::minus(const MatrixDiagonal& matrix, MatrixDiagonal& resp) const
@@ -85,7 +81,6 @@ void MatrixDiagonal::minus(const MatrixDiagonal& matrix, MatrixDiagonal& resp) c
 
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
 		resp.setValue((*this)(i, i) - matrix(i, i), i, i);
-
 }
 
 void MatrixDiagonal::subtractBy(const MatrixDiagonal& matrix)
@@ -94,7 +89,6 @@ void MatrixDiagonal::subtractBy(const MatrixDiagonal& matrix)
 
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
 		this->setValue((*this)(i, i) - matrix(i, i), i, i);
-
 }
 
 void MatrixDiagonal::times(const MatrixDiagonal& matrix, MatrixDiagonal& resp) const
@@ -104,7 +98,6 @@ void MatrixDiagonal::times(const MatrixDiagonal& matrix, MatrixDiagonal& resp) c
 
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
 		resp.setValue((*this)(i, i) * matrix(i, i), i, i);
-
 }
 
 void MatrixDiagonal::times(const Vector& vector, Vector& resp) const
@@ -112,10 +105,8 @@ void MatrixDiagonal::times(const Vector& vector, Vector& resp) const
 	this->validadeVectorMult(vector);
 	this->validadeVectorRespMult(resp);
 
-
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
 		resp.setValue((*this)(i, i) * vector(i), i);
-
 }
 
 void MatrixDiagonal::times(const double& scalar, MatrixDiagonal& resp) const
@@ -128,7 +119,6 @@ void MatrixDiagonal::multiplyBy(const double& scalar)
 {
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
 		this->setValue((*this)(i, i) * scalar, i, i);
-
 }
 
 double MatrixDiagonal::frobeniusNorm() const
@@ -139,7 +129,6 @@ double MatrixDiagonal::frobeniusNorm() const
 		resp += (*this)(i, i) * (*this)(i, i);
 
 	return sqrt(resp);
-
 }
 
 void MatrixDiagonal::fillRandomly(const double& min, const double& max)
@@ -155,7 +144,6 @@ void MatrixDiagonal::fillRandomly(const double& min, const double& max)
 
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
 		this->setValue(dist(rng), i, i);
-
 }
 
 double MatrixDiagonal::determinant() const

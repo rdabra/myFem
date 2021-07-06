@@ -4,7 +4,6 @@
 
 class MatrixTriangular : public MatrixSquare
 {
-
 private:
 	bool _isLower;
 

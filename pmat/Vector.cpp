@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Vector.h"
 
-
 Vector::Vector(unsigned int size)
 {
 	_size = size;
@@ -53,7 +52,6 @@ Vector& Vector::operator=(Vector&& vector) noexcept
 	return (*this);
 }
 
-
 bool Vector::operator==(const Vector& vector) const
 {
 	bool resp = _size == vector.getSize();
@@ -89,7 +87,6 @@ void Vector::addBy(const Vector& vector)
 
 	for (unsigned int i = 0; i < _size; i++)
 		(*this).setValue(_vector[i] + vector(i), i);
-
 }
 
 void Vector::minus(const Vector& vector, Vector& resp) const
@@ -100,7 +97,6 @@ void Vector::minus(const Vector& vector, Vector& resp) const
 	for (unsigned int i = 0; i < _size; i++)
 		resp.setValue(_vector[i] - vector(i), i);
 }
-
 
 Vector Vector::operator-(const Vector& vector) const
 {
@@ -118,7 +114,6 @@ void Vector::subtractBy(const Vector& vector)
 	for (unsigned int i = 0; i < _size; i++)
 		this->setValue(_vector[i] - vector(i), i);
 }
-
 
 double Vector::dotProduct(const Vector& vector) const
 {
@@ -158,4 +153,3 @@ double Vector::frobeniusNorm() const
 
 	return sqrt(resp);
 }
-
