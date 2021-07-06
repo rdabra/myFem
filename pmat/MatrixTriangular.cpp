@@ -1,34 +1,6 @@
 #include "pch.h"
 #include "MatrixTriangular.h"
 
-MatrixTriangular::MatrixTriangular(const unsigned int& size, bool isLower)
-{
-	_rowSize = size;
-	_columnSize = size;
-	_isLower = isLower;
-	_matrix = new double* [_rowSize];
-	for (unsigned int i = 0; i < _rowSize; i++)
-		_matrix[i] = new double[i + (int64_t)1];
-}
-
-MatrixTriangular::MatrixTriangular(const MatrixTriangular& matrix)
-{
-
-	_rowSize = matrix.getSize();
-	_columnSize = matrix.getSize();
-	_isLower = matrix.isLower();
-	_matrix = new double* [_rowSize];
-	for (unsigned int i = 0; i < _rowSize; i++) {
-		_matrix[i] = new double[i + (int64_t)1];
-		if (_isLower)
-			for (unsigned int j = 0; j <= i; j++)
-				_matrix[i][j] = matrix(i, j);
-		else
-			for (unsigned int j = i; j < _rowSize; j++)
-				_matrix[j][i] = matrix(i, j);
-	}
-}
-
 
 const double& MatrixTriangular::operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const
 {
@@ -36,7 +8,35 @@ const double& MatrixTriangular::operator()(const unsigned int& rowIndex, const u
 
 	bool isZero = (_isLower && columnIndex > rowIndex) || ((!_isLower) && columnIndex < rowIndex);
 
-	return isZero ? putils::ZERO : _isLower ? _matrix[rowIndex][columnIndex] : _matrix[columnIndex][rowIndex];
+	return isZero ? putils::ZERO : _isLower ? _matrix[this->getVectorIndex(rowIndex, columnIndex)] : _matrix[this->getVectorIndex(columnIndex, rowIndex)];
+}
+
+MatrixTriangular::MatrixTriangular(const unsigned int& size, bool isLower)
+{
+	_rowSize = size;
+	_columnSize = size;
+	_isLower = isLower;
+	_matrix.resize(this->getVectorSize());
+
+}
+
+MatrixTriangular::MatrixTriangular(const MatrixTriangular& matrix)
+{
+	_rowSize = matrix._rowSize;
+	_columnSize = matrix._columnSize;
+	_matrix.resize(matrix.getVectorSize());
+
+	for (unsigned int i = 0; i < matrix.getVectorSize(); i++)
+		_matrix.push_back(matrix._matrix[i]);
+
+}
+
+MatrixTriangular::MatrixTriangular(MatrixTriangular&& matrix) noexcept
+{
+	_rowSize = matrix._rowSize;
+	_columnSize = matrix._columnSize;
+	_isLower = matrix.isLower();
+	_matrix = std::move(matrix._matrix);
 }
 
 void MatrixTriangular::setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex)
@@ -44,12 +44,12 @@ void MatrixTriangular::setValue(const double& value, const unsigned int& rowInde
 	Matrix::validadeIndex(rowIndex, columnIndex);
 	if (_isLower) {
 		if (columnIndex > rowIndex) throw std::out_of_range(messages::INDEX_OUT);
-		_matrix[rowIndex][columnIndex] = value;
+		_matrix[this->getVectorIndex(rowIndex,columnIndex)] = value;
 	}
 	else
 	{
 		if (columnIndex < rowIndex) throw std::out_of_range(messages::INDEX_OUT);
-		_matrix[columnIndex][rowIndex] = value;
+		_matrix[this->getVectorIndex(columnIndex,rowIndex)] = value;
 	}
 }
 
@@ -57,34 +57,24 @@ void MatrixTriangular::setValue(const double& value, const unsigned int& rowInde
 MatrixTriangular& MatrixTriangular::operator=(const MatrixTriangular& matrix)
 {
 
-	for (unsigned int i = 0; i < _rowSize; i++)
-		delete[] _matrix[i];
-	delete[] _matrix;
+	_matrix.clear();
 	_rowSize = matrix.getSize();
 	_columnSize = matrix.getSize();
 	_isLower = matrix.isLower();
-	_matrix = new double* [_rowSize];
-	for (unsigned int i = 0; i < _rowSize; i++) {
-		_matrix[i] = new double[i + (int64_t)1];
-		if (_isLower)
-			for (unsigned int j = 0; j <= i; j++)
-				_matrix[i][j] = matrix(i, j);
-		else
-			for (unsigned int j = i; j < _rowSize; j++)
-				_matrix[j][i] = matrix(i, j);
-	}
+	_matrix.resize(_rowSize);
+	for (unsigned int i = 0; i < matrix.getVectorSize(); i++)
+		_matrix.push_back(matrix._matrix[i]);
+
 	return (*this);
 }
 
 MatrixTriangular& MatrixTriangular::operator=(MatrixTriangular&& matrix) noexcept
 {
-	for (unsigned int i = 0; i < _rowSize; i++)
-		delete[] _matrix[i];
-	delete[] _matrix;
+	_matrix.clear();
 	_rowSize = matrix.getSize();
 	_columnSize = matrix.getSize();
 	_isLower = matrix.isLower();
-	_matrix = std::exchange(matrix._matrix, nullptr);
+	_matrix = std::move(matrix._matrix);
 
 	return (*this);
 }
@@ -181,7 +171,7 @@ void MatrixTriangular::minus(const MatrixTriangular& matrix, MatrixSquare& resp)
 						resp.setValue((*this)(i, i) - matrix(i, i), i, i);
 					else {
 						resp.setValue((*this)(i, j), i, j);
-						resp.setValue(matrix(j, i), j, i);
+						resp.setValue(-matrix(j, i), j, i);
 					}
 		else
 			for (unsigned int i = 0; i < this->getRowSize(); i++)
@@ -190,7 +180,7 @@ void MatrixTriangular::minus(const MatrixTriangular& matrix, MatrixSquare& resp)
 						resp.setValue((*this)(i, i) - matrix(i, i), i, i);
 					else {
 						resp.setValue((*this)(j, i), j, i);
-						resp.setValue(matrix(i, j), i, j);
+						resp.setValue(-matrix(i, j), i, j);
 					}
 	}
 }
@@ -217,7 +207,7 @@ void MatrixTriangular::times(const MatrixSquare& matrix, MatrixSquare& resp) con
 
 	if (this->isLower()) {
 		for (unsigned int i = 0; i < this->getSize(); i++)
-			for (unsigned int j = 0; j <= this->getSize(); j++)
+			for (unsigned int j = 0; j < this->getSize(); j++)
 			{
 				double aux = 0.0;
 				for (unsigned int k = 0; k <= i; k++)
@@ -227,7 +217,7 @@ void MatrixTriangular::times(const MatrixSquare& matrix, MatrixSquare& resp) con
 	}
 	else {
 		for (unsigned int i = 0; i < this->getSize(); i++)
-			for (unsigned int j = 0; j <= this->getSize(); j++)
+			for (unsigned int j = 0; j < this->getSize(); j++)
 			{
 				double aux = 0.0;
 				for (unsigned int k = i; k <= this->getSize(); k++)
@@ -236,6 +226,45 @@ void MatrixTriangular::times(const MatrixSquare& matrix, MatrixSquare& resp) con
 			}
 	}
 
+}
+
+void MatrixTriangular::times(const Vector& vector, Vector& resp) const
+{
+	this->validadeVectorMult(vector);
+	this->validadeVectorRespMult(resp);
+
+	if (this->isLower())
+		for (unsigned int i = 0; i < this->getSize(); i++)
+		{
+			double aux = 0.0;
+			for (unsigned int k = 0; k <= i; k++)
+				aux += (*this)(i, k) * vector(k);
+			resp.setValue(aux, i);
+		}
+	else
+		for (unsigned int i = 0; i < this->getSize(); i++)
+		{
+			double aux = 0.0;
+			for (unsigned int k = i; k < this->getSize(); k++)
+				aux += (*this)(i, k) * vector(k);
+			resp.setValue(aux, i);
+		}
+
+}
+
+void MatrixTriangular::times(const double& scalar, MatrixTriangular& resp) const
+{
+	if (_isLower != resp.isLower())
+		throw std::out_of_range(messages::NONCOMPT_ARG);
+
+	if (this->isLower())
+		for (unsigned int i = 0; i < this->getSize(); i++)
+			for (unsigned int j = 0; j <= i; j++)
+				resp.setValue((*this)(i, j) * scalar, i, j);
+	else
+		for (unsigned int i = 0; i < this->getSize(); i++)
+			for (unsigned int j = i; j < this->getSize(); j++)
+				resp.setValue((*this)(i, j) * scalar, i, j);
 }
 
 void MatrixTriangular::multiplyBy(const double& scalar)

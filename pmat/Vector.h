@@ -7,14 +7,14 @@
 class Vector
 {
 private:
-	double* _vector;
-	unsigned int _size;
+	std::vector <double> _vector;
+	unsigned int _size{ 0 };
 
 public:
 	Vector(unsigned int size);
 	Vector(const Vector& vector);
 	Vector(Vector&& vector) noexcept;
-	virtual ~Vector();
+	virtual ~Vector() {};
 	const double& operator()(const unsigned int& index) const;
 	void setValue(const double& coef, const unsigned int& index);
 	const unsigned int& getSize(void) const { return _size; };

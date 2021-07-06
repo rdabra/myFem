@@ -5,26 +5,21 @@
 Vector::Vector(unsigned int size)
 {
 	_size = size;
-	_vector = new double[size];
+	_vector.resize(_size);
 }
 
 Vector::Vector(const Vector& vector)
 {
 	_size = vector.getSize();
-	_vector = new double[_size];
+	_vector.resize(_size);
 	for (unsigned int i = 0; i < _size; i++)
-		_vector[i] = vector(i);
+		_vector.push_back(vector(i));
 }
 
 Vector::Vector(Vector&& vector) noexcept
 {
 	_size = vector.getSize();
-	_vector = std::exchange(vector._vector, nullptr);
-}
-
-Vector::~Vector()
-{
-	delete[] _vector;
+	_vector = std::move(vector._vector);
 }
 
 const double& Vector::operator()(const unsigned int& index) const
@@ -42,10 +37,10 @@ void Vector::setValue(const double& coef, const unsigned int& index)
 Vector& Vector::operator=(const Vector& vector)
 {
 	_size = vector.getSize();
-	delete[] _vector;
-	_vector = new double[_size];
+	_vector.clear();
+	_vector.reserve(_size);
 	for (unsigned int i = 0; i < _size; i++)
-		_vector[i] = vector(i);
+		_vector.push_back(vector(i));
 
 	return (*this);
 }
@@ -53,8 +48,7 @@ Vector& Vector::operator=(const Vector& vector)
 Vector& Vector::operator=(Vector&& vector) noexcept
 {
 	_size = vector._size;
-	delete[] _vector;
-	_vector = std::exchange(vector._vector, nullptr);
+	_vector = std::move(vector._vector);
 
 	return (*this);
 }

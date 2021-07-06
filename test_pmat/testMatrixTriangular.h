@@ -127,7 +127,7 @@ TEST(MatrixTriangular, TestPlus) {
 	resp2.setValue(24.0, 3, 2);
 	resp2.setValue(26.0, 3, 3);
 
-	Matrix x1(4, 4);
+	MatrixSquare x1(4);
 	z.plus(v, x1);
 	Matrix x2(z + v);
 	z.addBy(z);
@@ -199,7 +199,7 @@ TEST(MatrixTriangular, TestMinus) {
 	resp2.setValue(0.0, 3, 2);
 	resp2.setValue(0.0, 3, 3);
 
-	Matrix x1(4, 4);
+	MatrixSquare x1(4);
 	z.minus(v, x1);
 	Matrix x2(z - v);
 	z.subtractBy(z);
@@ -270,11 +270,11 @@ TEST(MatrixTriangular, TestTimes) {
 	resp2.setValue(26.0, 3, 3);
 
 
-	Matrix x1(4, 4);
+	MatrixSquare x1(4);
 	z.times(v, x1);
 	Matrix x2(z * v);
 
-	Matrix x3(4, 4);
+	MatrixTriangular x3(4,true);
 	z.times(2.0, x3);
 	Matrix x4(z * 2.0);
 	z.multiplyBy(2.0);
@@ -286,9 +286,9 @@ TEST(MatrixTriangular, TestTimes) {
 	EXPECT_TRUE(resp2 == z);
 }
 
-TEST(MatrixTriangular, TestFrobenius) 
+TEST(MatrixTriangular, TestFrobenius)
 {
-	
+
 	MatrixTriangular z(4, true);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);

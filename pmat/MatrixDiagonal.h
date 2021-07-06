@@ -4,6 +4,15 @@
 class MatrixDiagonal :
 	public MatrixSquare
 {
+
+protected:
+	inline virtual unsigned int getVectorIndex(const unsigned int& i, const unsigned int& j) const
+	{
+		return i;
+	}
+	inline virtual unsigned int getVectorSize()  const { return _rowSize ; };
+
+
 public:
 	MatrixDiagonal(const unsigned int& size);
 	MatrixDiagonal(const MatrixDiagonal& matrix);

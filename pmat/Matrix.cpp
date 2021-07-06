@@ -7,82 +7,63 @@ Matrix::Matrix(const unsigned int& rowSize, const unsigned int& columnSize)
 {
 	_rowSize = rowSize;
 	_columnSize = columnSize;
-	_matrix = new double* [_rowSize];
-
-	for (unsigned int i = 0; i < _rowSize; i++)
-		_matrix[i] = new double[_columnSize];
+	_matrix.resize(this->getVectorSize());
 }
 
 Matrix::Matrix(const Matrix& matrix)
 {
 	_rowSize = matrix._rowSize;
 	_columnSize = matrix._columnSize;
-	_matrix = new double* [_rowSize];
+	_matrix.resize(this->getVectorSize());
 
-	for (unsigned int i = 0; i < _rowSize; i++) {
-		_matrix[i] = new double[_columnSize];
+	for (unsigned int i = 0; i < _rowSize; i++)
 		for (unsigned int j = 0; j < _columnSize; j++)
-			_matrix[i][j] = matrix(i, j);
-	}
+			_matrix.push_back(matrix(i, j));
 }
 
 Matrix::Matrix(Matrix&& matrix) noexcept
 {
 	_rowSize = matrix._rowSize;
 	_columnSize = matrix._columnSize;
-	_matrix = std::exchange(matrix._matrix, nullptr);
+	_matrix = std::move(matrix._matrix);
 }
 
-Matrix::~Matrix()
-{
-	if (_matrix != nullptr) {
-		for (unsigned int i = 0; i < _rowSize; i++)
-			delete[] _matrix[i];
-		delete[] _matrix;
-	}
-}
 
 const double& Matrix::operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const
 {
 	this->validadeIndex(rowIndex, columnIndex);
-	return _matrix[rowIndex][columnIndex];
+	return _matrix[this->getVectorIndex(rowIndex, columnIndex)];
 }
 
 
 void Matrix::setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex)
 {
 	this->validadeIndex(rowIndex, columnIndex);
-	_matrix[rowIndex][columnIndex] = value;
+	_matrix[this->getVectorIndex(rowIndex, columnIndex)] = value;
 }
 
 Matrix& Matrix::operator=(const Matrix& matrix)
 {
-	for (unsigned int i = 0; i < _rowSize; i++)
-		delete[] _matrix[i];
-	delete[] _matrix;
+	_matrix.clear();
 
 	_rowSize = matrix.getRowSize();
 	_columnSize = matrix.getColumnSize();
-	_matrix = new double* [_rowSize];
+	_matrix.resize(this->getVectorSize());
 
-	for (unsigned int i = 0; i < _rowSize; i++) {
-		_matrix[i] = new double[_columnSize];
+	for (unsigned int i = 0; i < _rowSize; i++)
 		for (unsigned int j = 0; j < _columnSize; j++)
-			_matrix[i][j] = matrix(i, j);
-	}
+			_matrix.push_back(matrix(i, j));
 
 	return (*this);
 }
 
 Matrix& Matrix::operator=(Matrix&& matrix) noexcept
 {
-	for (unsigned int i = 0; i < _rowSize; i++)
-		delete[] _matrix[i];
-	delete[] _matrix;
+	_matrix.clear();
 
 	_rowSize = matrix.getRowSize();
 	_columnSize = matrix.getColumnSize();
-	_matrix = std::exchange(matrix._matrix, nullptr);
+	_matrix = std::move(matrix._matrix);
 
 	return (*this);
 }
@@ -115,7 +96,7 @@ double Matrix::dotProduct(const Matrix& matrix) const
 	return resp;
 }
 
-void Matrix::plus(const Matrix& matrix, Matrix& resp) const  
+void Matrix::plus(const Matrix& matrix, Matrix& resp) const
 {
 	this->validateOperands(matrix);
 	this->validadeResponse(resp);
