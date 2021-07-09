@@ -26,6 +26,7 @@ public:
 	void times(const double& scalar, MatrixDiagonal& resp) const;
 	virtual void multiplyBy(const double& scalar);
 	virtual double frobeniusNorm() const;
+	virtual void tranpose() {};
 	virtual void fillRandomly(const double& min, const double& max);
 	virtual double determinant() const;
 };
