@@ -5,14 +5,14 @@
 class MatrixTriangular : public MatrixSquare
 {
 private:
-	bool _isLower;
+	bool _isLower{ true };
 
 protected:
-	inline unsigned int getVectorIndex(const unsigned int& i, const unsigned int& j) const
+	inline virtual unsigned int getVectorIndex(const unsigned int& i, const unsigned int& j) const
 	{
-		return (i * (i + 1)) / 2 + j;
+		return _isLower ? (i * (i + 1)) / 2 + j : (j * (j + 1)) / 2 + i;
 	};
-	inline unsigned int getVectorSize()  const { return (_rowSize * _rowSize - _rowSize) / 2; };
+	inline virtual unsigned int getVectorSize()  const { return (_rowSize * _rowSize + _rowSize) / 2; };
 
 public:
 	MatrixTriangular(const unsigned int& size, bool isLower);
@@ -34,6 +34,7 @@ public:
 	void times(const double& scalar, MatrixTriangular& resp) const;
 	virtual void multiplyBy(const double& scalar);
 	virtual double frobeniusNorm() const;
+	virtual void transpose();
 	virtual void fillRandomly(const double& min, const double& max);
 	virtual double determinant() const;
 };

@@ -1,14 +1,6 @@
 #include "pch.h"
 #include "MatrixTriangular.h"
 
-const double& MatrixTriangular::operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const
-{
-	Matrix::validadeIndex(rowIndex, columnIndex);
-
-	bool isZero = (_isLower && columnIndex > rowIndex) || ((!_isLower) && columnIndex < rowIndex);
-
-	return isZero ? putils::ZERO : _isLower ? _matrix[this->getVectorIndex(rowIndex, columnIndex)] : _matrix[this->getVectorIndex(columnIndex, rowIndex)];
-}
 
 MatrixTriangular::MatrixTriangular(const unsigned int& size, bool isLower)
 {
@@ -39,15 +31,20 @@ MatrixTriangular::MatrixTriangular(MatrixTriangular&& matrix) noexcept
 void MatrixTriangular::setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex)
 {
 	Matrix::validadeIndex(rowIndex, columnIndex);
-	if (_isLower) {
-		if (columnIndex > rowIndex) throw std::out_of_range(messages::INDEX_OUT);
-		_matrix[this->getVectorIndex(rowIndex, columnIndex)] = value;
-	}
-	else
-	{
-		if (columnIndex < rowIndex) throw std::out_of_range(messages::INDEX_OUT);
-		_matrix[this->getVectorIndex(columnIndex, rowIndex)] = value;
-	}
+	if ((_isLower && columnIndex > rowIndex) || (!_isLower && columnIndex < rowIndex))
+		throw std::out_of_range(messages::INDEX_OUT);
+
+	_matrix[this->getVectorIndex(rowIndex, columnIndex)] = value;
+}
+
+const double& MatrixTriangular::operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const
+{
+	Matrix::validadeIndex(rowIndex, columnIndex);
+
+	bool isZero = (_isLower && columnIndex > rowIndex) || ((!_isLower) && columnIndex < rowIndex);
+
+	return isZero ? putils::ZERO : _matrix[this->getVectorIndex(rowIndex, columnIndex)];
+
 }
 
 MatrixTriangular& MatrixTriangular::operator=(const MatrixTriangular& matrix)
@@ -286,6 +283,12 @@ double MatrixTriangular::frobeniusNorm() const
 				resp += (*this)(i, j) * (*this)(i, j);
 
 	return sqrt(resp);
+}
+
+void MatrixTriangular::transpose()
+{
+	Matrix::transpose();
+	_isLower = !_isLower;
 }
 
 void MatrixTriangular::fillRandomly(const double& min, const double& max)

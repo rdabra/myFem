@@ -268,3 +268,38 @@ TEST(TestMatrix, TestFrobenius) {
 
 	EXPECT_TRUE(putils::areEqual(z.frobeniusNorm(), 25.4950975));
 }
+
+TEST(TestMatrix, TestTranspose) {
+	Matrix z(4, 3);
+	z.setValue(1.0, 0, 0);
+	z.setValue(2.0, 0, 1);
+	z.setValue(3.0, 0, 2);
+	z.setValue(4.0, 1, 0);
+	z.setValue(5.0, 1, 1);
+	z.setValue(6.0, 1, 2);
+	z.setValue(7.0, 2, 0);
+	z.setValue(8.0, 2, 1);
+	z.setValue(9.0, 2, 2);
+	z.setValue(10.0, 3, 0);
+	z.setValue(11.0, 3, 1);
+	z.setValue(12.0, 3, 2);
+
+
+	Matrix zt(3, 4);
+	zt.setValue(1.0, 0, 0);
+	zt.setValue(2.0, 1, 0);
+	zt.setValue(3.0, 2, 0);
+	zt.setValue(4.0, 0, 1);
+	zt.setValue(5.0, 1, 1);
+	zt.setValue(6.0, 2, 1);
+	zt.setValue(7.0, 0, 2);
+	zt.setValue(8.0, 1, 2);
+	zt.setValue(9.0, 2, 2);
+	zt.setValue(10.0, 0, 3);
+	zt.setValue(11.0, 1, 3);
+	zt.setValue(12.0, 2, 3);
+
+	z.transpose();
+
+	EXPECT_TRUE(zt == z);
+}

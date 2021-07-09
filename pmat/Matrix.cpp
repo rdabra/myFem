@@ -215,6 +215,13 @@ void Matrix::multiplyBy(const double& scalar)
 			this->setValue((*this)(i, j) * scalar, i, j);
 }
 
+void Matrix::transpose()
+{
+	_isTransposed = !_isTransposed;
+	std::swap(_rowSize, _columnSize);
+}
+
+
 double Matrix::frobeniusNorm() const
 {
 	double resp = 0.0;
