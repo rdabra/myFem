@@ -215,6 +215,47 @@ void Matrix::multiplyBy(const double& scalar)
 			this->setValue((*this)(i, j) * scalar, i, j);
 }
 
+void Matrix::multiplyRowBy(const unsigned int& rowIndex, const double& scalar)
+{
+	this->validadeIndex(rowIndex, 0);
+
+	for (unsigned int j = 0; j < this->getColumnSize(); j++)
+		this->setValue((*this)(rowIndex, j) * scalar, rowIndex, j);
+}
+
+void Matrix::multiplyColumnBy(const unsigned int& columnIndex, const double& scalar)
+{
+	this->validadeIndex(0, columnIndex);
+
+	for (unsigned int i = 0; i < this->getRowSize(); i++)
+		this->setValue((*this)(i, columnIndex) * scalar, i, columnIndex);
+}
+
+void Matrix::swapRows(const unsigned int& rowIndexA, const unsigned int& rowIndexB)
+{
+	this->validadeIndex(rowIndexA, 0);
+	this->validadeIndex(rowIndexB, 0);
+
+	for (unsigned int j = 0; j < this->getColumnSize(); j++) {
+		double tmp{ (*this)(rowIndexB, j) };
+		this->setValue((*this)(rowIndexA, j), rowIndexB, j);
+		this->setValue(tmp, rowIndexA, j);
+	}
+}
+
+void Matrix::swapColumns(const unsigned int& columnIndexA, const unsigned int& columnIndexB)
+{
+	this->validadeIndex(0, columnIndexA);
+	this->validadeIndex(0, columnIndexA);
+
+	for (unsigned int i = 0; i < this->getRowSize(); i++) {
+		double tmp{ (*this)(i, columnIndexB) };
+		this->setValue((*this)(i, columnIndexA), i, columnIndexB);
+		this->setValue(tmp, i, columnIndexA);
+	}
+}
+
+
 void Matrix::transpose()
 {
 	_isTransposed = !_isTransposed;

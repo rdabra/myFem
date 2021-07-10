@@ -5,9 +5,9 @@
 class MatrixSquare : public Matrix
 {
 private:
-	Matrix* _matP = NULL;
-	Matrix* _matL = NULL;
-	Matrix* _matU = NULL;
+	MatrixSquare* _matP{ nullptr };
+	MatrixSquare* _matL{ nullptr };
+	MatrixSquare* _matU{ nullptr };
 	bool _calcLU{ false };
 	bool _createLU{ false };
 	void fillLU();
@@ -15,6 +15,7 @@ private:
 protected:
 	MatrixSquare() {};
 	void createLU();
+	void destroyLU();
 
 public:
 	MatrixSquare(const unsigned int& size) : Matrix(size, size) {};

@@ -53,6 +53,10 @@ public:
 	void times(const double& scalar, Matrix& resp) const;
 	Matrix operator*(const double& scalar) const;
 	virtual void multiplyBy(const double& scalar);
+	virtual void multiplyRowBy(const unsigned int& rowIndex, const double& scalar);
+	virtual void multiplyColumnBy(const unsigned int& columnIndex, const double& scalar);
+	virtual void swapRows(const unsigned int& rowIndexA, const unsigned int& rowIndexB);
+	virtual void swapColumns(const unsigned int& columnIndexA, const unsigned int& columnIndexB);
 	virtual void transpose();
 	virtual double frobeniusNorm() const;
 	virtual void fillRandomly(const double& min, const double& max);
