@@ -231,28 +231,43 @@ void Matrix::multiplyColumnBy(const unsigned int& columnIndex, const double& sca
 		this->setValue((*this)(i, columnIndex) * scalar, i, columnIndex);
 }
 
-void Matrix::swapRows(const unsigned int& rowIndexA, const unsigned int& rowIndexB)
+void Matrix::swapRowElements(const unsigned int& rowIndexA, const unsigned int& rowIndexB, const unsigned int& startColumn, const unsigned int& endColumn)
 {
 	this->validadeIndex(rowIndexA, 0);
 	this->validadeIndex(rowIndexB, 0);
+	if (startColumn >= this->getColumnSize() || endColumn >= this->getColumnSize()) throw std::logic_error(messages::INDEX_OUT);
 
-	for (unsigned int j = 0; j < this->getColumnSize(); j++) {
+	for (unsigned int j = startColumn; j <= endColumn; j++) {
 		double tmp{ (*this)(rowIndexB, j) };
 		this->setValue((*this)(rowIndexA, j), rowIndexB, j);
 		this->setValue(tmp, rowIndexA, j);
 	}
+
 }
 
-void Matrix::swapColumns(const unsigned int& columnIndexA, const unsigned int& columnIndexB)
+inline void Matrix::swapRows(const unsigned int& rowIndexA, const unsigned int& rowIndexB)
+{
+	this->swapRowElements(rowIndexA, rowIndexB, 0, this->getColumnSize() - 1);
+}
+
+void Matrix::swapColumnElements(const unsigned int& columnIndexA, const unsigned int& columnIndexB, const unsigned int& startRow, const unsigned int& endRow)
 {
 	this->validadeIndex(0, columnIndexA);
 	this->validadeIndex(0, columnIndexA);
+	if (startRow >= this->getRowSize() || endRow >= this->getRowSize()) throw std::logic_error(messages::INDEX_OUT);
 
-	for (unsigned int i = 0; i < this->getRowSize(); i++) {
+	for (unsigned int i = startRow; i <= endRow; i++) {
 		double tmp{ (*this)(i, columnIndexB) };
 		this->setValue((*this)(i, columnIndexA), i, columnIndexB);
 		this->setValue(tmp, i, columnIndexA);
 	}
+
+}
+
+
+void Matrix::swapColumns(const unsigned int& columnIndexA, const unsigned int& columnIndexB)
+{
+	this->swapColumnElements(columnIndexA, columnIndexB, 0, this->getRowSize() - 1);
 }
 
 
@@ -292,35 +307,35 @@ void Matrix::fillRandomly(const double& min, const double& max)
 
 void Matrix::validateOperands(const Matrix& matrix) const
 {
-	if (this->getRowSize() != matrix.getRowSize() || this->getColumnSize() != matrix.getColumnSize()) throw std::length_error(messages::OPERANDS_EQUAL);
+	if (this->getRowSize() != matrix.getRowSize() || this->getColumnSize() != matrix.getColumnSize()) throw std::logic_error(messages::OPERANDS_EQUAL);
 }
 
 void Matrix::validadeResponse(Matrix& resp) const
 {
-	if (this->getRowSize() != resp.getRowSize() || this->getColumnSize() != resp.getColumnSize()) throw std::length_error(messages::NONCOMPT_RESP);
+	if (this->getRowSize() != resp.getRowSize() || this->getColumnSize() != resp.getColumnSize()) throw std::logic_error(messages::NONCOMPT_RESP);
 }
 
 void Matrix::validadeIndex(const unsigned int& rowIndex, const unsigned int& columnIndex) const
 {
-	if (rowIndex >= this->getRowSize() || columnIndex >= this->getColumnSize()) throw std::out_of_range(messages::INDEX_OUT);
+	if (rowIndex >= this->getRowSize() || columnIndex >= this->getColumnSize()) throw std::logic_error(messages::INDEX_OUT);
 }
 
 void Matrix::validadeOperandMult(const Matrix& matrix) const
 {
-	if (this->getColumnSize() != matrix.getRowSize()) throw std::length_error(messages::OPERANDS_MAT_PROD);
+	if (this->getColumnSize() != matrix.getRowSize()) throw std::logic_error(messages::OPERANDS_MAT_PROD);
 }
 
 void Matrix::validadeResponseMult(const Matrix& matrix, const Matrix& resp) const
 {
-	if (this->getRowSize() != resp.getRowSize() || matrix.getColumnSize() != resp.getColumnSize()) throw std::length_error(messages::OPERANDS_MAT_PROD);
+	if (this->getRowSize() != resp.getRowSize() || matrix.getColumnSize() != resp.getColumnSize()) throw std::logic_error(messages::OPERANDS_MAT_PROD);
 }
 
 void Matrix::validadeVectorMult(const Vector& vector) const
 {
-	if (this->getColumnSize() != vector.getSize()) throw std::length_error(messages::OPERANDS_MAT_PROD);
+	if (this->getColumnSize() != vector.getSize()) throw std::logic_error(messages::OPERANDS_MAT_PROD);
 }
 
 void Matrix::validadeVectorRespMult(Vector& resp) const
 {
-	if (this->getColumnSize() != resp.getSize()) throw std::length_error(messages::NONCOMPT_RESP);
+	if (this->getColumnSize() != resp.getSize()) throw std::logic_error(messages::NONCOMPT_RESP);
 }

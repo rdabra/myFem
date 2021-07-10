@@ -35,6 +35,10 @@ public:
 	virtual void multiplyBy(const double& scalar);
 	virtual double frobeniusNorm() const;
 	virtual void transpose();
+	virtual void swapRows(const unsigned int& rowIndexA, const unsigned int& rowIndexB) { throw std::logic_error(messages::ELEM_SWAPPED); };
+	virtual void swapRowElements(const unsigned int& rowIndexA, const unsigned int& rowIndexB, const unsigned int& startColumn, const unsigned int& endColumn);
+	virtual void swapColumns(const unsigned int& columnIndexA, const unsigned int& columnIndexB) { throw std::logic_error(messages::ELEM_SWAPPED); };
+	virtual void swapColumnElements(const unsigned int& columnIndexA, const unsigned int& columnIndexB, const unsigned int& startRow, const unsigned int& endRow);
 	virtual void fillRandomly(const double& min, const double& max);
 	virtual double determinant() const;
 };

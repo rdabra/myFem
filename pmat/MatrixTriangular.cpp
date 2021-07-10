@@ -128,7 +128,7 @@ void MatrixTriangular::plus(const MatrixTriangular& matrix, MatrixSquare& resp) 
 void MatrixTriangular::addBy(const MatrixTriangular& matrix)
 {
 	if (_isLower != matrix.isLower())
-		throw std::out_of_range(messages::NONCOMPT_ARG);
+		throw std::logic_error(messages::NONCOMPT_ARG);
 
 	if (this->isLower())
 		for (unsigned int i = 0; i < this->getRowSize(); i++)
@@ -180,7 +180,7 @@ void MatrixTriangular::minus(const MatrixTriangular& matrix, MatrixSquare& resp)
 void MatrixTriangular::subtractBy(const MatrixTriangular& matrix)
 {
 	if (_isLower != matrix.isLower())
-		throw std::out_of_range(messages::NONCOMPT_ARG);
+		throw std::logic_error(messages::NONCOMPT_ARG);
 
 	if (this->isLower())
 		for (unsigned int i = 0; i < this->getSize(); i++)
@@ -245,7 +245,7 @@ void MatrixTriangular::times(const Vector& vector, Vector& resp) const
 void MatrixTriangular::times(const double& scalar, MatrixTriangular& resp) const
 {
 	if (_isLower != resp.isLower())
-		throw std::out_of_range(messages::NONCOMPT_ARG);
+		throw std::logic_error(messages::NONCOMPT_ARG);
 
 	if (this->isLower())
 		for (unsigned int i = 0; i < this->getSize(); i++)
@@ -289,6 +289,25 @@ void MatrixTriangular::transpose()
 {
 	Matrix::transpose();
 	_isLower = !_isLower;
+}
+
+void MatrixTriangular::swapRowElements(const unsigned int& rowIndexA, const unsigned int& rowIndexB, const unsigned int& startColumn, const unsigned int& endColumn)
+{
+	if ((startColumn > endColumn) || (_isLower && (endColumn > rowIndexA || endColumn > rowIndexB)) ||
+		((!_isLower) && (startColumn < rowIndexA || startColumn < rowIndexB)))
+		throw std::out_of_range(messages::INDEX_OUT);
+
+	Matrix::swapRowElements(rowIndexA, rowIndexB, startColumn, endColumn);
+}
+
+void MatrixTriangular::swapColumnElements(const unsigned int& columnIndexA, const unsigned int& columnIndexB, const unsigned int& startRow, const unsigned int& endRow)
+{
+	if ((startRow > endRow) || (_isLower && (startRow > columnIndexA || startRow > columnIndexA)) ||
+		((!_isLower) && (endRow < columnIndexA || endRow < columnIndexA)))
+		throw std::out_of_range(messages::INDEX_OUT);
+
+	Matrix::swapColumnElements(columnIndexA, columnIndexB, startRow, endRow);
+
 }
 
 void MatrixTriangular::fillRandomly(const double& min, const double& max)

@@ -55,7 +55,9 @@ public:
 	virtual void multiplyBy(const double& scalar);
 	virtual void multiplyRowBy(const unsigned int& rowIndex, const double& scalar);
 	virtual void multiplyColumnBy(const unsigned int& columnIndex, const double& scalar);
+	virtual void swapRowElements(const unsigned int& rowIndexA, const unsigned int& rowIndexB, const unsigned int& startColumn, const unsigned int& endColumn);
 	virtual void swapRows(const unsigned int& rowIndexA, const unsigned int& rowIndexB);
+	virtual void swapColumnElements(const unsigned int& columnIndexA, const unsigned int& columnIndexB, const unsigned int& startRow, const unsigned int& endRow);
 	virtual void swapColumns(const unsigned int& columnIndexA, const unsigned int& columnIndexB);
 	virtual void transpose();
 	virtual double frobeniusNorm() const;

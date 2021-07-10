@@ -11,6 +11,7 @@ private:
 	bool _calcLU{ false };
 	bool _createLU{ false };
 	void fillLU();
+	void nullifyElementBellow(const unsigned int& idxPivot);
 
 protected:
 	MatrixSquare() {};

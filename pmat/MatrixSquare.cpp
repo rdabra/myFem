@@ -1,27 +1,59 @@
 #include "pch.h"
 #include "MatrixSquare.h"
 
+
+
+
+void MatrixSquare::nullifyElementBellow(const unsigned int& idxPivot)
+{
+	for (unsigned int i = idxPivot + 1; i < _matU->getSize(); i++)
+		for (unsigned int j = idxPivot; j < _matU->getSize(); j++) {
+			_matL->setValue((*_matU)(i, j) / (*_matU)(idxPivot, idxPivot), i, j);
+			for (unsigned int k = idxPivot; k < _matU->getSize(); k++)
+				_matU->setValue((*_matU)(i, k) - (*_matU)(idxPivot, k) * (*_matL)(i, j), i, k);
+		}
+}
+
+
+
+
 void MatrixSquare::fillLU()
 {
 	if (!_calcLU) {
 		this->createLU();
 
-		for (unsigned int i = 1, unsigned int idxBase = 0; i < _matU->getSize(); i++, idxBase++) {
-			if (!putils::areEqual((*this)(idxBase, idxBase), 0.0))
-				for (unsigned int j = 0; i < _matU->getSize(); i++) {
-					_matL->setValue(i, j, (*this)(i, j) / (*this)(idxBase, idxBase));
-					for (unsigned int k = 0; k < _matU->getSize(); k++)
-						_matU->setValue(i, k, (*_matU)(i, k) - (*_matU)(idxBase, k) * (*_matL)(i, j));
-				}
+		unsigned int idxPivot{ 0 };
+		while (idxPivot < _matU->getSize()) {
+			if (!putils::areEqual((*this)(idxPivot, idxPivot), 0.0)) {
+				this->nullifyElementBellow(idxPivot);
+				idxPivot++;
+			}
 			else {
-
+				unsigned int i = idxPivot + 1;
+				bool swap{ false };
+				while (!swap && i < _matU->getSize())
+				{
+					if (!putils::areEqual((*this)(i, idxPivot), 0.0)) {
+						_matU->swapRows(i, idxPivot);
+						_matP->swapRows(i, idxPivot);
+						_matL->swapRowElements(i, idxPivot, 0, idxPivot - 1);
+						swap = true;
+					}
+					i++;
+				}
+				if (!swap) {
+					this->destroyLU();
+					throw std::logic_error(messages::MATRIX_SINGULAR);
+				}
 			}
 		}
-
-		_calcLU = true;
 	}
 
+	_calcLU = true;
 }
+
+
+
 
 
 void MatrixSquare::createLU()
@@ -33,8 +65,8 @@ void MatrixSquare::createLU()
 	_matL = new MatrixSquare(this->getSize());
 
 	for (unsigned int j = 1; j < this->getSize(); j++) {
-		_matL->setValue(j, j, 1.0);
-		_matP->setValue(j, j, 1.0);
+		_matL->setValue(1.0, j, j);
+		_matP->setValue(1.0, j, j);
 	}
 
 	_createLU = true;
