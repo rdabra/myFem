@@ -302,8 +302,8 @@ void MatrixTriangular::swapRowElements(const unsigned int& rowIndexA, const unsi
 
 void MatrixTriangular::swapColumnElements(const unsigned int& columnIndexA, const unsigned int& columnIndexB, const unsigned int& startRow, const unsigned int& endRow)
 {
-	if ((startRow > endRow) || (_isLower && (startRow > columnIndexA || startRow > columnIndexA)) ||
-		((!_isLower) && (endRow < columnIndexA || endRow < columnIndexA)))
+	if ((startRow > endRow) || (_isLower && (startRow > columnIndexA || startRow > columnIndexB)) ||
+		((!_isLower) && (endRow < columnIndexA || endRow < columnIndexB)))
 		throw std::out_of_range(messages::INDEX_OUT);
 
 	Matrix::swapColumnElements(columnIndexA, columnIndexB, startRow, endRow);

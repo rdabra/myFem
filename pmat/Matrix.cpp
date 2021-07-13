@@ -17,7 +17,7 @@ Matrix::Matrix(const Matrix& matrix)
 
 	for (unsigned int i = 0; i < _rowSize; i++)
 		for (unsigned int j = 0; j < _columnSize; j++)
-			_matrix.push_back(matrix(i, j));
+			(*this).setValue(matrix(i, j), i, j);;
 }
 
 Matrix::Matrix(Matrix&& matrix) noexcept
@@ -49,7 +49,7 @@ Matrix& Matrix::operator=(const Matrix& matrix)
 
 	for (unsigned int i = 0; i < _rowSize; i++)
 		for (unsigned int j = 0; j < _columnSize; j++)
-			_matrix.push_back(matrix(i, j));
+			(*this).setValue(matrix(i, j), i, j);
 
 	return (*this);
 }
@@ -304,6 +304,8 @@ void Matrix::fillRandomly(const double& min, const double& max)
 		for (unsigned int j = 0; j < this->getColumnSize(); j++)
 			this->setValue(dist(rng), i, j);
 }
+
+
 
 void Matrix::validateOperands(const Matrix& matrix) const
 {

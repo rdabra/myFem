@@ -1,60 +1,14 @@
 #include "pch.h"
 #include "MatrixSquare.h"
 
-
-
-
 void MatrixSquare::nullifyElementBellow(const unsigned int& idxPivot)
 {
-	for (unsigned int i = idxPivot + 1; i < _matU->getSize(); i++)
-		for (unsigned int j = idxPivot; j < _matU->getSize(); j++) {
-			_matL->setValue((*_matU)(i, j) / (*_matU)(idxPivot, idxPivot), i, j);
-			for (unsigned int k = idxPivot; k < _matU->getSize(); k++)
-				_matU->setValue((*_matU)(i, k) - (*_matU)(idxPivot, k) * (*_matL)(i, j), i, k);
-		}
-}
-
-
-
-
-void MatrixSquare::fillLU()
-{
-	if (!_calcLU) {
-		this->createLU();
-
-		unsigned int idxPivot{ 0 };
-		while (idxPivot < _matU->getSize()) {
-			if (!putils::areEqual((*this)(idxPivot, idxPivot), 0.0)) {
-				this->nullifyElementBellow(idxPivot);
-				idxPivot++;
-			}
-			else {
-				unsigned int i = idxPivot + 1;
-				bool swap{ false };
-				while (!swap && i < _matU->getSize())
-				{
-					if (!putils::areEqual((*this)(i, idxPivot), 0.0)) {
-						_matU->swapRows(i, idxPivot);
-						_matP->swapRows(i, idxPivot);
-						_matL->swapRowElements(i, idxPivot, 0, idxPivot - 1);
-						swap = true;
-					}
-					i++;
-				}
-				if (!swap) {
-					this->destroyLU();
-					throw std::logic_error(messages::MATRIX_SINGULAR);
-				}
-			}
-		}
+	for (unsigned int i = idxPivot + 1; i < _matU->getSize(); i++) {
+		_matL->setValue((*_matU)(i, idxPivot) / (*_matU)(idxPivot, idxPivot), i, idxPivot);
+		for (unsigned int j = idxPivot; j < _matU->getSize(); j++)
+			_matU->setValue((*_matU)(i, j) - (*_matU)(idxPivot, j) * (*_matL)(i, idxPivot), i, j);
 	}
-
-	_calcLU = true;
 }
-
-
-
-
 
 void MatrixSquare::createLU()
 {
@@ -64,7 +18,7 @@ void MatrixSquare::createLU()
 	_matP = new MatrixSquare(this->getSize());
 	_matL = new MatrixSquare(this->getSize());
 
-	for (unsigned int j = 1; j < this->getSize(); j++) {
+	for (unsigned int j = 0; j < this->getSize(); j++) {
 		_matL->setValue(1.0, j, j);
 		_matP->setValue(1.0, j, j);
 	}
@@ -100,7 +54,47 @@ double MatrixSquare::trace() const
 	return resp;
 }
 
-double MatrixSquare::determinant() const
+void MatrixSquare::decomposeToPLU()
 {
-	return 0.0;
+	if (!_calcLU) {
+		this->createLU();
+		_numExchangesP = 0;
+		unsigned int idxPivot{ 0 };
+		while (idxPivot < _matU->getSize() - 1) {
+			if (!putils::areEqual((*_matU)(idxPivot, idxPivot), 0.0)) {
+				this->nullifyElementBellow(idxPivot);
+				idxPivot++;
+			}
+			else {
+				unsigned int i = idxPivot + 1;
+				bool swap{ false };
+				while (!swap && i < _matU->getSize())
+				{
+					if (!putils::areEqual((*_matU)(i, idxPivot), 0.0)) {
+						_matU->swapRows(i, idxPivot);
+						_matP->swapRows(i, idxPivot);
+						_matL->swapRowElements(i, idxPivot, 0, idxPivot - 1);
+						_numExchangesP++;
+						swap = true;
+					}
+					i++;
+				}
+				if (!swap) idxPivot++;
+			}
+		}
+	}
+
+	_calcLU = true;
+}
+
+double MatrixSquare::determinant()
+{
+	this->decomposeToPLU();
+
+	double resp{ pow(-1.0, _numExchangesP) };
+
+	for (unsigned int i = 0; i < this->getSize(); i++)
+		resp *= (*_matU)(i, i);
+
+	return resp;
 }

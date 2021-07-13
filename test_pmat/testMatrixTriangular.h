@@ -340,3 +340,4 @@ TEST(MatrixTriangular, TestTranspose)
 
 	EXPECT_TRUE(z == zt);
 }
+

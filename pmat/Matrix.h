@@ -62,4 +62,5 @@ public:
 	virtual void transpose();
 	virtual double frobeniusNorm() const;
 	virtual void fillRandomly(const double& min, const double& max);
+	inline virtual void copyFrom(const Matrix& matrix) { (*this) = matrix; };
 };
