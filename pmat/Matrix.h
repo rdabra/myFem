@@ -1,10 +1,6 @@
 #pragma once
-#include <stdexcept>
-#include <cmath>
 #include <random>
 #include <vector>
-#include "Messages.h"
-#include "utils.h"
 #include "Vector.h"
 
 class Matrix
@@ -17,29 +13,29 @@ protected:
 	{
 		return _isTransposed ? i + j * _rowSize : j + i * _columnSize;
 	}
-	inline virtual unsigned int getVectorSize()  const { return _rowSize * _columnSize; };
-	void validadeIndex(const unsigned int& rowIndex, const unsigned int& columnIndex) const;
+	inline virtual unsigned int getVectorSize()  const { return _rowSize * _columnSize; }
+	void validateIndex(const unsigned int& rowIndex, const unsigned int& columnIndex) const;
 	void validateOperands(const Matrix& matrix) const;
-	void validadeResponse(Matrix& resp) const;
-	void validadeOperandMult(const Matrix& matrix) const;
-	void validadeResponseMult(const Matrix& matrix, const Matrix& resp) const;
-	void validadeVectorMult(const Vector& vector) const;
-	void validadeVectorRespMult(Vector& resp) const;
+	void validateResponse(Matrix& resp) const;
+	void validateOperandMult(const Matrix& matrix) const;
+	void validateResponseMult(const Matrix& matrix, const Matrix& resp) const;
+	void validateVectorMult(const Vector& vector) const;
+	void validateVectorRespMult(Vector& resp) const;
 
 public:
-	Matrix() {};
+	Matrix() = default;
 	Matrix(const unsigned int& rowSize, const unsigned int& columnSize);
 	Matrix(const Matrix& matrix);
 	Matrix(Matrix&& matrix) noexcept;
-	virtual ~Matrix() {};
+	virtual ~Matrix() = default;
 	virtual const double& operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const;
 	virtual void setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex);
-	inline virtual const unsigned int& getRowSize(void) const { return _rowSize; };
-	inline virtual const unsigned int& getColumnSize(void) const { return _columnSize; };
-	virtual Matrix& operator=(const Matrix& matrix);
-	virtual Matrix& operator=(Matrix&& matrix) noexcept;
+	inline virtual const unsigned int& getRowSize(void) const { return _rowSize; }
+	inline virtual const unsigned int& getColumnSize(void) const { return _columnSize; }
+	Matrix& operator=(const Matrix& matrix);
+	Matrix& operator=(Matrix&& matrix) noexcept;
 	virtual bool operator==(const Matrix& matrix) const;
-	double dotProduct(const Matrix& matrix) const;
+	virtual double dotProduct(const Matrix& matrix) const;
 	void plus(const Matrix& matrix, Matrix& resp) const;
 	Matrix operator+(const Matrix& matrix) const;
 	virtual void addBy(const Matrix& matrix);
@@ -48,7 +44,7 @@ public:
 	virtual void subtractBy(const Matrix& matrix);
 	void times(const Matrix& matrix, Matrix& resp) const;
 	Matrix operator*(const Matrix& matrix) const;
-	void times(const Vector& vector, Vector& resp) const;
+	virtual void times(const Vector& vector, Vector& resp) const;
 	Vector operator*(const Vector& vector) const;
 	void times(const double& scalar, Matrix& resp) const;
 	Matrix operator*(const double& scalar) const;
@@ -62,5 +58,5 @@ public:
 	virtual void transpose();
 	virtual double frobeniusNorm() const;
 	virtual void fillRandomly(const double& min, const double& max);
-	inline virtual void copyFrom(const Matrix& matrix) { (*this) = matrix; };
+	inline virtual void copyFrom(const Matrix& matrix) { (*this) = matrix; }
 };

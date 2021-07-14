@@ -6,56 +6,58 @@ Matrix::Matrix(const unsigned int& rowSize, const unsigned int& columnSize)
 {
 	_rowSize = rowSize;
 	_columnSize = columnSize;
-	_matrix.resize(this->getVectorSize());
+	_matrix.resize(this->Matrix::getVectorSize());
 }
 
 Matrix::Matrix(const Matrix& matrix)
 {
 	_rowSize = matrix.getRowSize();
 	_columnSize = matrix.getColumnSize();
-	_matrix.resize(this->getVectorSize());
+	_matrix.resize(this->Matrix::getVectorSize());
 
-	for (unsigned int i = 0; i < this->getRowSize(); i++)
-		for (unsigned int j = 0; j < this->getColumnSize(); j++)
-			this->setValue(matrix(i, j), i, j);
+	for (unsigned int i = 0; i < this->Matrix::getRowSize(); i++)
+		for (unsigned int j = 0; j < this->Matrix::getColumnSize(); j++)
+			this->Matrix::setValue(matrix(i, j), i, j);
 }
 
 Matrix::Matrix(Matrix&& matrix) noexcept
 {
 	_rowSize = matrix.getRowSize();
 	_columnSize = matrix.getColumnSize();
-	_matrix.resize(this->getVectorSize());
+	_matrix.resize(this->Matrix::getVectorSize());
 
-	for (unsigned int i = 0; i < this->getRowSize(); i++)
-		for (unsigned int j = 0; j < this->getColumnSize(); j++)
-			this->setValue(matrix(i, j), i, j);
+	for (unsigned int i = 0; i < this->Matrix::getRowSize(); i++)
+		for (unsigned int j = 0; j < this->Matrix::getColumnSize(); j++)
+			this->Matrix::setValue(matrix(i, j), i, j);
 
 	matrix.~Matrix();
 }
 
 const double& Matrix::operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const
 {
-	this->validadeIndex(rowIndex, columnIndex);
+	this->validateIndex(rowIndex, columnIndex);
 	return _matrix[this->getVectorIndex(rowIndex, columnIndex)];
 }
 
 void Matrix::setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex)
 {
-	this->validadeIndex(rowIndex, columnIndex);
+	this->validateIndex(rowIndex, columnIndex);
 	_matrix[this->getVectorIndex(rowIndex, columnIndex)] = value;
 }
 
 Matrix& Matrix::operator=(const Matrix& matrix)
 {
-	_matrix.clear();
+	if (!(this == &matrix)) {
+		_matrix.clear();
 
-	_rowSize = matrix.getRowSize();
-	_columnSize = matrix.getColumnSize();
-	_matrix.resize(this->getVectorSize());
+		_rowSize = matrix.getRowSize();
+		_columnSize = matrix.getColumnSize();
+		_matrix.resize(this->getVectorSize());
 
-	for (unsigned int i = 0; i < this->getRowSize(); i++)
-		for (unsigned int j = 0; j < this->getColumnSize(); j++)
-			this->setValue(matrix(i, j), i, j);
+		for (unsigned int i = 0; i < this->getRowSize(); i++)
+			for (unsigned int j = 0; j < this->getColumnSize(); j++)
+				this->setValue(matrix(i, j), i, j);
+	}
 
 	return (*this);
 }
@@ -76,13 +78,11 @@ bool Matrix::operator==(const Matrix& matrix) const
 	bool resp = this->getRowSize() == matrix.getRowSize() && this->getColumnSize() == matrix.getColumnSize();
 
 	if (resp)
-		for (unsigned int i = 0; i < this->getRowSize(); i++) {
-			for (unsigned int j = 0; j < this->getColumnSize(); j++)
-			{
+		for (unsigned int i = 0; i < this->getRowSize(); i++)
+			for (unsigned int j = 0; j < this->getColumnSize(); j++) {
 				resp = putils::areEqual((*this)(i, j), matrix(i, j));
 				if (!resp) return false;
 			}
-		}
 
 	return resp;
 }
@@ -102,7 +102,7 @@ double Matrix::dotProduct(const Matrix& matrix) const
 void Matrix::plus(const Matrix& matrix, Matrix& resp) const
 {
 	this->validateOperands(matrix);
-	this->validadeResponse(resp);
+	this->validateResponse(resp);
 
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
 		for (unsigned int j = 0; j < this->getColumnSize(); j++)
@@ -129,7 +129,7 @@ void Matrix::addBy(const Matrix& matrix)
 void Matrix::minus(const Matrix& matrix, Matrix& resp) const
 {
 	this->validateOperands(matrix);
-	this->validadeResponse(resp);
+	this->validateResponse(resp);
 
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
 		for (unsigned int j = 0; j < this->getColumnSize(); j++)
@@ -156,12 +156,11 @@ void Matrix::subtractBy(const Matrix& matrix)
 
 void Matrix::times(const Matrix& matrix, Matrix& resp) const
 {
-	this->validadeOperandMult(matrix);
-	this->validadeResponseMult(matrix, resp);
+	this->validateOperandMult(matrix);
+	this->validateResponseMult(matrix, resp);
 
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
-		for (unsigned int j = 0; j < matrix.getColumnSize(); j++)
-		{
+		for (unsigned int j = 0; j < matrix.getColumnSize(); j++) {
 			double aux = 0.0;
 			for (unsigned int k = 0; k < this->getColumnSize(); k++)
 				aux += (*this)(i, k) * matrix(k, j);
@@ -179,11 +178,10 @@ Matrix Matrix::operator*(const Matrix& matrix) const
 
 void Matrix::times(const Vector& vector, Vector& resp) const
 {
-	this->validadeVectorMult(vector);
-	this->validadeVectorRespMult(resp);
+	this->validateVectorMult(vector);
+	this->validateVectorRespMult(resp);
 
-	for (unsigned int i = 0; i < this->getRowSize(); i++)
-	{
+	for (unsigned int i = 0; i < this->getRowSize(); i++) {
 		double aux = 0.0;
 		for (unsigned int k = 0; k < this->getColumnSize(); k++)
 			aux += (*this)(i, k) * vector(k);
@@ -223,7 +221,7 @@ void Matrix::multiplyBy(const double& scalar)
 
 void Matrix::multiplyRowBy(const unsigned int& rowIndex, const double& scalar)
 {
-	this->validadeIndex(rowIndex, 0);
+	this->validateIndex(rowIndex, 0);
 
 	for (unsigned int j = 0; j < this->getColumnSize(); j++)
 		this->setValue((*this)(rowIndex, j) * scalar, rowIndex, j);
@@ -231,24 +229,26 @@ void Matrix::multiplyRowBy(const unsigned int& rowIndex, const double& scalar)
 
 void Matrix::multiplyColumnBy(const unsigned int& columnIndex, const double& scalar)
 {
-	this->validadeIndex(0, columnIndex);
+	this->validateIndex(0, columnIndex);
 
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
 		this->setValue((*this)(i, columnIndex) * scalar, i, columnIndex);
 }
 
-void Matrix::swapRowElements(const unsigned int& rowIndexA, const unsigned int& rowIndexB, const unsigned int& startColumn, const unsigned int& endColumn)
+void Matrix::swapRowElements(const unsigned int& rowIndexA, const unsigned int& rowIndexB,
+	const unsigned int& startColumn, const unsigned int& endColumn)
 {
-	this->validadeIndex(rowIndexA, 0);
-	this->validadeIndex(rowIndexB, 0);
-	if (startColumn >= this->getColumnSize() || endColumn >= this->getColumnSize()) throw std::logic_error(messages::INDEX_OUT);
+	this->validateIndex(rowIndexA, 0);
+	this->validateIndex(rowIndexB, 0);
+	if (startColumn >= this->getColumnSize() || endColumn >= this->getColumnSize())
+		throw std::logic_error(
+			messages::INDEX_OUT);
 
 	for (unsigned int j = startColumn; j <= endColumn; j++) {
 		double tmp{ (*this)(rowIndexB, j) };
 		this->setValue((*this)(rowIndexA, j), rowIndexB, j);
 		this->setValue(tmp, rowIndexA, j);
 	}
-
 }
 
 inline void Matrix::swapRows(const unsigned int& rowIndexA, const unsigned int& rowIndexB)
@@ -256,10 +256,11 @@ inline void Matrix::swapRows(const unsigned int& rowIndexA, const unsigned int& 
 	this->swapRowElements(rowIndexA, rowIndexB, 0, this->getColumnSize() - 1);
 }
 
-void Matrix::swapColumnElements(const unsigned int& columnIndexA, const unsigned int& columnIndexB, const unsigned int& startRow, const unsigned int& endRow)
+void Matrix::swapColumnElements(const unsigned int& columnIndexA, const unsigned int& columnIndexB,
+	const unsigned int& startRow, const unsigned int& endRow)
 {
-	this->validadeIndex(0, columnIndexA);
-	this->validadeIndex(0, columnIndexA);
+	this->validateIndex(0, columnIndexA);
+	this->validateIndex(0, columnIndexA);
 	if (startRow >= this->getRowSize() || endRow >= this->getRowSize()) throw std::logic_error(messages::INDEX_OUT);
 
 	for (unsigned int i = startRow; i <= endRow; i++) {
@@ -267,7 +268,6 @@ void Matrix::swapColumnElements(const unsigned int& columnIndexA, const unsigned
 		this->setValue((*this)(i, columnIndexA), i, columnIndexB);
 		this->setValue(tmp, i, columnIndexA);
 	}
-
 }
 
 
@@ -300,11 +300,8 @@ void Matrix::fillRandomly(const double& min, const double& max)
 	//Type of random number distribution
 	std::uniform_real_distribution<double> dist(min, max);
 
-	//Mersenne Twister: Good quality random number generator
-	std::mt19937 rng;
-
-	//Initialize with non-deterministic seeds
-	rng.seed(std::random_device{}());
+	//Mersenne Twister: Good quality random number generator initialized with non-deterministic seeds
+	std::mt19937 rng(std::random_device{}());
 
 	for (unsigned int i = 0; i < this->getRowSize(); i++)
 		for (unsigned int j = 0; j < this->getColumnSize(); j++)
@@ -312,38 +309,45 @@ void Matrix::fillRandomly(const double& min, const double& max)
 }
 
 
-
 void Matrix::validateOperands(const Matrix& matrix) const
 {
-	if (this->getRowSize() != matrix.getRowSize() || this->getColumnSize() != matrix.getColumnSize()) throw std::logic_error(messages::OPERANDS_EQUAL);
+	if (this->getRowSize() != matrix.getRowSize() || this->getColumnSize() != matrix.getColumnSize())
+		throw
+		std::logic_error(messages::OPERANDS_EQUAL);
 }
 
-void Matrix::validadeResponse(Matrix& resp) const
+void Matrix::validateResponse(Matrix& resp) const
 {
-	if (this->getRowSize() != resp.getRowSize() || this->getColumnSize() != resp.getColumnSize()) throw std::logic_error(messages::NONCOMPT_RESP);
+	if (this->getRowSize() != resp.getRowSize() || this->getColumnSize() != resp.getColumnSize())
+		throw
+		std::logic_error(messages::NONCOMPT_RESP);
 }
 
-void Matrix::validadeIndex(const unsigned int& rowIndex, const unsigned int& columnIndex) const
+void Matrix::validateIndex(const unsigned int& rowIndex, const unsigned int& columnIndex) const
 {
-	if (rowIndex >= this->getRowSize() || columnIndex >= this->getColumnSize()) throw std::logic_error(messages::INDEX_OUT);
+	if (rowIndex >= this->getRowSize() || columnIndex >= this->getColumnSize())
+		throw std::logic_error(
+			messages::INDEX_OUT);
 }
 
-void Matrix::validadeOperandMult(const Matrix& matrix) const
+void Matrix::validateOperandMult(const Matrix& matrix) const
 {
 	if (this->getColumnSize() != matrix.getRowSize()) throw std::logic_error(messages::OPERANDS_MAT_PROD);
 }
 
-void Matrix::validadeResponseMult(const Matrix& matrix, const Matrix& resp) const
+void Matrix::validateResponseMult(const Matrix& matrix, const Matrix& resp) const
 {
-	if (this->getRowSize() != resp.getRowSize() || matrix.getColumnSize() != resp.getColumnSize()) throw std::logic_error(messages::OPERANDS_MAT_PROD);
+	if (this->getRowSize() != resp.getRowSize() || matrix.getColumnSize() != resp.getColumnSize())
+		throw
+		std::logic_error(messages::OPERANDS_MAT_PROD);
 }
 
-void Matrix::validadeVectorMult(const Vector& vector) const
+void Matrix::validateVectorMult(const Vector& vector) const
 {
 	if (this->getColumnSize() != vector.getSize()) throw std::logic_error(messages::OPERANDS_MAT_PROD);
 }
 
-void Matrix::validadeVectorRespMult(Vector& resp) const
+void Matrix::validateVectorRespMult(Vector& resp) const
 {
 	if (this->getRowSize() != resp.getSize()) throw std::logic_error(messages::NONCOMPT_RESP);
 }

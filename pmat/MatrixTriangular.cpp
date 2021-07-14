@@ -7,25 +7,24 @@ MatrixTriangular::MatrixTriangular(const unsigned int& size, bool isLower)
 	_rowSize = size;
 	_columnSize = size;
 	_isLower = isLower;
-	_matrix.resize(this->getVectorSize());
+	_matrix.resize(this->MatrixTriangular::getVectorSize());
 }
 
 MatrixTriangular::MatrixTriangular(const MatrixTriangular& matrix)
 {
-	_rowSize = matrix._rowSize;
-	_columnSize = matrix._columnSize;
+	_rowSize = matrix.getSize();
+	_columnSize = matrix.getSize();
 	_isLower = matrix.isLower();
 	_matrix.resize(matrix.getVectorSize());
 
 	if (this->isLower())
-		for (unsigned int i = 0; i < this->getRowSize(); i++)
+		for (unsigned int i = 0; i < this->getSize(); i++)
 			for (unsigned int j = 0; j <= i; j++)
-				this->setValue(matrix(i, j), i, j);
+				this->MatrixTriangular::setValue(matrix(i, j), i, j);
 	else
-		for (unsigned int i = 0; i < this->getRowSize(); i++)
-			for (unsigned int j = i; j < this->getColumnSize(); j++)
-				this->setValue(matrix(i, j), i, j);
-
+		for (unsigned int i = 0; i < this->getSize(); i++)
+			for (unsigned int j = i; j < this->getSize(); j++)
+				this->MatrixTriangular::setValue(matrix(i, j), i, j);
 }
 
 MatrixTriangular::MatrixTriangular(MatrixTriangular&& matrix) noexcept
@@ -38,7 +37,7 @@ MatrixTriangular::MatrixTriangular(MatrixTriangular&& matrix) noexcept
 
 void MatrixTriangular::setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex)
 {
-	Matrix::validadeIndex(rowIndex, columnIndex);
+	validateIndex(rowIndex, columnIndex);
 	if ((_isLower && columnIndex > rowIndex) || (!_isLower && columnIndex < rowIndex))
 		throw std::out_of_range(messages::INDEX_OUT);
 
@@ -47,12 +46,11 @@ void MatrixTriangular::setValue(const double& value, const unsigned int& rowInde
 
 const double& MatrixTriangular::operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const
 {
-	Matrix::validadeIndex(rowIndex, columnIndex);
+	validateIndex(rowIndex, columnIndex);
 
-	bool isZero = (_isLower && columnIndex > rowIndex) || ((!_isLower) && columnIndex < rowIndex);
+	const bool isZero = (_isLower && columnIndex > rowIndex) || ((!_isLower) && columnIndex < rowIndex);
 
 	return isZero ? putils::ZERO : _matrix[this->getVectorIndex(rowIndex, columnIndex)];
-
 }
 
 MatrixTriangular& MatrixTriangular::operator=(const MatrixTriangular& matrix)
@@ -82,6 +80,8 @@ MatrixTriangular& MatrixTriangular::operator=(MatrixTriangular&& matrix) noexcep
 	_isLower = matrix.isLower();
 	_matrix = std::move(matrix._matrix);
 
+	matrix.~MatrixTriangular();
+	
 	return (*this);
 }
 
@@ -105,7 +105,7 @@ double MatrixTriangular::dotProduct(const MatrixSquare& matrix) const
 void MatrixTriangular::plus(const MatrixTriangular& matrix, MatrixSquare& resp) const
 {
 	this->validateOperands(matrix);
-	this->validadeResponse(resp);
+	this->validateResponse(resp);
 
 	if (_isLower == matrix.isLower()) {
 		if (this->isLower())
@@ -157,7 +157,7 @@ void MatrixTriangular::addBy(const MatrixTriangular& matrix)
 void MatrixTriangular::minus(const MatrixTriangular& matrix, MatrixSquare& resp) const
 {
 	this->validateOperands(matrix);
-	this->validadeResponse(resp);
+	this->validateResponse(resp);
 
 	if (_isLower == matrix.isLower()) {
 		if (this->isLower())
@@ -208,13 +208,12 @@ void MatrixTriangular::subtractBy(const MatrixTriangular& matrix)
 
 void MatrixTriangular::times(const MatrixSquare& matrix, MatrixSquare& resp) const
 {
-	this->validadeOperandMult(matrix);
-	this->validadeResponseMult(matrix, resp);
+	this->validateOperandMult(matrix);
+	this->validateResponseMult(matrix, resp);
 
 	if (this->isLower()) {
 		for (unsigned int i = 0; i < this->getSize(); i++)
-			for (unsigned int j = 0; j < this->getSize(); j++)
-			{
+			for (unsigned int j = 0; j < this->getSize(); j++) {
 				double aux = 0.0;
 				for (unsigned int k = 0; k <= i; k++)
 					aux += (*this)(i, k) * matrix(k, j);
@@ -223,8 +222,7 @@ void MatrixTriangular::times(const MatrixSquare& matrix, MatrixSquare& resp) con
 	}
 	else {
 		for (unsigned int i = 0; i < this->getSize(); i++)
-			for (unsigned int j = 0; j < this->getSize(); j++)
-			{
+			for (unsigned int j = 0; j < this->getSize(); j++) {
 				double aux = 0.0;
 				for (unsigned int k = i; k <= this->getSize(); k++)
 					aux += (*this)(i, k) * matrix(k, j);
@@ -235,20 +233,18 @@ void MatrixTriangular::times(const MatrixSquare& matrix, MatrixSquare& resp) con
 
 void MatrixTriangular::times(const Vector& vector, Vector& resp) const
 {
-	this->validadeVectorMult(vector);
-	this->validadeVectorRespMult(resp);
+	this->validateVectorMult(vector);
+	this->validateVectorRespMult(resp);
 
 	if (this->isLower())
-		for (unsigned int i = 0; i < this->getSize(); i++)
-		{
+		for (unsigned int i = 0; i < this->getSize(); i++) {
 			double aux = 0.0;
 			for (unsigned int k = 0; k <= i; k++)
 				aux += (*this)(i, k) * vector(k);
 			resp.setValue(aux, i);
 		}
 	else
-		for (unsigned int i = 0; i < this->getSize(); i++)
-		{
+		for (unsigned int i = 0; i < this->getSize(); i++) {
 			double aux = 0.0;
 			for (unsigned int k = i; k < this->getSize(); k++)
 				aux += (*this)(i, k) * vector(k);
@@ -305,7 +301,8 @@ void MatrixTriangular::transpose()
 	_isLower = !_isLower;
 }
 
-void MatrixTriangular::swapRowElements(const unsigned int& rowIndexA, const unsigned int& rowIndexB, const unsigned int& startColumn, const unsigned int& endColumn)
+void MatrixTriangular::swapRowElements(const unsigned int& rowIndexA, const unsigned int& rowIndexB,
+                                       const unsigned int& startColumn, const unsigned int& endColumn)
 {
 	if ((startColumn > endColumn) || (_isLower && (endColumn > rowIndexA || endColumn > rowIndexB)) ||
 		((!_isLower) && (startColumn < rowIndexA || startColumn < rowIndexB)))
@@ -314,14 +311,14 @@ void MatrixTriangular::swapRowElements(const unsigned int& rowIndexA, const unsi
 	Matrix::swapRowElements(rowIndexA, rowIndexB, startColumn, endColumn);
 }
 
-void MatrixTriangular::swapColumnElements(const unsigned int& columnIndexA, const unsigned int& columnIndexB, const unsigned int& startRow, const unsigned int& endRow)
+void MatrixTriangular::swapColumnElements(const unsigned int& columnIndexA, const unsigned int& columnIndexB,
+                                          const unsigned int& startRow, const unsigned int& endRow)
 {
 	if ((startRow > endRow) || (_isLower && (startRow > columnIndexA || startRow > columnIndexB)) ||
 		((!_isLower) && (endRow < columnIndexA || endRow < columnIndexB)))
 		throw std::out_of_range(messages::INDEX_OUT);
 
 	Matrix::swapColumnElements(columnIndexA, columnIndexB, startRow, endRow);
-
 }
 
 void MatrixTriangular::fillRandomly(const double& min, const double& max)
@@ -329,11 +326,8 @@ void MatrixTriangular::fillRandomly(const double& min, const double& max)
 	//Type of random number distribution
 	std::uniform_real_distribution<double> dist(min, max);
 
-	//Mersenne Twister: Good quality random number generator
-	std::mt19937 rng;
-
-	//Initialize with non-deterministic seeds
-	rng.seed(std::random_device{}());
+	//Mersenne Twister: Good quality random number generator initialized with non-deterministic seeds
+	std::mt19937 rng(std::random_device{}());
 
 	if (this->isLower())
 		for (unsigned int i = 0; i < this->getSize(); i++)
@@ -345,7 +339,7 @@ void MatrixTriangular::fillRandomly(const double& min, const double& max)
 				this->setValue(dist(rng), i, j);
 }
 
-double MatrixTriangular::determinant() const
+double MatrixTriangular::determinant()
 {
 	double resp = 1.0;
 

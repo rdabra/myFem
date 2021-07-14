@@ -1,6 +1,5 @@
 #pragma once
 
-#include<cmath>
 #include "Matrix.h"
 
 class MatrixSquare : public Matrix
@@ -10,23 +9,25 @@ private:
 	MatrixSquare* _matL{ nullptr };
 	MatrixSquare* _matU{ nullptr };
 	unsigned int _numExchangesP{ 0 };
-	bool _calcLU{ false };
-	bool _createLU{ false };
-	void nullifyElementBellow(const unsigned int& idxPivot);
+	bool _calcLu{ false };
+	bool _createLu{ false };
+	void nullifyElementBellow(const unsigned int& idxPivot) const;
 
 protected:
-	MatrixSquare() {};
-	void createLU();
-	void destroyLU();
+	void createLu();
+	void destroyLu() const;
 
 public:
-	MatrixSquare(const unsigned int& size) : Matrix(size, size) {};
-	MatrixSquare(const MatrixSquare& matrix) : Matrix(matrix) {};
-	MatrixSquare(MatrixSquare&& matrix) noexcept : Matrix(matrix) {};
-	virtual ~MatrixSquare();
-	inline const unsigned int& getSize() const { return this->getRowSize(); };
-	virtual void setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex);
+	MatrixSquare() = default;
+	explicit MatrixSquare(const unsigned int& size) : Matrix(size, size) {}
+	MatrixSquare(const MatrixSquare& matrix) : Matrix(matrix) {}
+	MatrixSquare(MatrixSquare&& matrix) noexcept : Matrix(std::move(matrix)) {}
+	~MatrixSquare() override;
+	MatrixSquare& operator=(const MatrixSquare& matrix);
+	MatrixSquare& operator=(MatrixSquare&& matrix) noexcept;
+	inline const unsigned int& getSize() const { return this->getRowSize(); }
+	void setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex) override;
 	virtual double trace() const;
-	virtual void decomposeToPLU();
-	virtual double determinant();
+	virtual void decomposeToPlu();
+	virtual double determinant() ;
 };
