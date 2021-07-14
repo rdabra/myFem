@@ -11,6 +11,7 @@ private:
 	unsigned int _size{ 0 };
 
 public:
+	Vector() {};
 	Vector(unsigned int size);
 	Vector(const Vector& vector);
 	Vector(Vector&& vector) noexcept;

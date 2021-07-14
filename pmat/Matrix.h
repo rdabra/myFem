@@ -13,7 +13,6 @@ protected:
 	bool _isTransposed{ false };
 	std::vector <double> _matrix;
 	unsigned int _rowSize{ 0 }, _columnSize{ 0 };
-	Matrix() {};
 	inline virtual unsigned int getVectorIndex(const unsigned int& i, const unsigned int& j) const
 	{
 		return _isTransposed ? i + j * _rowSize : j + i * _columnSize;
@@ -28,6 +27,7 @@ protected:
 	void validadeVectorRespMult(Vector& resp) const;
 
 public:
+	Matrix() {};
 	Matrix(const unsigned int& rowSize, const unsigned int& columnSize);
 	Matrix(const Matrix& matrix);
 	Matrix(Matrix&& matrix) noexcept;

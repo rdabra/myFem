@@ -176,3 +176,37 @@ TEST(TestVector, TestFrobenius) {
 
 	EXPECT_TRUE(putils::areEqual(v.frobeniusNorm(), 11.8321595));
 }
+
+
+TEST(TestVector, TestMisc) {
+	Vector v(7);
+	v.setValue(1.0, 0);
+	v.setValue(2.0, 1);
+	v.setValue(3.0, 2);
+	v.setValue(4.0, 3);
+	v.setValue(5.0, 4);
+	v.setValue(6.0, 5);
+	v.setValue(7.0, 6);
+
+	Vector a(v);
+	Vector b;
+	b = v;
+	Vector c;
+	c = a * 2.0;
+
+	Vector res(7);
+	res.setValue(2.0, 0);
+	res.setValue(4.0, 1);
+	res.setValue(6.0, 2);
+	res.setValue(8.0, 3);
+	res.setValue(10.0, 4);
+	res.setValue(12.0, 5);
+	res.setValue(14.0, 6);
+
+
+	EXPECT_TRUE(a == v);
+	EXPECT_TRUE(b == v);
+	EXPECT_TRUE(c == res);
+
+
+}

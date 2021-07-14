@@ -11,20 +11,26 @@ Matrix::Matrix(const unsigned int& rowSize, const unsigned int& columnSize)
 
 Matrix::Matrix(const Matrix& matrix)
 {
-	_rowSize = matrix._rowSize;
-	_columnSize = matrix._columnSize;
+	_rowSize = matrix.getRowSize();
+	_columnSize = matrix.getColumnSize();
 	_matrix.resize(this->getVectorSize());
 
-	for (unsigned int i = 0; i < _rowSize; i++)
-		for (unsigned int j = 0; j < _columnSize; j++)
-			(*this).setValue(matrix(i, j), i, j);;
+	for (unsigned int i = 0; i < this->getRowSize(); i++)
+		for (unsigned int j = 0; j < this->getColumnSize(); j++)
+			this->setValue(matrix(i, j), i, j);
 }
 
 Matrix::Matrix(Matrix&& matrix) noexcept
 {
-	_rowSize = matrix._rowSize;
-	_columnSize = matrix._columnSize;
-	_matrix = std::move(matrix._matrix);
+	_rowSize = matrix.getRowSize();
+	_columnSize = matrix.getColumnSize();
+	_matrix.resize(this->getVectorSize());
+
+	for (unsigned int i = 0; i < this->getRowSize(); i++)
+		for (unsigned int j = 0; j < this->getColumnSize(); j++)
+			this->setValue(matrix(i, j), i, j);
+
+	matrix.~Matrix();
 }
 
 const double& Matrix::operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const
@@ -47,9 +53,9 @@ Matrix& Matrix::operator=(const Matrix& matrix)
 	_columnSize = matrix.getColumnSize();
 	_matrix.resize(this->getVectorSize());
 
-	for (unsigned int i = 0; i < _rowSize; i++)
-		for (unsigned int j = 0; j < _columnSize; j++)
-			(*this).setValue(matrix(i, j), i, j);
+	for (unsigned int i = 0; i < this->getRowSize(); i++)
+		for (unsigned int j = 0; j < this->getColumnSize(); j++)
+			this->setValue(matrix(i, j), i, j);
 
 	return (*this);
 }
@@ -339,5 +345,5 @@ void Matrix::validadeVectorMult(const Vector& vector) const
 
 void Matrix::validadeVectorRespMult(Vector& resp) const
 {
-	if (this->getColumnSize() != resp.getSize()) throw std::logic_error(messages::NONCOMPT_RESP);
+	if (this->getRowSize() != resp.getSize()) throw std::logic_error(messages::NONCOMPT_RESP);
 }

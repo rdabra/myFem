@@ -14,10 +14,18 @@ MatrixTriangular::MatrixTriangular(const MatrixTriangular& matrix)
 {
 	_rowSize = matrix._rowSize;
 	_columnSize = matrix._columnSize;
+	_isLower = matrix.isLower();
 	_matrix.resize(matrix.getVectorSize());
 
-	for (unsigned int i = 0; i < matrix.getVectorSize(); i++)
-		_matrix.push_back(matrix._matrix[i]);
+	if (this->isLower())
+		for (unsigned int i = 0; i < this->getRowSize(); i++)
+			for (unsigned int j = 0; j <= i; j++)
+				this->setValue(matrix(i, j), i, j);
+	else
+		for (unsigned int i = 0; i < this->getRowSize(); i++)
+			for (unsigned int j = i; j < this->getColumnSize(); j++)
+				this->setValue(matrix(i, j), i, j);
+
 }
 
 MatrixTriangular::MatrixTriangular(MatrixTriangular&& matrix) noexcept
@@ -54,8 +62,14 @@ MatrixTriangular& MatrixTriangular::operator=(const MatrixTriangular& matrix)
 	_columnSize = matrix.getSize();
 	_isLower = matrix.isLower();
 	_matrix.resize(_rowSize);
-	for (unsigned int i = 0; i < matrix.getVectorSize(); i++)
-		_matrix.push_back(matrix._matrix[i]);
+	if (this->isLower())
+		for (unsigned int i = 0; i < this->getRowSize(); i++)
+			for (unsigned int j = 0; j <= i; j++)
+				this->setValue(matrix(i, j), i, j);
+	else
+		for (unsigned int i = 0; i < this->getRowSize(); i++)
+			for (unsigned int j = i; j < this->getColumnSize(); j++)
+				this->setValue(matrix(i, j), i, j);
 
 	return (*this);
 }
