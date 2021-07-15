@@ -84,3 +84,42 @@ TEST(TestMatrixSquare, TestDeterminant) {
 	EXPECT_TRUE(putils::areEqual(B.determinant(), -6.0));
 
 }
+
+TEST(TestMatrixSquare, TestMisc) {
+	MatrixSquare A(4);
+
+	A.setValue(1.0, 0, 0);
+	A.setValue(2.0, 0, 1);
+	A.setValue(3.0, 0, 2);
+	A.setValue(4.0, 0, 3);
+
+	A.setValue(1.0, 1, 0);
+	A.setValue(3.0, 1, 1);
+	A.setValue(2.0, 1, 2);
+	A.setValue(5.0, 1, 3);
+
+	A.setValue(2.0, 2, 0);
+	A.setValue(1.0, 2, 1);
+	A.setValue(6.0, 2, 2);
+	A.setValue(3.0, 2, 3);
+
+	A.setValue(3.0, 3, 0);
+	A.setValue(2.0, 3, 1);
+	A.setValue(1.0, 3, 2);
+	A.setValue(1.0, 3, 3);
+
+
+	MatrixSquare B;
+
+	B = A;
+
+	MatrixSquare T(B);
+
+	MatrixSquare C;
+	C = (std::move(T));
+
+	EXPECT_TRUE(A == B);
+	EXPECT_TRUE(A == C);
+
+}
+

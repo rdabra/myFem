@@ -53,6 +53,22 @@ MatrixSquare& MatrixSquare::operator=(MatrixSquare&& matrix) noexcept
 	return (*this);
 }
 
+MatrixSquare MatrixSquare::operator+(const MatrixSquare& matrix) const
+{
+	MatrixSquare resp(matrix.getSize());
+	this->plus(matrix, resp);
+
+	return resp;
+}
+
+MatrixSquare MatrixSquare::operator-(const MatrixSquare& matrix) const
+{
+	MatrixSquare resp(matrix.getSize());
+	this->minus(matrix, resp);
+
+	return resp;
+}
+
 void MatrixSquare::setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex)
 {
 	Matrix::setValue(value, rowIndex, columnIndex);
@@ -99,7 +115,7 @@ void MatrixSquare::decomposeToPlu()
 	_calcLu = true;
 }
 
-double MatrixSquare::determinant() 
+double MatrixSquare::determinant()
 {
 	this->decomposeToPlu();
 

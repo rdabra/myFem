@@ -55,19 +55,21 @@ const double& MatrixTriangular::operator()(const unsigned int& rowIndex, const u
 
 MatrixTriangular& MatrixTriangular::operator=(const MatrixTriangular& matrix)
 {
-	_matrix.clear();
-	_rowSize = matrix.getSize();
-	_columnSize = matrix.getSize();
-	_isLower = matrix.isLower();
-	_matrix.resize(_rowSize);
-	if (this->isLower())
-		for (unsigned int i = 0; i < this->getRowSize(); i++)
-			for (unsigned int j = 0; j <= i; j++)
-				this->setValue(matrix(i, j), i, j);
-	else
-		for (unsigned int i = 0; i < this->getRowSize(); i++)
-			for (unsigned int j = i; j < this->getColumnSize(); j++)
-				this->setValue(matrix(i, j), i, j);
+	if (!(this == &matrix)) {
+		_matrix.clear();
+		_rowSize = matrix.getSize();
+		_columnSize = matrix.getSize();
+		_isLower = matrix.isLower();
+		_matrix.resize(matrix.getVectorSize());
+		if (this->isLower())
+			for (unsigned int i = 0; i < this->getSize(); i++)
+				for (unsigned int j = 0; j <= i; j++)
+					this->setValue(matrix(i, j), i, j);
+		else
+			for (unsigned int i = 0; i < this->getSize(); i++)
+				for (unsigned int j = i; j < this->getSize(); j++)
+					this->setValue(matrix(i, j), i, j);
+	}
 
 	return (*this);
 }
@@ -81,7 +83,7 @@ MatrixTriangular& MatrixTriangular::operator=(MatrixTriangular&& matrix) noexcep
 	_matrix = std::move(matrix._matrix);
 
 	matrix.~MatrixTriangular();
-	
+
 	return (*this);
 }
 
@@ -109,17 +111,17 @@ void MatrixTriangular::plus(const MatrixTriangular& matrix, MatrixSquare& resp) 
 
 	if (_isLower == matrix.isLower()) {
 		if (this->isLower())
-			for (unsigned int i = 0; i < this->getRowSize(); i++)
+			for (unsigned int i = 0; i < this->getSize(); i++)
 				for (unsigned int j = 0; j <= i; j++)
 					resp.setValue((*this)(i, j) + matrix(i, j), i, j);
 		else
-			for (unsigned int i = 0; i < this->getRowSize(); i++)
-				for (unsigned int j = i; j < this->getColumnSize(); j++)
+			for (unsigned int i = 0; i < this->getSize(); i++)
+				for (unsigned int j = i; j < this->getSize(); j++)
 					resp.setValue((*this)(i, j) + matrix(i, j), i, j);
 	}
 	else {
 		if (this->isLower())
-			for (unsigned int i = 0; i < this->getRowSize(); i++)
+			for (unsigned int i = 0; i < this->getSize(); i++)
 				for (unsigned int j = 0; j <= i; j++)
 					if (i == j)
 						resp.setValue((*this)(i, i) + matrix(i, i), i, i);
@@ -128,7 +130,7 @@ void MatrixTriangular::plus(const MatrixTriangular& matrix, MatrixSquare& resp) 
 						resp.setValue(matrix(j, i), j, i);
 					}
 		else
-			for (unsigned int i = 0; i < this->getRowSize(); i++)
+			for (unsigned int i = 0; i < this->getSize(); i++)
 				for (unsigned int j = 0; j <= i; j++)
 					if (i == j)
 						resp.setValue((*this)(i, i) + matrix(i, i), i, i);
@@ -189,6 +191,22 @@ void MatrixTriangular::minus(const MatrixTriangular& matrix, MatrixSquare& resp)
 						resp.setValue(-matrix(i, j), i, j);
 					}
 	}
+}
+
+MatrixSquare MatrixTriangular::operator+(const MatrixTriangular& matrix) const
+{
+	MatrixSquare resp(matrix.getSize());
+	this->plus(matrix, resp);
+
+	return resp;
+}
+
+MatrixSquare MatrixTriangular::operator-(const MatrixTriangular& matrix) const
+{
+	MatrixSquare resp(matrix.getSize());
+	this->minus(matrix, resp);
+
+	return resp;
 }
 
 void MatrixTriangular::subtractBy(const MatrixTriangular& matrix)

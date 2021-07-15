@@ -25,6 +25,8 @@ public:
 	~MatrixSquare() override;
 	MatrixSquare& operator=(const MatrixSquare& matrix);
 	MatrixSquare& operator=(MatrixSquare&& matrix) noexcept;
+	MatrixSquare operator+(const MatrixSquare& matrix) const;
+	MatrixSquare operator-(const MatrixSquare& matrix) const;
 	inline const unsigned int& getSize() const { return this->getRowSize(); }
 	void setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex) override;
 	virtual double trace() const;

@@ -5,7 +5,7 @@
 class MatrixTriangular : public MatrixSquare
 {
 private:
-	bool _isLower{true};
+	bool _isLower{ true };
 
 protected:
 	unsigned int getVectorIndex(const unsigned int& i, const unsigned int& j) const override
@@ -16,6 +16,7 @@ protected:
 	unsigned int getVectorSize() const override { return (_rowSize * _rowSize + _rowSize) / 2; };
 
 public:
+	MatrixTriangular() = default;
 	MatrixTriangular(const unsigned int& size, bool isLower);
 	MatrixTriangular(const MatrixTriangular& matrix);
 	MatrixTriangular(MatrixTriangular&& matrix) noexcept;
@@ -29,6 +30,8 @@ public:
 	void plus(const MatrixTriangular& matrix, MatrixSquare& resp) const;
 	virtual void addBy(const MatrixTriangular& matrix);
 	void minus(const MatrixTriangular& matrix, MatrixSquare& resp) const;
+	MatrixSquare operator+(const MatrixTriangular& matrix) const;
+	MatrixSquare operator-(const MatrixTriangular& matrix) const;
 	virtual void subtractBy(const MatrixTriangular& matrix);
 	void times(const MatrixSquare& matrix, MatrixSquare& resp) const;
 	void times(const Vector& vector, Vector& resp) const override;
@@ -43,7 +46,7 @@ public:
 	}
 
 	void swapRowElements(const unsigned int& rowIndexA, const unsigned int& rowIndexB, const unsigned int& startColumn,
-	                     const unsigned int& endColumn) override;
+		const unsigned int& endColumn) override;
 
 	void swapColumns(const unsigned int& columnIndexA, const unsigned int& columnIndexB) override
 	{
@@ -51,7 +54,7 @@ public:
 	}
 
 	void swapColumnElements(const unsigned int& columnIndexA, const unsigned int& columnIndexB,
-	                        const unsigned int& startRow, const unsigned int& endRow) override;
+		const unsigned int& startRow, const unsigned int& endRow) override;
 	void fillRandomly(const double& min, const double& max) override;
 	double determinant() override;
 };

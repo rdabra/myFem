@@ -57,7 +57,19 @@ TEST(MatrixTriangular, TestDotProduct) {
 	v.setValue(13.5, 0, 3);
 
 	double resp = z.dotProduct(v);
+
+	MatrixTriangular z1(z);
+	MatrixTriangular v1(v);
+
+	z1.transpose();
+	v1.transpose();
+	double resp1 = z1.dotProduct(v1);
+
+
+
 	EXPECT_TRUE(putils::areEqual(resp, 810.0));
+	EXPECT_TRUE(putils::areEqual(resp1, 810.0));
+
 }
 
 TEST(MatrixTriangular, TestPlus) {
@@ -78,17 +90,14 @@ TEST(MatrixTriangular, TestPlus) {
 	v.setValue(11.5, 0, 1);
 	v.setValue(12.5, 0, 2);
 	v.setValue(13.5, 0, 3);
-
 	v.setValue(7.5, 1, 1);
 	v.setValue(8.5, 1, 2);
 	v.setValue(9.5, 1, 3);
-
 	v.setValue(10.5, 2, 2);
 	v.setValue(11.5, 2, 3);
-
 	v.setValue(12.5, 3, 3);
 
-	Matrix resp(4, 4);
+	MatrixSquare resp(4);
 	resp.setValue(11.5, 0, 0);
 	resp.setValue(11.5, 0, 1);
 	resp.setValue(12.5, 0, 2);
@@ -121,14 +130,53 @@ TEST(MatrixTriangular, TestPlus) {
 	resp2.setValue(24.0, 3, 2);
 	resp2.setValue(26.0, 3, 3);
 
+	MatrixTriangular resp3(4, true);
+	resp3.setValue(2.0, 0, 0);
+	resp3.setValue(8.0, 1, 0);
+	resp3.setValue(10.0, 1, 1);
+	resp3.setValue(14.0, 2, 0);
+	resp3.setValue(16.0, 2, 1);
+	resp3.setValue(18.0, 2, 2);
+	resp3.setValue(20.0, 3, 0);
+	resp3.setValue(22.0, 3, 1);
+	resp3.setValue(24.0, 3, 2);
+	resp3.setValue(26.0, 3, 3);
+
+	MatrixTriangular resp4(4, false);
+	resp4.setValue(21, 0, 0);
+	resp4.setValue(23, 0, 1);
+	resp4.setValue(25, 0, 2);
+	resp4.setValue(27, 0, 3);
+	resp4.setValue(15, 1, 1);
+	resp4.setValue(17, 1, 2);
+	resp4.setValue(19, 1, 3);
+	resp4.setValue(21, 2, 2);
+	resp4.setValue(23, 2, 3);
+	resp4.setValue(25, 3, 3);
+
+	
 	MatrixSquare x1(4);
 	z.plus(v, x1);
-	Matrix x2(z + v);
+	MatrixSquare x2(z + v);
+	MatrixTriangular z1(z);
+	MatrixSquare z2(z + z);
+	MatrixSquare v2(v + v);
 	z.addBy(z);
+
+	MatrixTriangular v1(v);
+	MatrixSquare resp1(resp);
+	z1.transpose();
+	v1.transpose();
+	resp1.transpose();
+
 
 	EXPECT_TRUE(resp == x1);
 	EXPECT_TRUE(resp == x2);
 	EXPECT_TRUE(resp2 == z);
+	EXPECT_TRUE(resp1 == z1 + v1);
+	EXPECT_TRUE(resp3 == z2);
+	EXPECT_TRUE(resp4 == v2);
+
 }
 
 TEST(MatrixTriangular, TestMinus) {
@@ -194,7 +242,7 @@ TEST(MatrixTriangular, TestMinus) {
 
 	MatrixSquare x1(4);
 	z.minus(v, x1);
-	Matrix x2(z - v);
+	MatrixSquare x2(z - v);
 	z.subtractBy(z);
 
 	EXPECT_TRUE(resp == x1);
@@ -357,6 +405,29 @@ TEST(MatrixTriangular, TestMisc)
 
 	MatrixTriangular zz(z);
 
+	MatrixTriangular a(z);
+	a.transpose();
+
+	MatrixTriangular b(a);
+
+	MatrixTriangular t(z);
+
+	MatrixTriangular c(std::move(t));
+
+	MatrixTriangular d;
+	d = a;
+	MatrixTriangular e;
+	e = z;
+
+	MatrixTriangular t1(a);
+
+	MatrixTriangular f;
+	f = std::move(t1);
 
 	EXPECT_TRUE(z == zz);
+	EXPECT_TRUE(b == a);
+	EXPECT_TRUE(c == z);
+	EXPECT_TRUE(d == a);
+	EXPECT_TRUE(e == z);
+	EXPECT_TRUE(f == a);
 }
