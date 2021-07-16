@@ -154,7 +154,7 @@ TEST(MatrixTriangular, TestPlus) {
 	resp4.setValue(23, 2, 3);
 	resp4.setValue(25, 3, 3);
 
-	
+
 	MatrixSquare x1(4);
 	z.plus(v, x1);
 	MatrixSquare x2(z + v);
@@ -168,6 +168,8 @@ TEST(MatrixTriangular, TestPlus) {
 	z1.transpose();
 	v1.transpose();
 	resp1.transpose();
+	v.addBy(v);
+
 
 
 	EXPECT_TRUE(resp == x1);
@@ -176,6 +178,7 @@ TEST(MatrixTriangular, TestPlus) {
 	EXPECT_TRUE(resp1 == z1 + v1);
 	EXPECT_TRUE(resp3 == z2);
 	EXPECT_TRUE(resp4 == v2);
+	EXPECT_TRUE(resp4 == v);
 
 }
 
@@ -240,14 +243,40 @@ TEST(MatrixTriangular, TestMinus) {
 	resp2.setValue(0.0, 3, 2);
 	resp2.setValue(0.0, 3, 3);
 
+	MatrixTriangular zz(z);
+	MatrixTriangular vv(v);
+
 	MatrixSquare x1(4);
 	z.minus(v, x1);
 	MatrixSquare x2(z - v);
+
 	z.subtractBy(z);
+
+	MatrixSquare x3(4);
+	MatrixSquare x4(4);
+	v.minus(v, x3);
+
+	v.transpose();
+	v.minus(v, x4);
+
+	v.transpose();
+	MatrixSquare x5(4);
+	v.minus(v, x5);
+
+	MatrixSquare x6(vv - zz);
+
+	vv.subtractBy(vv);
+
 
 	EXPECT_TRUE(resp == x1);
 	EXPECT_TRUE(resp == x2);
 	EXPECT_TRUE(resp2 == z);
+	EXPECT_TRUE(resp2 == x3);
+	EXPECT_TRUE(resp2 == x4);
+	EXPECT_TRUE(resp2 == x5);
+	EXPECT_TRUE(resp * -1.0 == x6);
+	EXPECT_TRUE(resp2 == vv);
+
 }
 
 TEST(MatrixTriangular, TestTimes) {
@@ -308,20 +337,46 @@ TEST(MatrixTriangular, TestTimes) {
 	resp2.setValue(24.0, 3, 2);
 	resp2.setValue(26.0, 3, 3);
 
+	Matrix resp3(4, 4);
+	resp3.setValue(279., 0, 0);
+	resp3.setValue(306., 0, 1);
+	resp3.setValue(274.5, 0, 2);
+	resp3.setValue(175.5, 0, 3);
+
+	resp3.setValue(184.5, 1, 0);
+	resp3.setValue(210., 1, 1);
+	resp3.setValue(190.5, 1, 2);
+	resp3.setValue(123.5, 1, 3);
+
+	resp3.setValue(86.5, 2, 0);
+	resp3.setValue(96.5, 2, 1);
+	resp3.setValue(106.5, 2, 2);
+	resp3.setValue(71.5, 2, 3);
+
+	resp3.setValue(15.0, 3, 0);
+	resp3.setValue(16.5, 3, 1);
+	resp3.setValue(18., 3, 2);
+	resp3.setValue(19.5, 3, 3);
+
+	
 	MatrixSquare x1(4);
 	z.times(v, x1);
 	Matrix x2(z * v);
+	Matrix x5(v * z);
 
 	MatrixTriangular x3(4, true);
 	z.times(2.0, x3);
 	Matrix x4(z * 2.0);
 	z.multiplyBy(2.0);
 
+
 	EXPECT_TRUE(resp == x1);
 	EXPECT_TRUE(resp == x2);
 	EXPECT_TRUE(resp2 == x3);
 	EXPECT_TRUE(resp2 == x4);
 	EXPECT_TRUE(resp2 == z);
+	EXPECT_TRUE(resp3 == x5);
+
 }
 
 TEST(MatrixTriangular, TestFrobenius)

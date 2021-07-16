@@ -69,6 +69,22 @@ MatrixSquare MatrixSquare::operator-(const MatrixSquare& matrix) const
 	return resp;
 }
 
+MatrixSquare MatrixSquare::operator*(const MatrixSquare& matrix) const
+{
+	MatrixSquare resp(matrix.getSize());
+	this->times(matrix, resp);
+
+	return resp;
+}
+
+MatrixSquare MatrixSquare::operator*(const double& scalar) const
+{
+	MatrixSquare resp(this->getSize());
+	this->times(scalar, resp);
+
+	return resp;
+}
+
 void MatrixSquare::setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex)
 {
 	Matrix::setValue(value, rowIndex, columnIndex);
@@ -88,7 +104,7 @@ void MatrixSquare::decomposeToPlu()
 	if (!_calcLu) {
 		this->createLu();
 		_numExchangesP = 0;
-		unsigned int idxPivot{0};
+		unsigned int idxPivot{ 0 };
 		while (idxPivot < _matU->getSize() - 1) {
 			if (!putils::areEqual((*_matU)(idxPivot, idxPivot), 0.0)) {
 				this->nullifyElementBellow(idxPivot);
@@ -96,7 +112,7 @@ void MatrixSquare::decomposeToPlu()
 			}
 			else {
 				unsigned int i = idxPivot + 1;
-				bool swap{false};
+				bool swap{ false };
 				while (!swap && i < _matU->getSize()) {
 					if (!putils::areEqual((*_matU)(i, idxPivot), 0.0)) {
 						_matU->swapRows(i, idxPivot);
@@ -119,7 +135,7 @@ double MatrixSquare::determinant()
 {
 	this->decomposeToPlu();
 
-	double resp{pow(-1.0, _numExchangesP)};
+	double resp{ pow(-1.0, _numExchangesP) };
 
 	for (unsigned int i = 0; i < this->getSize(); i++)
 		resp *= (*_matU)(i, i);

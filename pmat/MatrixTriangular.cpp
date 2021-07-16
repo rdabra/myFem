@@ -163,17 +163,17 @@ void MatrixTriangular::minus(const MatrixTriangular& matrix, MatrixSquare& resp)
 
 	if (_isLower == matrix.isLower()) {
 		if (this->isLower())
-			for (unsigned int i = 0; i < this->getRowSize(); i++)
+			for (unsigned int i = 0; i < this->getSize(); i++)
 				for (unsigned int j = 0; j <= i; j++)
 					resp.setValue((*this)(i, j) - matrix(i, j), i, j);
 		else
-			for (unsigned int i = 0; i < this->getRowSize(); i++)
-				for (unsigned int j = i; j < this->getColumnSize(); j++)
+			for (unsigned int i = 0; i < this->getSize(); i++)
+				for (unsigned int j = i; j < this->getSize(); j++)
 					resp.setValue((*this)(i, j) - matrix(i, j), i, j);
 	}
 	else {
 		if (this->isLower())
-			for (unsigned int i = 0; i < this->getRowSize(); i++)
+			for (unsigned int i = 0; i < this->getSize(); i++)
 				for (unsigned int j = 0; j <= i; j++)
 					if (i == j)
 						resp.setValue((*this)(i, i) - matrix(i, i), i, i);
@@ -182,7 +182,7 @@ void MatrixTriangular::minus(const MatrixTriangular& matrix, MatrixSquare& resp)
 						resp.setValue(-matrix(j, i), j, i);
 					}
 		else
-			for (unsigned int i = 0; i < this->getRowSize(); i++)
+			for (unsigned int i = 0; i < this->getSize(); i++)
 				for (unsigned int j = 0; j <= i; j++)
 					if (i == j)
 						resp.setValue((*this)(i, i) - matrix(i, i), i, i);
