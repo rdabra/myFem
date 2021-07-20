@@ -8,9 +8,10 @@ private:
 	MatrixSquare* _matP{ nullptr };
 	MatrixSquare* _matL{ nullptr };
 	MatrixSquare* _matU{ nullptr };
-	unsigned int _numExchangesP{ 0 };
+	double _coefSwaps{ 1.0 };
 	bool _calcLu{ false };
 	bool _createLu{ false };
+	void swapRowsBellow(const unsigned int& idxPivot) ;
 	void nullifyElementBellow(const unsigned int& idxPivot) const;
 
 protected:
@@ -27,11 +28,13 @@ public:
 	MatrixSquare& operator=(MatrixSquare&& matrix) noexcept;
 	MatrixSquare operator+(const MatrixSquare& matrix) const;
 	MatrixSquare operator-(const MatrixSquare& matrix) const;
-	MatrixSquare operator*(const MatrixSquare& matrix) const;
+	virtual MatrixSquare operator*(const MatrixSquare& matrix) const;
 	MatrixSquare operator*(const double& scalar) const;
+	Vector operator*(const Vector& vector) const override { return Matrix::operator*(vector); }
 	inline const unsigned int& getSize() const { return this->getRowSize(); }
 	void setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex) override;
 	virtual double trace() const;
 	virtual void decomposeToPlu();
-	virtual double determinant() ;
+	virtual double determinant();
 };
+

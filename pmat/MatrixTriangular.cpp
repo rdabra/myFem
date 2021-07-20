@@ -242,7 +242,7 @@ void MatrixTriangular::times(const MatrixSquare& matrix, MatrixSquare& resp) con
 		for (unsigned int i = 0; i < this->getSize(); i++)
 			for (unsigned int j = 0; j < this->getSize(); j++) {
 				double aux = 0.0;
-				for (unsigned int k = i; k <= this->getSize(); k++)
+				for (unsigned int k = i; k < this->getSize(); k++)
 					aux += (*this)(i, k) * matrix(k, j);
 				resp.setValue(aux, i, j);
 			}
@@ -283,6 +283,30 @@ void MatrixTriangular::times(const double& scalar, MatrixTriangular& resp) const
 		for (unsigned int i = 0; i < this->getSize(); i++)
 			for (unsigned int j = i; j < this->getSize(); j++)
 				resp.setValue((*this)(i, j) * scalar, i, j);
+}
+
+MatrixSquare MatrixTriangular::operator*(const MatrixSquare& matrix) const
+{
+	MatrixSquare resp(matrix.getSize());
+	this->times(matrix, resp);
+
+	return resp;
+}
+
+MatrixTriangular MatrixTriangular::operator*(const double& scalar) const
+{
+	MatrixTriangular resp(this->getSize(), this->isLower());
+	this->times(scalar, resp);
+
+	return resp;
+}
+
+Vector MatrixTriangular::operator*(const Vector& vector) const
+{
+	Vector resp(this->getSize());
+	this->times(vector, resp);
+
+	return resp;
 }
 
 void MatrixTriangular::multiplyBy(const double& scalar)
@@ -332,8 +356,8 @@ void MatrixTriangular::swapRowElements(const unsigned int& rowIndexA, const unsi
 void MatrixTriangular::swapColumnElements(const unsigned int& columnIndexA, const unsigned int& columnIndexB,
                                           const unsigned int& startRow, const unsigned int& endRow)
 {
-	if ((startRow > endRow) || (_isLower && (startRow > columnIndexA || startRow > columnIndexB)) ||
-		((!_isLower) && (endRow < columnIndexA || endRow < columnIndexB)))
+	if ((startRow > endRow) || (_isLower && (columnIndexA  > startRow || columnIndexB > startRow)) ||
+		((!_isLower) && (endRow > columnIndexA || endRow > columnIndexB)))
 		throw std::out_of_range(messages::INDEX_OUT);
 
 	Matrix::swapColumnElements(columnIndexA, columnIndexB, startRow, endRow);

@@ -85,6 +85,142 @@ TEST(TestMatrixSquare, TestDeterminant) {
 
 }
 
+
+TEST(TestMatrixSquare, TestPlus) {
+	MatrixSquare z(4);
+	z.setValue(1.0, 0, 0);
+	z.setValue(2.0, 0, 1);
+	z.setValue(3.0, 0, 2);
+	z.setValue(4.0, 0, 3);
+	z.setValue(5.0, 1, 0);
+	z.setValue(6.0, 1, 1);
+	z.setValue(7.0, 1, 2);
+	z.setValue(8.0, 1, 3);
+	z.setValue(9.0, 2, 0);
+	z.setValue(10.0, 2, 1);
+	z.setValue(11.0, 2, 2);
+	z.setValue(12.0, 2, 3);
+	z.setValue(13.0, 3, 0);
+	z.setValue(14.0, 3, 1);
+	z.setValue(15.0, 3, 2);
+	z.setValue(16.0, 3, 3);
+
+
+	MatrixSquare resp(4);
+	resp.setValue(2.0, 0, 0);
+	resp.setValue(4.0, 0, 1);
+	resp.setValue(6.0, 0, 2);
+	resp.setValue(8.0, 0, 3);
+	resp.setValue(10.0, 1, 0);
+	resp.setValue(12.0, 1, 1);
+	resp.setValue(14.0, 1, 2);
+	resp.setValue(16.0, 1, 3);
+	resp.setValue(18.0, 2, 0);
+	resp.setValue(20.0, 2, 1);
+	resp.setValue(22.0, 2, 2);
+	resp.setValue(24.0, 2, 3);
+	resp.setValue(26.0, 3, 0);
+	resp.setValue(28.0, 3, 1);
+	resp.setValue(30.0, 3, 2);
+	resp.setValue(32.0, 3, 3);
+
+
+	MatrixSquare x1(4);
+	z.plus(z, x1);
+	MatrixSquare x2(z + z);
+	z.addBy(z);
+
+	EXPECT_TRUE(resp == x1);
+	EXPECT_TRUE(resp == x2);
+	EXPECT_TRUE(resp == z);
+}
+
+TEST(TestMatrixSquare, TestMinus) {
+	MatrixSquare z(4);
+	z.setValue(1.0, 0, 0);
+	z.setValue(2.0, 0, 1);
+	z.setValue(3.0, 0, 2);
+	z.setValue(4.0, 0, 3);
+	z.setValue(5.0, 1, 0);
+	z.setValue(6.0, 1, 1);
+	z.setValue(7.0, 1, 2);
+	z.setValue(8.0, 1, 3);
+	z.setValue(9.0, 2, 0);
+	z.setValue(10.0, 2, 1);
+	z.setValue(11.0, 2, 2);
+	z.setValue(12.0, 2, 3);
+	z.setValue(13.0, 3, 0);
+	z.setValue(14.0, 3, 1);
+	z.setValue(15.0, 3, 2);
+	z.setValue(16.0, 3, 3);
+
+
+	MatrixSquare resp(4);
+
+
+	MatrixSquare x1(4);
+	z.minus(z, x1);
+	MatrixSquare x2(z - z);
+	z.subtractBy(z);
+
+	EXPECT_TRUE(resp == x1);
+	EXPECT_TRUE(resp == x2);
+	EXPECT_TRUE(resp == z);
+}
+
+
+TEST(TestMatrixSquare, TestTimes) {
+	MatrixSquare z(3);
+	z.setValue(1.0, 0, 0);
+	z.setValue(2.0, 0, 1);
+	z.setValue(3.0, 0, 2);
+	z.setValue(4.0, 1, 0);
+	z.setValue(5.0, 1, 1);
+	z.setValue(6.0, 1, 2);
+	z.setValue(7.0, 2, 0);
+	z.setValue(8.0, 2, 1);
+	z.setValue(9.0, 2, 2);
+
+	MatrixSquare v(3);
+	v.setValue(-1.0, 0, 0);
+	v.setValue(-2.0, 0, 1);
+	v.setValue(-3.0, 0, 2);
+	v.setValue(-4.0, 1, 0);
+	v.setValue(-5.0, 1, 1);
+	v.setValue(-6.0, 1, 2);
+	v.setValue(-7.0, 2, 0);
+	v.setValue(-8.0, 2, 1);
+	v.setValue(-9.0, 2, 2);
+
+	MatrixSquare resp(3);
+	resp.setValue(-30.0, 0, 0);
+	resp.setValue(-36.0, 0, 1);
+	resp.setValue(-42.0, 0, 2);
+	resp.setValue(-66.0, 1, 0);
+	resp.setValue(-81.0, 1, 1);
+	resp.setValue(-96.0, 1, 2);
+	resp.setValue(-102.0, 2, 0);
+	resp.setValue(-126.0, 2, 1);
+	resp.setValue(-150.0, 2, 2);
+
+	MatrixSquare resp1(3);
+	resp1.setValue(2.0, 0, 0);
+	resp1.setValue(4.0, 0, 1);
+	resp1.setValue(6.0, 0, 2);
+	resp1.setValue(8.0, 1, 0);
+	resp1.setValue(10.0, 1, 1);
+	resp1.setValue(12.0, 1, 2);
+	resp1.setValue(14.0, 2, 0);
+	resp1.setValue(16.0, 2, 1);
+	resp1.setValue(18.0, 2, 2);
+
+
+	EXPECT_TRUE(resp == z * v);
+	EXPECT_TRUE(resp1 == z * 2.0);
+
+}
+
+
 TEST(TestMatrixSquare, TestMisc) {
 	MatrixSquare A(4);
 

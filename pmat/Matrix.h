@@ -45,9 +45,9 @@ public:
 	Matrix operator-(const Matrix& matrix) const;
 	virtual void subtractBy(const Matrix& matrix);
 	void times(const Matrix& matrix, Matrix& resp) const;
-	Matrix operator*(const Matrix& matrix) const;
+	virtual Matrix operator*(const Matrix& matrix) const;
 	virtual void times(const Vector& vector, Vector& resp) const;
-	Vector operator*(const Vector& vector) const;
+	virtual Vector operator*(const Vector& vector) const;
 	void times(const double& scalar, Matrix& resp) const;
 	Matrix operator*(const double& scalar) const;
 	virtual void multiplyBy(const double& scalar);
@@ -62,5 +62,4 @@ public:
 	virtual void transpose();
 	virtual double frobeniusNorm() const;
 	virtual void fillRandomly(const double& min, const double& max);
-	virtual void copyFrom(const Matrix& matrix) { (*this) = matrix; }
 };

@@ -36,23 +36,22 @@ public:
 	void times(const MatrixSquare& matrix, MatrixSquare& resp) const;
 	void times(const Vector& vector, Vector& resp) const override;
 	void times(const double& scalar, MatrixTriangular& resp) const;
+	MatrixSquare operator*(const MatrixSquare& matrix) const override;
+	MatrixTriangular operator*(const double& scalar) const;
+	Vector operator*(const Vector& vector) const override;
 	void multiplyBy(const double& scalar) override;
 	double frobeniusNorm() const override;
 	void transpose() override;
-
 	void swapRows(const unsigned int& rowIndexA, const unsigned int& rowIndexB) override
 	{
 		throw std::logic_error(messages::ELEM_SWAPPED);
 	}
-
 	void swapRowElements(const unsigned int& rowIndexA, const unsigned int& rowIndexB, const unsigned int& startColumn,
 		const unsigned int& endColumn) override;
-
 	void swapColumns(const unsigned int& columnIndexA, const unsigned int& columnIndexB) override
 	{
 		throw std::logic_error(messages::ELEM_SWAPPED);
 	}
-
 	void swapColumnElements(const unsigned int& columnIndexA, const unsigned int& columnIndexB,
 		const unsigned int& startRow, const unsigned int& endRow) override;
 	void fillRandomly(const double& min, const double& max) override;

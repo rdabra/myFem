@@ -304,6 +304,12 @@ TEST(MatrixTriangular, TestTimes) {
 	v.setValue(12.5, 0, 2);
 	v.setValue(13.5, 0, 3);
 
+	Vector w(4);
+	w.setValue(1.0, 0);
+	w.setValue(2.0, 1);
+	w.setValue(3.0, 2);
+	w.setValue(4.0, 3);
+
 	Matrix resp(4, 4);
 	resp.setValue(10.5, 0, 0);
 	resp.setValue(11.5, 0, 1);
@@ -358,17 +364,49 @@ TEST(MatrixTriangular, TestTimes) {
 	resp3.setValue(18., 3, 2);
 	resp3.setValue(19.5, 3, 3);
 
+
+	Vector respVecLow(4);
+	respVecLow.setValue(1.0, 0);
+	respVecLow.setValue(14.0, 1);
+	respVecLow.setValue(50.0, 2);
+	respVecLow.setValue(120.0, 3);
+
+	Vector respVecUp(4);
+	respVecUp.setValue(125.0, 0);
+	respVecUp.setValue(78.5, 1);
+	respVecUp.setValue(35.5, 2);
+	respVecUp.setValue(6.0, 3);
+
+	MatrixTriangular resp6(4, false);
+	resp6.setValue(3., 3, 3);
+	resp6.setValue(9., 2, 2);
+	resp6.setValue(11., 2, 3);
+	resp6.setValue(15., 1, 1);
+	resp6.setValue(17, 1, 2);
+	resp6.setValue(19, 1, 3);
+	resp6.setValue(21, 0, 0);
+	resp6.setValue(23, 0, 1);
+	resp6.setValue(25, 0, 2);
+	resp6.setValue(27, 0, 3);
+
 	
+
+	Vector low(z * w);
+	Vector up(v * w);
+
+
 	MatrixSquare x1(4);
 	z.times(v, x1);
-	Matrix x2(z * v);
-	Matrix x5(v * z);
+	MatrixSquare x2(z * v);
+	MatrixSquare x5(v * z);
 
 	MatrixTriangular x3(4, true);
 	z.times(2.0, x3);
-	Matrix x4(z * 2.0);
+	MatrixTriangular x4(z * 2.0);
 	z.multiplyBy(2.0);
 
+	MatrixTriangular x6(v * 2.0);
+	v.multiplyBy(2.0);
 
 	EXPECT_TRUE(resp == x1);
 	EXPECT_TRUE(resp == x2);
@@ -376,6 +414,10 @@ TEST(MatrixTriangular, TestTimes) {
 	EXPECT_TRUE(resp2 == x4);
 	EXPECT_TRUE(resp2 == z);
 	EXPECT_TRUE(resp3 == x5);
+	EXPECT_TRUE(respVecLow == low);
+	EXPECT_TRUE(respVecUp == up);
+	EXPECT_TRUE(resp6 == x6);
+	EXPECT_TRUE(resp6 == v);
 
 }
 
@@ -393,7 +435,22 @@ TEST(MatrixTriangular, TestFrobenius)
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
+	MatrixTriangular v(4, false);
+	v.setValue(1.0, 3, 3);
+	v.setValue(4.0, 2, 2);
+	v.setValue(5.0, 2, 3);
+	v.setValue(7.0, 1, 1);
+	v.setValue(8.0, 1, 2);
+	v.setValue(9.0, 1, 3);
+	v.setValue(10.0, 0, 0);
+	v.setValue(11.0, 0, 1);
+	v.setValue(12.0, 0, 2);
+	v.setValue(13.0, 0, 3);
+
+	
 	EXPECT_TRUE(putils::areEqual(z.frobeniusNorm(), 27.7488739));
+	EXPECT_TRUE(putils::areEqual(v.frobeniusNorm(), 27.7488739));
+
 }
 
 TEST(MatrixTriangular, TestDeterminant)
@@ -458,7 +515,38 @@ TEST(MatrixTriangular, TestMisc)
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
+	MatrixTriangular resp1(4, true);
+	resp1.setValue(1.0, 0, 0);
+	resp1.setValue(4.0, 1, 0);
+	resp1.setValue(5.0, 1, 1);
+	resp1.setValue(10.0, 2, 0);
+	resp1.setValue(11.0, 2, 1);
+	resp1.setValue(12.0, 2, 2);
+	resp1.setValue(7.0, 3, 0);
+	resp1.setValue(8.0, 3, 1);
+	resp1.setValue(9.0, 3, 2);
+	resp1.setValue(13.0, 3, 3);
+
+	MatrixTriangular resp2(4, true);
+	resp2.setValue(1.0, 0, 0);
+	resp2.setValue(4.0, 1, 0);
+	resp2.setValue(5.0, 1, 1);
+	resp2.setValue(7.0, 2, 0);
+	resp2.setValue(9.0, 2, 1);
+	resp2.setValue(8.0, 2, 2);
+	resp2.setValue(10.0, 3, 0);
+	resp2.setValue(12.0, 3, 1);
+	resp2.setValue(11.0, 3, 2);
+	resp2.setValue(13.0, 3, 3);
+
+
 	MatrixTriangular zz(z);
+
+	MatrixTriangular zzz(z);
+	zzz.swapRowElements(2, 3, 0, 2);
+
+	MatrixTriangular zzzz(z);
+	zzzz.swapColumnElements(1, 2, 2, 3);
 
 	MatrixTriangular a(z);
 	a.transpose();
@@ -479,10 +567,23 @@ TEST(MatrixTriangular, TestMisc)
 	MatrixTriangular f;
 	f = std::move(t1);
 
+
+	MatrixTriangular ee(5, true);
+	ee.fillRandomly(-1.0, 2.0);
+
+	MatrixTriangular eee(5, false);
+	eee.fillRandomly(-1.0, 2.0);
+
+
 	EXPECT_TRUE(z == zz);
 	EXPECT_TRUE(b == a);
 	EXPECT_TRUE(c == z);
 	EXPECT_TRUE(d == a);
 	EXPECT_TRUE(e == z);
 	EXPECT_TRUE(f == a);
+	EXPECT_TRUE(resp1 == zzz);
+	EXPECT_TRUE(resp2 == zzzz);
+	EXPECT_TRUE(ee(2, 2) < 2.0 && ee(2, 2) > -1.0);
+	EXPECT_TRUE(eee(2, 2) < 2.0 && eee(2, 2) > -1.0);
+
 }
