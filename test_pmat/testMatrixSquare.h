@@ -82,6 +82,58 @@ TEST(TestMatrixSquare, TestDeterminant) {
 
 	EXPECT_TRUE(putils::areEqual(A.determinant(), -3.0));
 	EXPECT_TRUE(putils::areEqual(B.determinant(), -6.0));
+}
+
+TEST(TestMatrixSquare, TestDecompPLU) {
+	MatrixSquare A(4);
+
+	A.setValue(1.0, 0, 0);
+	A.setValue(2.0, 0, 1);
+	A.setValue(3.0, 0, 2);
+	A.setValue(4.0, 0, 3);
+
+	A.setValue(1.0, 1, 0);
+	A.setValue(3.0, 1, 1);
+	A.setValue(2.0, 1, 2);
+	A.setValue(5.0, 1, 3);
+
+	A.setValue(2.0, 2, 0);
+	A.setValue(1.0, 2, 1);
+	A.setValue(6.0, 2, 2);
+	A.setValue(3.0, 2, 3);
+
+	A.setValue(3.0, 3, 0);
+	A.setValue(2.0, 3, 1);
+	A.setValue(1.0, 3, 2);
+	A.setValue(1.0, 3, 3);
+
+	MatrixSquare B(3);
+
+	B.setValue(1.0, 0, 0);
+	B.setValue(2.0, 0, 1);
+	B.setValue(3.0, 0, 2);
+
+	B.setValue(2.0, 1, 0);
+	B.setValue(4.0, 1, 1);
+	B.setValue(7.0, 1, 2);
+
+	B.setValue(3.0, 2, 0);
+	B.setValue(5.0, 2, 1);
+	B.setValue(3.0, 2, 2);
+
+
+	PLU mats = A.getPLU();
+
+	MatrixSquare PA((*mats.matP) * A);
+	MatrixSquare LU((*mats.matL) * (*mats.matU));
+
+	PLU mats1 = B.getPLU();
+
+	MatrixSquare PB((*mats1.matP) * B);
+	MatrixSquare LU1((*mats1.matL) * (*mats1.matU));
+	
+	EXPECT_TRUE(PA == LU);
+	EXPECT_TRUE(PB == LU1);
 
 }
 
