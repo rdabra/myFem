@@ -75,7 +75,7 @@ Matrix& Matrix::operator=(Matrix&& matrix) noexcept
 
 bool Matrix::operator==(const Matrix& matrix) const
 {
-	bool test{ this->getRowSize() == matrix.getRowSize() && this->getColumnSize() == matrix.getColumnSize() };
+	bool test{this->getRowSize() == matrix.getRowSize() && this->getColumnSize() == matrix.getColumnSize()};
 
 	if (test) {
 		for (unsigned int i = 0; i < this->getRowSize(); i++)
@@ -237,7 +237,7 @@ void Matrix::multiplyColumnBy(const unsigned int& columnIndex, const double& sca
 }
 
 void Matrix::swapRowElements(const unsigned int& rowIndexA, const unsigned int& rowIndexB,
-	const unsigned int& startColumn, const unsigned int& endColumn)
+                             const unsigned int& startColumn, const unsigned int& endColumn)
 {
 	this->validateIndex(rowIndexA, 0);
 	this->validateIndex(rowIndexB, 0);
@@ -245,11 +245,9 @@ void Matrix::swapRowElements(const unsigned int& rowIndexA, const unsigned int& 
 		throw std::logic_error(
 			messages::INDEX_OUT);
 
-	for (unsigned int j = startColumn; j <= endColumn; j++) {
-		double tmp{ (*this)(rowIndexB, j) };
-		this->setValue((*this)(rowIndexA, j), rowIndexB, j);
-		this->setValue(tmp, rowIndexA, j);
-	}
+	for (unsigned int j = startColumn; j <= endColumn; j++)
+		_matrix[this->getVectorIndex(rowIndexB, j)] = std::exchange(_matrix[this->getVectorIndex(rowIndexA, j)],
+		                                                            _matrix[this->getVectorIndex(rowIndexB, j)]);
 }
 
 inline void Matrix::swapRows(const unsigned int& rowIndexA, const unsigned int& rowIndexB)
@@ -258,17 +256,15 @@ inline void Matrix::swapRows(const unsigned int& rowIndexA, const unsigned int& 
 }
 
 void Matrix::swapColumnElements(const unsigned int& columnIndexA, const unsigned int& columnIndexB,
-	const unsigned int& startRow, const unsigned int& endRow)
+                                const unsigned int& startRow, const unsigned int& endRow)
 {
 	this->validateIndex(0, columnIndexA);
 	this->validateIndex(0, columnIndexA);
 	if (startRow >= this->getRowSize() || endRow >= this->getRowSize()) throw std::logic_error(messages::INDEX_OUT);
 
-	for (unsigned int i = startRow; i <= endRow; i++) {
-		double tmp{ (*this)(i, columnIndexB) };
-		this->setValue((*this)(i, columnIndexA), i, columnIndexB);
-		this->setValue(tmp, i, columnIndexA);
-	}
+	for (unsigned int i = startRow; i <= endRow; i++)
+		_matrix[this->getVectorIndex(i, columnIndexB)] = std::exchange(_matrix[this->getVectorIndex(i, columnIndexA)],
+		                                                               _matrix[this->getVectorIndex(i, columnIndexB)]);
 }
 
 
@@ -314,14 +310,14 @@ void Matrix::validateOperands(const Matrix& matrix) const
 {
 	if (this->getRowSize() != matrix.getRowSize() || this->getColumnSize() != matrix.getColumnSize())
 		throw
-		std::logic_error(messages::OPERANDS_EQUAL);
+			std::logic_error(messages::OPERANDS_EQUAL);
 }
 
 void Matrix::validateResponse(Matrix& resp) const
 {
 	if (this->getRowSize() != resp.getRowSize() || this->getColumnSize() != resp.getColumnSize())
 		throw
-		std::logic_error(messages::NONCOMPT_RESP);
+			std::logic_error(messages::NONCOMPT_RESP);
 }
 
 void Matrix::validateIndex(const unsigned int& rowIndex, const unsigned int& columnIndex) const
@@ -340,7 +336,7 @@ void Matrix::validateResponseMult(const Matrix& matrix, const Matrix& resp) cons
 {
 	if (this->getRowSize() != resp.getRowSize() || matrix.getColumnSize() != resp.getColumnSize())
 		throw
-		std::logic_error(messages::OPERANDS_MAT_PROD);
+			std::logic_error(messages::OPERANDS_MAT_PROD);
 }
 
 void Matrix::validateVectorMult(const Vector& vector) const

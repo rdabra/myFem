@@ -204,9 +204,22 @@ TEST(TestVector, TestMisc) {
 	res.setValue(14.0, 6);
 
 
+	Vector res1(7);
+	res1.setValue(1.0, 0);
+	res1.setValue(5.0, 1);
+	res1.setValue(3.0, 2);
+	res1.setValue(4.0, 3);
+	res1.setValue(2.0, 4);
+	res1.setValue(6.0, 5);
+	res1.setValue(7.0, 6);
+
+	Vector vv(v);
+
+	vv.swapElements(1, 4);
+	
 	EXPECT_TRUE(a == v);
 	EXPECT_TRUE(b == v);
 	EXPECT_TRUE(c == res);
-
+	EXPECT_TRUE(vv == res1);
 
 }

@@ -1,6 +1,10 @@
 #pragma once
 #include "MatrixSquare.h"
 
+/**
+ * @TODO Implementar um pai para MatrixDiagonal que é MatrixSymmetric
+ * @TODO Em MatrixSymmetric implementar Cholesky
+*/
 class MatrixDiagonal final :
 	public MatrixSquare
 {

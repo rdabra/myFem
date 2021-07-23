@@ -3,6 +3,9 @@
 #include "MatrixSquare.h"
 
 
+/**
+ * @todo Construir operador * multiplicando triangular com triangular
+*/
 class MatrixTriangular : public MatrixSquare
 {
 private:

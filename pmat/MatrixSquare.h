@@ -11,6 +11,7 @@ struct PLU
 	MatrixSquare* matP{ nullptr };
 	MatrixTriangular* matL{ nullptr };
 	MatrixTriangular* matU{ nullptr };
+	std::vector<std::pair<unsigned, unsigned>> swappedRows;
 };
 
 
@@ -29,8 +30,8 @@ private:
 	bool _createLu{ false };
 	void swapRowsBellow(MatrixSquare& matU, const unsigned int& idxPivot);
 	void nullifyElementBellow(MatrixSquare& matU,const unsigned int& idxPivot) const;
-	void decomposePlu();
-	void findInverseTriangular(MatrixSquare* matrix, bool lower, MatrixSquare* resp) const;
+	void decomposeToPlu();
+	void findInverseByBackSubstitution(MatrixTriangular* matrix, MatrixTriangular* resp) const;
 
 protected:
 	void createLu();
@@ -58,5 +59,6 @@ public:
 	virtual bool isInvertible();
 	MatrixTriangular extractLowerPart() const;
 	MatrixTriangular extractUpperPart() const;
+	MatrixSquare getInverse();
 };
 

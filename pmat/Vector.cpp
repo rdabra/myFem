@@ -145,6 +145,14 @@ void Vector::multiplyBy(const double& scalar)
 		this->setValue(scalar * (*this)(i), i);
 }
 
+void Vector::swapElements(const unsigned& elmIndexA, const unsigned& elmIndexB)
+{
+
+	if (elmIndexA >= _size || elmIndexB >= _size) throw std::out_of_range(messages::INDEX_OUT);
+
+	_vector[elmIndexB] = std::exchange(_vector[elmIndexA], _vector[elmIndexB]);
+}
+
 double Vector::frobeniusNorm() const
 {
 	double resp = 0.0;

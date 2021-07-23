@@ -32,5 +32,6 @@ public:
 	void times(const double& scalar, Vector& resp) const;
 	Vector operator*(const double& scalar) const;
 	void multiplyBy(const double& scalar);
+	virtual void swapElements(const unsigned int& elmIndexA, const unsigned int& elmIndexB);
 	double frobeniusNorm() const;
 };

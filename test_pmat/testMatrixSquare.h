@@ -142,6 +142,58 @@ TEST(TestMatrixSquare, TestDecompPLU) {
 }
 
 
+TEST(TestMatrixSquare, TestInverse) {
+	MatrixSquare A(4);
+
+	A.setValue(1.0, 0, 0);
+	A.setValue(2.0, 0, 1);
+	A.setValue(3.0, 0, 2);
+	A.setValue(4.0, 0, 3);
+
+	A.setValue(1.0, 1, 0);
+	A.setValue(3.0, 1, 1);
+	A.setValue(2.0, 1, 2);
+	A.setValue(5.0, 1, 3);
+
+	A.setValue(2.0, 2, 0);
+	A.setValue(1.0, 2, 1);
+	A.setValue(6.0, 2, 2);
+	A.setValue(3.0, 2, 3);
+
+	A.setValue(3.0, 3, 0);
+	A.setValue(2.0, 3, 1);
+	A.setValue(1.0, 3, 2);
+	A.setValue(1.0, 3, 3);
+
+	MatrixSquare invA(4);
+
+	invA.setValue(12.0, 0, 0);
+	invA.setValue(-23.0/3.0, 0, 1);
+	invA.setValue(-11.0/3.0, 0, 2);
+	invA.setValue(4.0/3.0, 0, 3);
+
+	invA.setValue(-21.0, 1, 0);
+	invA.setValue(40.0/3.0, 1, 1);
+	invA.setValue(19.0/3.0, 1, 2);
+	invA.setValue(-5.0/3.0, 1, 3);
+
+	invA.setValue(-7.0, 2, 0);
+	invA.setValue(13.0/3.0, 2, 1);
+	invA.setValue(7.0/3.0, 2, 2);
+	invA.setValue(-2.0/3.0, 2, 3);
+
+	invA.setValue(13.0, 3, 0);
+	invA.setValue(-8.0, 3, 1);
+	invA.setValue(-4.0, 3, 2);
+	invA.setValue(1.0, 3, 3);
+
+
+	EXPECT_TRUE(A.getInverse() == invA);
+
+}
+
+
+
 TEST(TestMatrixSquare, TestPlus) {
 	MatrixSquare z(4);
 	z.setValue(1.0, 0, 0);

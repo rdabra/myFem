@@ -17,6 +17,7 @@ void MatrixSquare::swapRowsBellow(MatrixSquare& matU, const unsigned int& idxPiv
 		_matsPLU.matP->swapRows(idxMax, idxPivot);
 		if (idxPivot > 0)
 			_matsPLU.matL->swapRowElements(idxMax, idxPivot, 0, idxPivot - 1);
+		_matsPLU.swappedRows.emplace_back(idxMax, idxPivot);
 		_changeSignForDet = !_changeSignForDet;
 	}
 }
@@ -123,7 +124,7 @@ double MatrixSquare::trace() const
 }
 
 
-void MatrixSquare::decomposePlu()
+void MatrixSquare::decomposeToPlu()
 {
 	if (!_calcLu) {
 		this->createLu();
@@ -134,19 +135,19 @@ void MatrixSquare::decomposePlu()
 				this->nullifyElementBellow(matU, idxPivot);
 		}
 		_matsPLU.matU = new MatrixTriangular(matU.extractUpperPart());
+		_calcLu = true;
 	}
 
-	_calcLu = true;
 }
 
-void MatrixSquare::findInverseTriangular(MatrixSquare* matrix, bool lower, MatrixSquare* resp) const
+void MatrixSquare::findInverseByBackSubstitution(MatrixTriangular* matrix, MatrixTriangular* resp) const
 {
 	std::vector<unsigned> ids(matrix->getSize());
 
-	if (lower)
+	if (matrix->isLower())
 		for (unsigned int k = 0; k < matrix->getSize(); k++) ids[k] = k;
 	else
-		for (unsigned int k = matrix->getSize(); k != 0; k--) ids[k - 1] = k - 1;
+		for (unsigned int k = 0; k < matrix->getSize(); k++) ids[k] = matrix->getSize() - k - 1;
 
 	for (unsigned int idxPivot = 0; idxPivot < matrix->getSize(); idxPivot++) {
 		resp->setValue(1.0 / (*matrix)(ids[idxPivot], ids[idxPivot]), ids[idxPivot], ids[idxPivot]);
@@ -161,7 +162,7 @@ void MatrixSquare::findInverseTriangular(MatrixSquare* matrix, bool lower, Matri
 
 const PLU& MatrixSquare::getPLU()
 {
-	this->decomposePlu();
+	this->decomposeToPlu();
 
 
 	return _matsPLU;
@@ -190,9 +191,34 @@ MatrixTriangular MatrixSquare::extractUpperPart() const
 	return resp;
 }
 
+MatrixSquare MatrixSquare::getInverse()
+{
+	this->decomposeToPlu();
+	if (!this->isInvertible()) throw std::out_of_range(messages::MATRIX_SINGULAR);
+
+	MatrixTriangular invU(this->getSize(), false);
+	this->findInverseByBackSubstitution(_matsPLU.matU, &invU);
+
+	// Retirar depois
+	const MatrixSquare& x = invU * (*_matsPLU.matU);
+
+	MatrixTriangular invL(this->getSize(), true);
+	this->findInverseByBackSubstitution(_matsPLU.matL, &invL);
+
+	// Retirar depois
+	const MatrixSquare& y = invL * (*_matsPLU.matL);
+
+	MatrixSquare resp(invL * invU * (*_matsPLU.matP));
+
+//	for (auto& swappedRow : _matsPLU.swappedRows)
+//		resp.swapColumns(swappedRow.first, swappedRow.second);
+
+	return resp;
+}
+
 double MatrixSquare::determinant()
 {
-	this->decomposePlu();
+	this->decomposeToPlu();
 
 	double resp{ 1.0 };
 
