@@ -243,6 +243,19 @@ TEST(MatrixTriangular, TestMinus) {
 	resp2.setValue(0.0, 3, 2);
 	resp2.setValue(0.0, 3, 3);
 
+	MatrixTriangular resp3(4, false);
+	resp3.setValue(0.0, 0, 0);
+	resp3.setValue(0.0, 0, 1);
+	resp3.setValue(0.0, 0, 2);
+	resp3.setValue(0.0, 0, 3);
+	resp3.setValue(0.0, 1, 1);
+	resp3.setValue(0.0, 1, 2);
+	resp3.setValue(0.0, 1, 3);
+	resp3.setValue(0.0, 2, 2);
+	resp3.setValue(0.0, 2, 3);
+	resp3.setValue(0.0, 3, 3);
+
+
 	MatrixTriangular zz(z);
 	MatrixTriangular vv(v);
 
@@ -275,7 +288,7 @@ TEST(MatrixTriangular, TestMinus) {
 	EXPECT_TRUE(resp2 == x4);
 	EXPECT_TRUE(resp2 == x5);
 	EXPECT_TRUE(resp * -1.0 == x6);
-	EXPECT_TRUE(resp2 == vv);
+	EXPECT_TRUE(resp3 == vv);
 
 }
 

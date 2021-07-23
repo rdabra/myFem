@@ -2,16 +2,22 @@
 
 #include "Matrix.h"
 
+class MatrixTriangular;
+
 class MatrixSquare;
 
 struct PLU
 {
 	MatrixSquare* matP{ nullptr };
-	MatrixSquare* matL{ nullptr };
-	MatrixSquare* matU{ nullptr };
+	MatrixTriangular* matL{ nullptr };
+	MatrixTriangular* matU{ nullptr };
 };
 
 
+/**
+ * @TODO Implementar inversa
+ * 
+*/
 class MatrixSquare : public Matrix
 {
 public:
@@ -21,12 +27,15 @@ private:
 	bool _changeSignForDet{ false };
 	bool _calcLu{ false };
 	bool _createLu{ false };
-	void swapRowsBellow(const unsigned int& idxPivot);
-	void nullifyElementBellow(const unsigned int& idxPivot) const;
+	void swapRowsBellow(MatrixSquare& matU, const unsigned int& idxPivot);
+	void nullifyElementBellow(MatrixSquare& matU,const unsigned int& idxPivot) const;
+	void decomposePlu();
+	void findInverseTriangular(MatrixSquare* matrix, bool lower, MatrixSquare* resp) const;
 
 protected:
 	void createLu();
 	void destroyLu() const;
+	
 
 public:
 	MatrixSquare() = default;
@@ -46,5 +55,8 @@ public:
 	virtual double trace() const;
 	virtual double determinant();
 	virtual const PLU& getPLU();
+	virtual bool isInvertible();
+	MatrixTriangular extractLowerPart() const;
+	MatrixTriangular extractUpperPart() const;
 };
 

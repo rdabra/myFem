@@ -33,6 +33,7 @@ MatrixTriangular::MatrixTriangular(MatrixTriangular&& matrix) noexcept
 	_columnSize = matrix._columnSize;
 	_isLower = matrix.isLower();
 	_matrix = std::move(matrix._matrix);
+	matrix.~MatrixTriangular();
 }
 
 void MatrixTriangular::setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex)
@@ -52,6 +53,24 @@ const double& MatrixTriangular::operator()(const unsigned int& rowIndex, const u
 
 	return isZero ? putils::ZERO : _matrix[this->getVectorIndex(rowIndex, columnIndex)];
 }
+
+bool MatrixTriangular::operator==(MatrixTriangular& matrix) const
+{
+	if (this->isLower() != matrix.isLower()) return false;
+
+	if (this->isLower())
+		for (unsigned int i = 0; i < this->getSize(); i++)
+			for (unsigned int j = 0; j <= i; j++) {
+				if (!putils::areEqual((*this)(i, j), matrix(i, j))) return false;
+			}
+	else
+		for (unsigned int i = 0; i < this->getSize(); i++)
+			for (unsigned int j = i; j < this->getSize(); j++)
+				if (!putils::areEqual((*this)(i, j), matrix(i, j))) return false;
+
+	return true;
+}
+
 
 MatrixTriangular& MatrixTriangular::operator=(const MatrixTriangular& matrix)
 {
@@ -356,7 +375,7 @@ void MatrixTriangular::swapRowElements(const unsigned int& rowIndexA, const unsi
 void MatrixTriangular::swapColumnElements(const unsigned int& columnIndexA, const unsigned int& columnIndexB,
                                           const unsigned int& startRow, const unsigned int& endRow)
 {
-	if ((startRow > endRow) || (_isLower && (columnIndexA  > startRow || columnIndexB > startRow)) ||
+	if ((startRow > endRow) || (_isLower && (columnIndexA > startRow || columnIndexB > startRow)) ||
 		((!_isLower) && (endRow > columnIndexA || endRow > columnIndexB)))
 		throw std::out_of_range(messages::INDEX_OUT);
 

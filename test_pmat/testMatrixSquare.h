@@ -80,8 +80,12 @@ TEST(TestMatrixSquare, TestDeterminant) {
 	B.setValue(5.0, 2, 1);
 	B.setValue(8.0, 2, 2);
 
+	MatrixSquare C(3);
+
 	EXPECT_TRUE(putils::areEqual(A.determinant(), -3.0));
 	EXPECT_TRUE(putils::areEqual(B.determinant(), -6.0));
+	EXPECT_TRUE(A.isInvertible());
+	EXPECT_FALSE(C.isInvertible());
 }
 
 TEST(TestMatrixSquare, TestDecompPLU) {
@@ -295,8 +299,39 @@ TEST(TestMatrixSquare, TestMisc) {
 	A.setValue(2.0, 3, 1);
 	A.setValue(1.0, 3, 2);
 	A.setValue(1.0, 3, 3);
+	
+	MatrixTriangular ALower(4,true);
+	MatrixTriangular AUpper(4, false);
 
+	ALower.setValue(1.0, 0, 0);
 
+	ALower.setValue(1.0, 1, 0);
+	ALower.setValue(3.0, 1, 1);
+
+	ALower.setValue(2.0, 2, 0);
+	ALower.setValue(1.0, 2, 1);
+	ALower.setValue(6.0, 2, 2);
+
+	ALower.setValue(3.0, 3, 0);
+	ALower.setValue(2.0, 3, 1);
+	ALower.setValue(1.0, 3, 2);
+	ALower.setValue(1.0, 3, 3);
+
+	AUpper.setValue(1.0, 0, 0);
+	AUpper.setValue(2.0, 0, 1);
+	AUpper.setValue(3.0, 0, 2);
+	AUpper.setValue(4.0, 0, 3);
+
+	AUpper.setValue(3.0, 1, 1);
+	AUpper.setValue(2.0, 1, 2);
+	AUpper.setValue(5.0, 1, 3);
+
+	AUpper.setValue(6.0, 2, 2);
+	AUpper.setValue(3.0, 2, 3);
+
+	AUpper.setValue(1.0, 3, 3);
+
+	
 	MatrixSquare B;
 
 	B = A;
@@ -308,6 +343,8 @@ TEST(TestMatrixSquare, TestMisc) {
 
 	EXPECT_TRUE(A == B);
 	EXPECT_TRUE(A == C);
+	EXPECT_TRUE(A.extractLowerPart() == ALower);
+	EXPECT_TRUE(A.extractUpperPart() == AUpper);
 
 }
 

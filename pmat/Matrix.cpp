@@ -75,16 +75,17 @@ Matrix& Matrix::operator=(Matrix&& matrix) noexcept
 
 bool Matrix::operator==(const Matrix& matrix) const
 {
-	bool resp = this->getRowSize() == matrix.getRowSize() && this->getColumnSize() == matrix.getColumnSize();
+	bool test{ this->getRowSize() == matrix.getRowSize() && this->getColumnSize() == matrix.getColumnSize() };
 
-	if (resp)
+	if (test) {
 		for (unsigned int i = 0; i < this->getRowSize(); i++)
-			for (unsigned int j = 0; j < this->getColumnSize(); j++) {
-				resp = putils::areEqual((*this)(i, j), matrix(i, j));
-				if (!resp) return false;
-			}
+			for (unsigned int j = 0; j < this->getColumnSize(); j++)
+				if (!putils::areEqual((*this)(i, j), matrix(i, j))) return false;
 
-	return resp;
+	}
+	else return false;
+
+	return true;
 }
 
 double Matrix::dotProduct(const Matrix& matrix) const

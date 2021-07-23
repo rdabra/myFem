@@ -2,18 +2,18 @@
 #include "MatrixSquare.h"
 
 
-void MatrixSquare::swapRowsBellow(const unsigned int& idxPivot)
+void MatrixSquare::swapRowsBellow(MatrixSquare& matU, const unsigned int& idxPivot)
 {
 	unsigned int idxMax = idxPivot;
-	double valMax = std::abs((*_matsPLU.matU)(idxPivot, idxPivot));
-	for (unsigned int i = idxPivot + 1; i < _matsPLU.matU->getSize(); i++)
-		if (std::abs((*_matsPLU.matU)(i, idxPivot)) > valMax) {
-			valMax = std::abs((*_matsPLU.matU)(i, idxPivot));
+	double valMax = std::abs(matU(idxPivot, idxPivot));
+	for (unsigned int i = idxPivot + 1; i < matU.getSize(); i++)
+		if (std::abs(matU(i, idxPivot)) > valMax) {
+			valMax = std::abs(matU(i, idxPivot));
 			idxMax = i;
 		}
 
 	if (idxMax != idxPivot) {
-		_matsPLU.matU->swapRows(idxMax, idxPivot);
+		matU.swapRows(idxMax, idxPivot);
 		_matsPLU.matP->swapRows(idxMax, idxPivot);
 		if (idxPivot > 0)
 			_matsPLU.matL->swapRowElements(idxMax, idxPivot, 0, idxPivot - 1);
@@ -21,22 +21,24 @@ void MatrixSquare::swapRowsBellow(const unsigned int& idxPivot)
 	}
 }
 
-void MatrixSquare::nullifyElementBellow(const unsigned int& idxPivot) const
+void MatrixSquare::nullifyElementBellow(MatrixSquare& matU, const unsigned int& idxPivot) const
 {
-	for (unsigned int i = idxPivot + 1; i < _matsPLU.matU->getSize(); i++) {
-		_matsPLU.matL->setValue((*_matsPLU.matU)(i, idxPivot) / (*_matsPLU.matU)(idxPivot, idxPivot), i, idxPivot);
-		for (unsigned int j = idxPivot; j < _matsPLU.matU->getSize(); j++)
-			_matsPLU.matU->setValue((*_matsPLU.matU)(i, j) - (*_matsPLU.matU)(idxPivot, j) * (*_matsPLU.matL)(i, idxPivot), i, j);
+	for (unsigned int i = idxPivot + 1; i < matU.getSize(); i++) {
+		_matsPLU.matL->setValue(matU(i, idxPivot) / matU(idxPivot, idxPivot), i, idxPivot);
+		for (unsigned int j = idxPivot; j < matU.getSize(); j++)
+			matU.setValue(
+				matU(i, j) - matU(idxPivot, j) * (*_matsPLU.matL)(i, idxPivot), i, j);
 	}
 }
+
 
 void MatrixSquare::createLu()
 {
 	this->destroyLu();
 
-	_matsPLU.matU = new MatrixSquare(*this);
 	_matsPLU.matP = new MatrixSquare(this->getSize());
-	_matsPLU.matL = new MatrixSquare(this->getSize());
+	_matsPLU.matU = new MatrixTriangular(this->getSize(), false);
+	_matsPLU.matL = new MatrixTriangular(this->getSize(), true);
 	_changeSignForDet = false;
 
 	for (unsigned int j = 0; j < this->getSize(); j++) {
@@ -121,26 +123,76 @@ double MatrixSquare::trace() const
 }
 
 
-const PLU& MatrixSquare::getPLU()
+void MatrixSquare::decomposePlu()
 {
 	if (!_calcLu) {
 		this->createLu();
-		for (unsigned int idxPivot = 0; idxPivot < _matsPLU.matU->getSize() - 1; idxPivot++) {
-			this->swapRowsBellow(idxPivot);
-			if (!putils::areEqual((*_matsPLU.matU)(idxPivot, idxPivot), 0.0))
-				this->nullifyElementBellow(idxPivot);
+		MatrixSquare matU(*this);
+		for (unsigned int idxPivot = 0; idxPivot < matU.getSize() - 1; idxPivot++) {
+			this->swapRowsBellow(matU, idxPivot);
+			if (!putils::areEqual(matU(idxPivot, idxPivot), 0.0))
+				this->nullifyElementBellow(matU, idxPivot);
 		}
+		_matsPLU.matU = new MatrixTriangular(std::move(matU.extractUpperPart()));
 	}
 
 	_calcLu = true;
+}
+
+void MatrixSquare::findInverseTriangular(MatrixSquare* matrix, bool lower, MatrixSquare* resp) const
+{
+	std::vector<unsigned> ids(matrix->getSize());
+
+	if (lower)
+		for (unsigned int k = 0; k < matrix->getSize(); k++) ids[k] = k;
+	else
+		for (unsigned int k = matrix->getSize(); k != 0; k--) ids[k - 1] = k - 1;
+
+	for (unsigned int idxPivot = 0; idxPivot < matrix->getSize(); idxPivot++) {
+		resp->setValue(1.0 / (*matrix)(ids[idxPivot], ids[idxPivot]), ids[idxPivot], ids[idxPivot]);
+		for (unsigned int i = idxPivot + 1; i < matrix->getSize(); i++) {
+			double num{ 0.0 };
+			for (unsigned int j = idxPivot; j < i; j++)
+				num -= (*matrix)(ids[i], ids[j]) * (*resp)(ids[j], ids[idxPivot]);
+			resp->setValue(num / (*matrix)(ids[i], ids[i]), ids[i], ids[idxPivot]);
+		}
+	}
+}
+
+const PLU& MatrixSquare::getPLU()
+{
+	this->decomposePlu();
 
 
 	return _matsPLU;
 }
 
+bool MatrixSquare::isInvertible()
+{
+	return !putils::areEqual(this->determinant(), 0.0);
+}
+
+MatrixTriangular MatrixSquare::extractLowerPart() const
+{
+	MatrixTriangular resp(this->getSize(), true);
+	for (unsigned int i = 0; i < this->getSize(); ++i)
+		for (unsigned int j = 0; j <= i; ++j)
+			resp.setValue((*this)(i, j), i, j);
+	return resp;
+}
+
+MatrixTriangular MatrixSquare::extractUpperPart() const
+{
+	MatrixTriangular resp(this->getSize(), false);
+	for (unsigned int i = 0; i < this->getSize(); ++i)
+		for (unsigned int j = i; j < this->getSize(); ++j)
+			resp.setValue((*this)(i, j), i, j);
+	return resp;
+}
+
 double MatrixSquare::determinant()
 {
-	this->getPLU();
+	this->decomposePlu();
 
 	double resp{ 1.0 };
 

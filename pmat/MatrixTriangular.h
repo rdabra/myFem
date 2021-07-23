@@ -2,6 +2,7 @@
 
 #include "MatrixSquare.h"
 
+
 class MatrixTriangular : public MatrixSquare
 {
 private:
@@ -13,7 +14,7 @@ protected:
 		return _isLower ? (i * (i + 1)) / 2 + j : (j * (j + 1)) / 2 + i;
 	}
 
-	unsigned int getVectorSize() const override { return (_rowSize * _rowSize + _rowSize) / 2; };
+	unsigned int getVectorSize() const override { return (_rowSize * _rowSize + _rowSize) / 2; }
 
 public:
 	MatrixTriangular() = default;
@@ -24,6 +25,8 @@ public:
 	const bool& isLower() const { return _isLower; }
 	void setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex) override;
 	const double& operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const override;
+	bool operator==(MatrixTriangular& matrix) const;
+	inline bool operator==(Matrix& matrix) const { return Matrix::operator==(matrix); }
 	MatrixTriangular& operator=(const MatrixTriangular& matrix);
 	MatrixTriangular& operator=(MatrixTriangular&& matrix) noexcept;
 	virtual double dotProduct(const MatrixSquare& matrix) const;
