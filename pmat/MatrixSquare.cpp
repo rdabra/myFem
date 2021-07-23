@@ -133,7 +133,7 @@ void MatrixSquare::decomposePlu()
 			if (!putils::areEqual(matU(idxPivot, idxPivot), 0.0))
 				this->nullifyElementBellow(matU, idxPivot);
 		}
-		_matsPLU.matU = new MatrixTriangular(std::move(matU.extractUpperPart()));
+		_matsPLU.matU = new MatrixTriangular(matU.extractUpperPart());
 	}
 
 	_calcLu = true;
