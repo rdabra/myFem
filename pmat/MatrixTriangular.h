@@ -27,6 +27,7 @@ public:
 	void setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex) override;
 	const double& operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const override;
 	bool operator==(MatrixTriangular& matrix) const;
+	bool operator==(MatrixSquare& matrix) const { return MatrixSquare::operator==(matrix); }
 	MatrixTriangular& operator=(const MatrixTriangular& matrix);
 	MatrixTriangular& operator=(MatrixTriangular&& matrix) noexcept;
 	double dotProduct(const Matrix& matrix) const override;
