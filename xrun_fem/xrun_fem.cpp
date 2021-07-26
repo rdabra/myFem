@@ -3,31 +3,20 @@
 
 #include <iostream>
 #include <vector>
-#include "MatrixTriangular.h"
+#include "MatrixSquare.h"
 
 
 int main()
 {
-	MatrixTriangular z(4, false);
-	z.setValue(1.0, 3, 3);
-	z.setValue(4.0, 2, 2);
-	z.setValue(5.0, 2, 3);
-	z.setValue(7.0, 1, 1);
-	z.setValue(8.0, 1, 2);
-	z.setValue(9.0, 1, 3);
-	z.setValue(10.0, 0, 0);
-	z.setValue(11.0, 0, 1);
-	z.setValue(12.0, 0, 2);
-	z.setValue(13.0, 0, 3);
 
+	double a{ 3.1234567865888 };
+	double b{ 3.1234567865321 };
 
-	for (unsigned int i = 0; i < 4; i++)
-	{
-		for (unsigned int j = 0; j < 4; j++)
-			std::cout << z(i, j) << " ";
-		std::cout << "\n";
-	}
+	double c = 1.0 / 10.0;
+	
 
+	std::cout << (putils::areEqual(a, b) ? "true" : "false") << "\n";
+	
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

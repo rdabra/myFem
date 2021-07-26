@@ -187,7 +187,8 @@ TEST(TestMatrixSquare, TestInverse) {
 	invA.setValue(-4.0, 3, 2);
 	invA.setValue(1.0, 3, 3);
 
-
+	MatrixSquare B(A * A.getInverse());
+	
 	EXPECT_TRUE(A.getInverse() == invA);
 
 }

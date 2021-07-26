@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Matrix" Collapsed="true">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BGCBAgABAATAAAAEGAMAAQIABgigYIBAmCigCwAAABA=</HashCode>
+      <FileName>Matrix.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MatrixSquare" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIoAIAAQIAEAAAAAAIAAIBAMAAAAAAQCIAoAAAQAAE=</HashCode>
+      <FileName>MatrixSquare.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MatrixTriangular" Collapsed="true">
+    <Position X="3.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAABAAEBAARAAAAEEAMAAQAAIggAIMBACSCgAoAAAAA=</HashCode>
+      <FileName>MatrixTriangular.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MatrixSymmetric" Collapsed="true">
+    <Position X="6" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAQAEAIAAQAAAAAAAABAAQAgAQAACAA=</HashCode>
+      <FileName>MatrixSymmetric.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MatrixDiagonal" Collapsed="true">
+    <Position X="1.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAABAARAAAAAEAMAAAAAIwgAIIBICCAgAAAAAAA=</HashCode>
+      <FileName>MatrixDiagonal.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Vector" Collapsed="true">
+    <Position X="6.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BEAAAAAAAIBAAAAAEAMIAQAAAgAAIIBAAGAgAAIAAAA=</HashCode>
+      <FileName>Vector.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

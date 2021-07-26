@@ -33,6 +33,7 @@ void Vector::setValue(const double& coef, const unsigned int& index)
 	_vector[index] = coef;
 }
 
+
 Vector& Vector::operator=(const Vector& vector)
 {
 	_size = vector.getSize();
@@ -155,9 +156,5 @@ void Vector::swapElements(const unsigned& elmIndexA, const unsigned& elmIndexB)
 
 double Vector::frobeniusNorm() const
 {
-	double resp = 0.0;
-	for (unsigned int i = 0; i < _size; i++)
-		resp += (*this)(i) * (*this)(i);
-
-	return sqrt(resp);
+	return sqrt(this->dotProduct(*this));
 }

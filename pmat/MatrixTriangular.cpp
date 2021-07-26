@@ -36,6 +36,15 @@ MatrixTriangular::MatrixTriangular(MatrixTriangular&& matrix) noexcept
 	matrix.~MatrixTriangular();
 }
 
+void MatrixTriangular::resize(const unsigned int& size, bool isLower)
+{
+	_matrix.clear();
+	_rowSize = size;
+	_columnSize = size;
+	_isLower = isLower;
+	_matrix.resize(this->getVectorSize());
+}
+
 void MatrixTriangular::setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex)
 {
 	validateIndex(rowIndex, columnIndex);
@@ -56,7 +65,7 @@ const double& MatrixTriangular::operator()(const unsigned int& rowIndex, const u
 
 bool MatrixTriangular::operator==(MatrixTriangular& matrix) const
 {
-	if (this->isLower() != matrix.isLower()) return false;
+	if (this->isLower() != matrix.isLower() || this->getSize() != matrix.getSize()) return false;
 
 	if (this->isLower())
 		for (unsigned int i = 0; i < this->getSize(); i++)
@@ -106,18 +115,18 @@ MatrixTriangular& MatrixTriangular::operator=(MatrixTriangular&& matrix) noexcep
 	return (*this);
 }
 
-double MatrixTriangular::dotProduct(const MatrixSquare& matrix) const
+double MatrixTriangular::dotProduct(const Matrix& matrix) const
 {
 	this->validateOperands(matrix);
 
 	double resp = 0.0;
 	if (this->isLower())
-		for (unsigned int i = 0; i < this->getRowSize(); i++)
+		for (unsigned int i = 0; i < this->getSize(); i++)
 			for (unsigned int j = 0; j <= i; j++)
 				resp += (*this)(i, j) * matrix(i, j);
 	else
-		for (unsigned int i = 0; i < this->getRowSize(); i++)
-			for (unsigned int j = i; j < this->getColumnSize(); j++)
+		for (unsigned int i = 0; i < this->getSize(); i++)
+			for (unsigned int j = i; j < this->getSize(); j++)
 				resp += (*this)(i, j) * matrix(i, j);
 
 	return resp;
@@ -342,18 +351,7 @@ void MatrixTriangular::multiplyBy(const double& scalar)
 
 double MatrixTriangular::frobeniusNorm() const
 {
-	double resp = 0.0;
-
-	if (this->isLower())
-		for (unsigned int i = 0; i < this->getSize(); i++)
-			for (unsigned int j = 0; j <= i; j++)
-				resp += (*this)(i, j) * (*this)(i, j);
-	else
-		for (unsigned int i = 0; i < this->getSize(); i++)
-			for (unsigned int j = 0; j < this->getSize(); j++)
-				resp += (*this)(i, j) * (*this)(i, j);
-
-	return sqrt(resp);
+	return sqrt(this->dotProduct((*this)));
 }
 
 void MatrixTriangular::transpose()
@@ -363,7 +361,7 @@ void MatrixTriangular::transpose()
 }
 
 void MatrixTriangular::swapRowElements(const unsigned int& rowIndexA, const unsigned int& rowIndexB,
-                                       const unsigned int& startColumn, const unsigned int& endColumn)
+	const unsigned int& startColumn, const unsigned int& endColumn)
 {
 	if ((startColumn > endColumn) || (_isLower && (endColumn > rowIndexA || endColumn > rowIndexB)) ||
 		((!_isLower) && (startColumn < rowIndexA || startColumn < rowIndexB)))
@@ -373,7 +371,7 @@ void MatrixTriangular::swapRowElements(const unsigned int& rowIndexA, const unsi
 }
 
 void MatrixTriangular::swapColumnElements(const unsigned int& columnIndexA, const unsigned int& columnIndexB,
-                                          const unsigned int& startRow, const unsigned int& endRow)
+	const unsigned int& startRow, const unsigned int& endRow)
 {
 	if ((startRow > endRow) || (_isLower && (columnIndexA > startRow || columnIndexB > startRow)) ||
 		((!_isLower) && (endRow > columnIndexA || endRow > columnIndexB)))

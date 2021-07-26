@@ -18,7 +18,7 @@ public:
 	virtual ~Vector() {};
 	const double& operator()(const unsigned int& index) const;
 	void setValue(const double& coef, const unsigned int& index);
-	const unsigned int& getSize(void) const { return _size; };
+	const unsigned int& getSize(void) const { return _size; }
 	Vector& operator=(const Vector& vector);
 	Vector& operator=(Vector&& vector) noexcept;
 	bool operator==(const Vector& vector) const;

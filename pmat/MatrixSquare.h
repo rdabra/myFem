@@ -15,10 +15,6 @@ struct PLU
 };
 
 
-/**
- * @TODO Implementar inversa
- * 
-*/
 class MatrixSquare : public Matrix
 {
 public:
@@ -37,7 +33,6 @@ protected:
 	void createLu();
 	void destroyLu() const;
 	
-
 public:
 	MatrixSquare() = default;
 	explicit MatrixSquare(const unsigned int& size) : Matrix(size, size) {}

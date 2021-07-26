@@ -282,7 +282,10 @@ TEST(TestMatrix, TestFrobenius) {
 	z.setValue(11.0, 3, 1);
 	z.setValue(12.0, 3, 2);
 
-	EXPECT_TRUE(putils::areEqual(z.frobeniusNorm(), 25.4950975));
+	double frobZ{ sqrt(z.dotProduct(z)) };
+
+
+	EXPECT_TRUE(putils::areEqual(z.frobeniusNorm(), frobZ));
 }
 
 TEST(TestMatrix, TestTranspose) {

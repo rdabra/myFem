@@ -3,9 +3,6 @@
 #include "MatrixSquare.h"
 
 
-/**
- * @todo Construir operador * multiplicando triangular com triangular
-*/
 class MatrixTriangular : public MatrixSquare
 {
 private:
@@ -26,13 +23,13 @@ public:
 	MatrixTriangular(MatrixTriangular&& matrix) noexcept;
 	~MatrixTriangular() override = default;
 	const bool& isLower() const { return _isLower; }
+	void resize(const unsigned int& size, bool isLower);
 	void setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex) override;
 	const double& operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const override;
 	bool operator==(MatrixTriangular& matrix) const;
-	inline bool operator==(Matrix& matrix) const { return Matrix::operator==(matrix); }
 	MatrixTriangular& operator=(const MatrixTriangular& matrix);
 	MatrixTriangular& operator=(MatrixTriangular&& matrix) noexcept;
-	virtual double dotProduct(const MatrixSquare& matrix) const;
+	double dotProduct(const Matrix& matrix) const override;
 	void plus(const MatrixTriangular& matrix, MatrixSquare& resp) const;
 	virtual void addBy(const MatrixTriangular& matrix);
 	void minus(const MatrixTriangular& matrix, MatrixSquare& resp) const;

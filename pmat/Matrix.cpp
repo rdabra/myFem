@@ -13,7 +13,7 @@ Matrix::Matrix(const Matrix& matrix)
 {
 	_rowSize = matrix.getRowSize();
 	_columnSize = matrix.getColumnSize();
-	_matrix.resize(this->Matrix::getVectorSize());
+	_matrix.resize(matrix.getVectorSize());
 
 	for (unsigned int i = 0; i < this->Matrix::getRowSize(); i++)
 		for (unsigned int j = 0; j < this->Matrix::getColumnSize(); j++)
@@ -283,13 +283,7 @@ void Matrix::transpose()
 
 double Matrix::frobeniusNorm() const
 {
-	double resp = 0.0;
-
-	for (unsigned int i = 0; i < this->getRowSize(); i++)
-		for (unsigned int j = 0; j < this->getColumnSize(); j++)
-			resp += (*this)(i, j) * (*this)(i, j);
-
-	return sqrt(resp);
+	return sqrt(this->dotProduct((*this)));
 }
 
 void Matrix::fillRandomly(const double& min, const double& max)

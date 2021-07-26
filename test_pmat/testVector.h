@@ -174,7 +174,10 @@ TEST(TestVector, TestFrobenius) {
 	v.setValue(6.0, 5);
 	v.setValue(7.0, 6);
 
-	EXPECT_TRUE(putils::areEqual(v.frobeniusNorm(), 11.8321595));
+	double frobV{ sqrt(v.dotProduct(v)) };
+
+	
+	EXPECT_TRUE(putils::areEqual(v.frobeniusNorm(),frobV ));
 }
 
 

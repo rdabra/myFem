@@ -2,7 +2,8 @@
 
 namespace putils
 {
-	static double DIF_TOLERANCE = 0.0000001;
+	//tolerância até à qtde de casas decimais
+	static double DIF_TOLERANCE = 0.0000000001;
 
 	static double ZERO = 0.0;
 

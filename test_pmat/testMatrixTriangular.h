@@ -448,6 +448,8 @@ TEST(MatrixTriangular, TestFrobenius)
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
+	double frobZ{ sqrt(z.dotProduct(z)) };
+
 	MatrixTriangular v(4, false);
 	v.setValue(1.0, 3, 3);
 	v.setValue(4.0, 2, 2);
@@ -460,9 +462,11 @@ TEST(MatrixTriangular, TestFrobenius)
 	v.setValue(12.0, 0, 2);
 	v.setValue(13.0, 0, 3);
 
+	double frobV{ sqrt(v.dotProduct(v)) };
+
 	
-	EXPECT_TRUE(putils::areEqual(z.frobeniusNorm(), 27.7488739));
-	EXPECT_TRUE(putils::areEqual(v.frobeniusNorm(), 27.7488739));
+	EXPECT_TRUE(putils::areEqual(z.frobeniusNorm(), frobZ));
+	EXPECT_TRUE(putils::areEqual(v.frobeniusNorm(), frobV));
 
 }
 

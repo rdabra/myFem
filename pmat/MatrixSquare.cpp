@@ -137,7 +137,6 @@ void MatrixSquare::decomposeToPlu()
 		_matsPLU.matU = new MatrixTriangular(matU.extractUpperPart());
 		_calcLu = true;
 	}
-
 }
 
 void MatrixSquare::findInverseByBackSubstitution(MatrixTriangular* matrix, MatrixTriangular* resp) const
@@ -152,7 +151,7 @@ void MatrixSquare::findInverseByBackSubstitution(MatrixTriangular* matrix, Matri
 	for (unsigned int idxPivot = 0; idxPivot < matrix->getSize(); idxPivot++) {
 		resp->setValue(1.0 / (*matrix)(ids[idxPivot], ids[idxPivot]), ids[idxPivot], ids[idxPivot]);
 		for (unsigned int i = idxPivot + 1; i < matrix->getSize(); i++) {
-			double num{ 0.0 };
+			double num{0.0};
 			for (unsigned int j = idxPivot; j < i; j++)
 				num -= (*matrix)(ids[i], ids[j]) * (*resp)(ids[j], ids[idxPivot]);
 			resp->setValue(num / (*matrix)(ids[i], ids[i]), ids[i], ids[idxPivot]);
@@ -208,10 +207,10 @@ MatrixSquare MatrixSquare::getInverse()
 	// Retirar depois
 	const MatrixSquare& y = invL * (*_matsPLU.matL);
 
-	MatrixSquare resp(invL * invU * (*_matsPLU.matP));
+	MatrixSquare resp(invU * invL);
 
-//	for (auto& swappedRow : _matsPLU.swappedRows)
-//		resp.swapColumns(swappedRow.first, swappedRow.second);
+	for (auto& swappedRow : _matsPLU.swappedRows)
+		resp.swapColumns(swappedRow.first, swappedRow.second);
 
 	return resp;
 }
@@ -220,7 +219,7 @@ double MatrixSquare::determinant()
 {
 	this->decomposeToPlu();
 
-	double resp{ 1.0 };
+	double resp{1.0};
 
 	for (unsigned int i = 0; i < this->getSize(); i++)
 		resp *= (*_matsPLU.matU)(i, i);
