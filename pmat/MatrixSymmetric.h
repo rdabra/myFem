@@ -5,7 +5,7 @@ class MatrixSymmetric :
     public MatrixSquare
 {
 private:
-	std::vector<double> _matrix; // In order to prevent from being inherited
+	std::vector<double> _matrix; // Changing visibility in order to prevent inheritance
 
 protected:
 	MatrixTriangular _matTri;
@@ -23,6 +23,8 @@ public:
 	MatrixSymmetric& operator=(const MatrixSymmetric& matrix);
 	MatrixSymmetric& operator=(MatrixSymmetric&& matrix) noexcept;
 	double dotProduct(const MatrixSymmetric& matrix) const;
+	double dotProduct(const Matrix& matrix) const override { return Matrix::dotProduct(matrix); }
+	void plus(const MatrixSymmetric& matrix, MatrixSymmetric& resp) const;
 
 
 

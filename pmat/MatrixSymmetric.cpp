@@ -80,3 +80,13 @@ double MatrixSymmetric::dotProduct(const MatrixSymmetric& matrix) const
 
 	return resp;
 }
+
+void MatrixSymmetric::plus(const MatrixSymmetric& matrix, MatrixSymmetric& resp) const
+{
+	this->validateOperands(matrix);
+	this->validateResponse(resp);
+
+	for (unsigned int i = 0; i < this->getSize(); i++)
+		for (unsigned int j = 0; j <= i; j++)
+			resp.setValue((*this)(i, j) + matrix(i, j), i, j);
+}

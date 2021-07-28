@@ -33,10 +33,12 @@ public:
 	double dotProduct(const Matrix& matrix) const override;
 	void plus(const MatrixTriangular& matrix, MatrixSquare& resp) const;
 	virtual void addBy(const MatrixTriangular& matrix);
+	void addBy(const Matrix& matrix) override { Matrix::addBy(matrix); }
 	void minus(const MatrixTriangular& matrix, MatrixSquare& resp) const;
 	MatrixSquare operator+(const MatrixTriangular& matrix) const;
 	MatrixSquare operator-(const MatrixTriangular& matrix) const;
 	virtual void subtractBy(const MatrixTriangular& matrix);
+	void subtractBy(const Matrix& matrix) override { Matrix::subtractBy(matrix); }
 	void times(const MatrixSquare& matrix, MatrixSquare& resp) const;
 	void times(const Vector& vector, Vector& resp) const override;
 	void times(const double& scalar, MatrixTriangular& resp) const;

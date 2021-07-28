@@ -24,7 +24,7 @@
   <Class Name="MatrixSymmetric" Collapsed="true">
     <Position X="6" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAACAAAAAAAAAQAEAIAAQAAAAAAAABAAQAgAQAACAA=</HashCode>
+      <HashCode>AAAACAAAAAAAAAQAEAIAAQAAAAAAIABAAQAgAQAACAA=</HashCode>
       <FileName>MatrixSymmetric.h</FileName>
     </TypeIdentifier>
   </Class>
