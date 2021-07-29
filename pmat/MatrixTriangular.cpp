@@ -171,6 +171,8 @@ void MatrixTriangular::plus(const MatrixTriangular& matrix, MatrixSquare& resp) 
 
 void MatrixTriangular::addBy(const MatrixTriangular& matrix)
 {
+	this->validateOperands(matrix);
+
 	if (_isLower != matrix.isLower())
 		throw std::logic_error(messages::NONCOMPT_ARG);
 

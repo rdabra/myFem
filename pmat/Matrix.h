@@ -3,7 +3,7 @@
 #include <vector>
 #include "Vector.h"
 
-class Matrix
+class Matrix 
 {
 protected:
 	bool _isTransposed{false};
@@ -44,11 +44,11 @@ public:
 	void minus(const Matrix& matrix, Matrix& resp) const;
 	Matrix operator-(const Matrix& matrix) const;
 	virtual void subtractBy(const Matrix& matrix);
-	void times(const Matrix& matrix, Matrix& resp) const;
+	virtual void times(const Matrix& matrix, Matrix& resp) const;
 	virtual Matrix operator*(const Matrix& matrix) const;
 	virtual void times(const Vector& vector, Vector& resp) const;
 	virtual Vector operator*(const Vector& vector) const;
-	void times(const double& scalar, Matrix& resp) const;
+	virtual void times(const double& scalar, Matrix& resp) const;
 	Matrix operator*(const double& scalar) const;
 	virtual void multiplyBy(const double& scalar);
 	virtual void multiplyRowBy(const unsigned int& rowIndex, const double& scalar);

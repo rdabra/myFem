@@ -39,9 +39,12 @@ public:
 	MatrixSquare operator-(const MatrixTriangular& matrix) const;
 	virtual void subtractBy(const MatrixTriangular& matrix);
 	void subtractBy(const Matrix& matrix) override { Matrix::subtractBy(matrix); }
-	void times(const MatrixSquare& matrix, MatrixSquare& resp) const;
+	void times(const MatrixSquare& matrix, MatrixSquare& resp) const override;
+	void times(const Matrix& matrix, Matrix& resp) const override { MatrixSquare::times(matrix, resp); }
 	void times(const Vector& vector, Vector& resp) const override;
-	void times(const double& scalar, MatrixTriangular& resp) const;
+	virtual void times(const double& scalar, MatrixTriangular& resp) const;
+	void times(const double& scalar, MatrixSquare& resp) const override { MatrixSquare::times(scalar, resp); }
+	void times(const double& scalar, Matrix& resp) const override { MatrixSquare::times(scalar, resp); }
 	MatrixSquare operator*(const MatrixSquare& matrix) const override;
 	MatrixTriangular operator*(const double& scalar) const;
 	Vector operator*(const Vector& vector) const override;

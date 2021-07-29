@@ -90,3 +90,62 @@ void MatrixSymmetric::plus(const MatrixSymmetric& matrix, MatrixSymmetric& resp)
 		for (unsigned int j = 0; j <= i; j++)
 			resp.setValue((*this)(i, j) + matrix(i, j), i, j);
 }
+
+void MatrixSymmetric::addBy(const MatrixSymmetric& matrix)
+{
+
+	_matTri.addBy(matrix._matTri);
+}
+
+void MatrixSymmetric::minus(const MatrixSymmetric& matrix, MatrixSymmetric& resp) const
+{
+	this->validateOperands(matrix);
+	this->validateResponse(resp);
+
+	for (unsigned int i = 0; i < this->getSize(); i++)
+		for (unsigned int j = 0; j <= i; j++)
+			resp.setValue((*this)(i, j) - matrix(i, j), i, j);
+}
+
+MatrixSymmetric MatrixSymmetric::operator+(const MatrixSymmetric& matrix) const
+{
+	MatrixSymmetric resp(matrix.getSize());
+	this->plus(matrix, resp);
+
+	return resp;
+}
+
+MatrixSymmetric MatrixSymmetric::operator-(const MatrixSymmetric& matrix) const
+{
+	MatrixSymmetric resp(matrix.getSize());
+	this->minus(matrix, resp);
+
+	return resp;
+}
+
+void MatrixSymmetric::subtractBy(const MatrixSymmetric& matrix)
+{
+	_matTri.subtractBy(matrix._matTri);
+}
+
+void MatrixSymmetric::multiplyBy(const double& scalar)
+{
+	_matTri.multiplyBy(scalar);
+}
+
+MatrixSymmetric MatrixSymmetric::operator*(const double& scalar) const
+{
+	MatrixSymmetric resp(this->getSize());
+	
+	for (unsigned int i = 0; i < this->getSize(); i++)
+		for (unsigned int j = 0; j <= i; j++)
+			resp.setValue((*this)(i, j) * scalar, i, j);
+
+	return resp;
+}
+
+double MatrixSymmetric::frobeniusNorm() const
+{
+	return _matTri.frobeniusNorm();
+}
+
