@@ -12,13 +12,13 @@ protected:
 
 public:
 	MatrixSymmetric() = default;
-	explicit MatrixSymmetric(const unsigned int& size);
+	explicit MatrixSymmetric(const unsigned& size);
 	MatrixSymmetric(const MatrixSymmetric& matrix);
 	MatrixSymmetric(MatrixSymmetric&& matrix) noexcept;
 	~MatrixSymmetric() override = default;
-	const double& operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const override;
-	void setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex) override;
-	void resize(const unsigned int& size);
+	const double& operator()(const unsigned& rowIndex, const unsigned& columnIndex) const override;
+	void setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex) override;
+	void resize(const unsigned& size);
 	bool operator==(MatrixSymmetric& matrix) const;
 	MatrixSymmetric& operator=(const MatrixSymmetric& matrix);
 	MatrixSymmetric& operator=(MatrixSymmetric&& matrix) noexcept;

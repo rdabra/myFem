@@ -8,17 +8,17 @@ class Vector
 {
 private:
 	std::vector <double> _vector;
-	unsigned int _size{ 0 };
+	unsigned _size{ 0 };
 
 public:
 	Vector() {};
-	Vector(unsigned int size);
+	Vector(unsigned size);
 	Vector(const Vector& vector);
 	Vector(Vector&& vector) noexcept;
 	virtual ~Vector() {};
-	const double& operator()(const unsigned int& index) const;
-	void setValue(const double& coef, const unsigned int& index);
-	const unsigned int& getSize(void) const { return _size; }
+	const double& operator()(const unsigned& index) const;
+	void setValue(const double& coef, const unsigned& index);
+	const unsigned& getSize(void) const { return _size; }
 	Vector& operator=(const Vector& vector);
 	Vector& operator=(Vector&& vector) noexcept;
 	bool operator==(const Vector& vector) const;
@@ -32,6 +32,6 @@ public:
 	void times(const double& scalar, Vector& resp) const;
 	Vector operator*(const double& scalar) const;
 	void multiplyBy(const double& scalar);
-	virtual void swapElements(const unsigned int& elmIndexA, const unsigned int& elmIndexB);
+	virtual void swapElements(const unsigned& elmIndexA, const unsigned& elmIndexB);
 	double frobeniusNorm() const;
 };

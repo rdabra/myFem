@@ -8,15 +8,15 @@ class Matrix
 protected:
 	bool _isTransposed{false};
 	std::vector<double> _matrix;
-	unsigned int _rowSize{0}, _columnSize{0};
+	unsigned _rowSize{0}, _columnSize{0};
 
-	virtual unsigned int getVectorIndex(const unsigned int& i, const unsigned int& j) const
+	virtual unsigned getVectorIndex(const unsigned& i, const unsigned& j) const
 	{
 		return _isTransposed ? i + j * _rowSize : j + i * _columnSize;
 	}
 
-	virtual unsigned int getVectorSize() const { return _rowSize * _columnSize; }
-	void validateIndex(const unsigned int& rowIndex, const unsigned int& columnIndex) const;
+	virtual unsigned getVectorSize() const { return _rowSize * _columnSize; }
+	void validateIndex(const unsigned& rowIndex, const unsigned& columnIndex) const;
 	void validateOperands(const Matrix& matrix) const;
 	void validateResponse(Matrix& resp) const;
 	void validateOperandMult(const Matrix& matrix) const;
@@ -26,14 +26,14 @@ protected:
 
 public:
 	Matrix() = default;
-	Matrix(const unsigned int& rowSize, const unsigned int& columnSize);
+	Matrix(const unsigned& rowSize, const unsigned& columnSize);
 	Matrix(const Matrix& matrix);
 	Matrix(Matrix&& matrix) noexcept;
 	virtual ~Matrix() = default;
-	virtual const double& operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const;
-	virtual void setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex);
-	virtual const unsigned int& getRowSize(void) const { return _rowSize; }
-	virtual const unsigned int& getColumnSize(void) const { return _columnSize; }
+	virtual const double& operator()(const unsigned& rowIndex, const unsigned& columnIndex) const;
+	virtual void setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex);
+	virtual const unsigned& getRowSize(void) const { return _rowSize; }
+	virtual const unsigned& getColumnSize(void) const { return _columnSize; }
 	Matrix& operator=(const Matrix& matrix);
 	Matrix& operator=(Matrix&& matrix) noexcept;
 	virtual bool operator==(const Matrix& matrix) const;
@@ -51,14 +51,14 @@ public:
 	virtual void times(const double& scalar, Matrix& resp) const;
 	Matrix operator*(const double& scalar) const;
 	virtual void multiplyBy(const double& scalar);
-	virtual void multiplyRowBy(const unsigned int& rowIndex, const double& scalar);
-	virtual void multiplyColumnBy(const unsigned int& columnIndex, const double& scalar);
-	virtual void swapRowElements(const unsigned int& rowIndexA, const unsigned int& rowIndexB,
-	                             const unsigned int& startColumn, const unsigned int& endColumn);
-	virtual void swapRows(const unsigned int& rowIndexA, const unsigned int& rowIndexB);
-	virtual void swapColumnElements(const unsigned int& columnIndexA, const unsigned int& columnIndexB,
-	                                const unsigned int& startRow, const unsigned int& endRow);
-	virtual void swapColumns(const unsigned int& columnIndexA, const unsigned int& columnIndexB);
+	virtual void multiplyRowBy(const unsigned& rowIndex, const double& scalar);
+	virtual void multiplyColumnBy(const unsigned& columnIndex, const double& scalar);
+	virtual void swapRowElements(const unsigned& rowIndexA, const unsigned& rowIndexB,
+	                             const unsigned& startColumn, const unsigned& endColumn);
+	virtual void swapRows(const unsigned& rowIndexA, const unsigned& rowIndexB);
+	virtual void swapColumnElements(const unsigned& columnIndexA, const unsigned& columnIndexB,
+	                                const unsigned& startRow, const unsigned& endRow);
+	virtual void swapColumns(const unsigned& columnIndexA, const unsigned& columnIndexB);
 	virtual void transpose();
 	virtual double frobeniusNorm() const;
 	virtual void fillRandomly(const double& min, const double& max);

@@ -9,19 +9,19 @@ class MatrixDiagonal final :
 	public MatrixSquare
 {
 protected:
-	unsigned int getVectorIndex(const unsigned int& i, const unsigned int& j) const override { return i; }
-	unsigned int getVectorSize() const override { return _rowSize; }
+	unsigned getVectorIndex(const unsigned& i, const unsigned& j) const override { return i; }
+	unsigned getVectorSize() const override { return _rowSize; }
 
 public:
 	MatrixDiagonal() = default;
-	explicit MatrixDiagonal(const unsigned int& size);
+	explicit MatrixDiagonal(const unsigned& size);
 	MatrixDiagonal(const MatrixDiagonal& matrix);
 	MatrixDiagonal(MatrixDiagonal&& matrix) noexcept : MatrixSquare(std::move(matrix)) {}
 	~MatrixDiagonal() override = default;
 	MatrixDiagonal& operator=(const MatrixDiagonal& matrix);
 	MatrixDiagonal& operator=(MatrixDiagonal&& matrix) noexcept;
-	void setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex) override;
-	const double& operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const override;
+	void setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex) override;
+	const double& operator()(const unsigned& rowIndex, const unsigned& columnIndex) const override;
 	double dotProduct(const Matrix& matrix) const override;
 	void plus(const MatrixDiagonal& matrix, MatrixDiagonal& resp) const;
 	virtual void addBy(const MatrixDiagonal& matrix);

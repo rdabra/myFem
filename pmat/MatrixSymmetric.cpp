@@ -2,7 +2,7 @@
 #include "MatrixSymmetric.h"
 
 
-MatrixSymmetric::MatrixSymmetric(const unsigned int& size)
+MatrixSymmetric::MatrixSymmetric(const unsigned& size)
 {
 	_rowSize = size;
 	_columnSize = size;
@@ -24,17 +24,17 @@ MatrixSymmetric::MatrixSymmetric(MatrixSymmetric&& matrix) noexcept
 	matrix.~MatrixSymmetric();
 }
 
-const double& MatrixSymmetric::operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const
+const double& MatrixSymmetric::operator()(const unsigned& rowIndex, const unsigned& columnIndex) const
 {
 	return (columnIndex > rowIndex) ? _matTri(columnIndex, rowIndex) : _matTri(rowIndex, columnIndex);
 }
 
-void MatrixSymmetric::setValue(const double& value, const unsigned int& rowIndex, const unsigned int& columnIndex)
+void MatrixSymmetric::setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex)
 {
 	_matTri.setValue(value, rowIndex, columnIndex);
 }
 
-void MatrixSymmetric::resize(const unsigned int& size)
+void MatrixSymmetric::resize(const unsigned& size)
 {
 	_rowSize = size;
 	_columnSize = size;
@@ -72,10 +72,10 @@ double MatrixSymmetric::dotProduct(const MatrixSymmetric& matrix) const
 {
 	this->validateOperands(matrix);
 	double resp{0.0};
-	for (unsigned int i = 0; i < this->getSize(); i++) {
-		resp += (*this)(i, i) * matrix(i, i);
-		for (unsigned int j = 0; j < i; j++)
+	for (unsigned i = 0; i < this->getSize(); i++) {
+		for (unsigned j = 0; j < i; j++)
 			resp += 2.0 * (*this)(i, j) * matrix(i, j);
+		resp += (*this)(i, i) * matrix(i, i);
 	}
 
 	return resp;
@@ -86,14 +86,13 @@ void MatrixSymmetric::plus(const MatrixSymmetric& matrix, MatrixSymmetric& resp)
 	this->validateOperands(matrix);
 	this->validateResponse(resp);
 
-	for (unsigned int i = 0; i < this->getSize(); i++)
-		for (unsigned int j = 0; j <= i; j++)
+	for (unsigned i = 0; i < this->getSize(); i++)
+		for (unsigned j = 0; j <= i; j++)
 			resp.setValue((*this)(i, j) + matrix(i, j), i, j);
 }
 
 void MatrixSymmetric::addBy(const MatrixSymmetric& matrix)
 {
-
 	_matTri.addBy(matrix._matTri);
 }
 
@@ -102,8 +101,8 @@ void MatrixSymmetric::minus(const MatrixSymmetric& matrix, MatrixSymmetric& resp
 	this->validateOperands(matrix);
 	this->validateResponse(resp);
 
-	for (unsigned int i = 0; i < this->getSize(); i++)
-		for (unsigned int j = 0; j <= i; j++)
+	for (unsigned i = 0; i < this->getSize(); i++)
+		for (unsigned j = 0; j <= i; j++)
 			resp.setValue((*this)(i, j) - matrix(i, j), i, j);
 }
 
@@ -136,9 +135,9 @@ void MatrixSymmetric::multiplyBy(const double& scalar)
 MatrixSymmetric MatrixSymmetric::operator*(const double& scalar) const
 {
 	MatrixSymmetric resp(this->getSize());
-	
-	for (unsigned int i = 0; i < this->getSize(); i++)
-		for (unsigned int j = 0; j <= i; j++)
+
+	for (unsigned i = 0; i < this->getSize(); i++)
+		for (unsigned j = 0; j <= i; j++)
 			resp.setValue((*this)(i, j) * scalar, i, j);
 
 	return resp;
@@ -146,6 +145,5 @@ MatrixSymmetric MatrixSymmetric::operator*(const double& scalar) const
 
 double MatrixSymmetric::frobeniusNorm() const
 {
-	return _matTri.frobeniusNorm();
+	return std::sqrt(this->dotProduct((*this)));
 }
-

@@ -9,3 +9,4 @@
 #include "testMatrixSquare.h"
 #include "testVector.h"
 #include "testMatrixTriangular.h"
+#include "testMatrixSymmetric.h"
