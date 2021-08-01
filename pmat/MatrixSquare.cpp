@@ -50,7 +50,7 @@ void MatrixSquare::createLu()
 	_createLu = true;
 }
 
-void MatrixSquare::destroyLu() 
+void MatrixSquare::destroyLu()
 {
 	if (_createLu) {
 		delete _matsPLU.matL;
@@ -114,6 +114,7 @@ void MatrixSquare::setValue(const double& value, const unsigned& rowIndex, const
 {
 	Matrix::setValue(value, rowIndex, columnIndex);
 	_calcLu = false;
+	_calcStrictLu = false;
 }
 
 double MatrixSquare::trace() const
@@ -125,26 +126,15 @@ double MatrixSquare::trace() const
 }
 
 
-void MatrixSquare::decomposeToPlu(bool strictLU)
+void MatrixSquare::decomposeToPlu()
 {
 	if (!_calcLu) {
 		this->createLu();
 		MatrixSquare matU(*this);
-		if (strictLU) {
-			for (unsigned idxPivot = 0; idxPivot < matU.getSize() - 1; idxPivot++) {
-				if (putils::areEqual(matU(idxPivot, idxPivot), 0.0)) {
-					this->destroyLu();
-					throw std::logic_error(messages::MATRIX_NOT_LU);
-				}
+		for (unsigned idxPivot = 0; idxPivot < matU.getSize() - 1; idxPivot++) {
+			this->swapRowsBellow(matU, idxPivot);
+			if (!putils::areEqual(matU(idxPivot, idxPivot), 0.0))
 				this->nullifyElementBellow(matU, idxPivot);
-			}
-		}
-		else {
-			for (unsigned idxPivot = 0; idxPivot < matU.getSize() - 1; idxPivot++) {
-				this->swapRowsBellow(matU, idxPivot);
-				if (!putils::areEqual(matU(idxPivot, idxPivot), 0.0)) 
-					this->nullifyElementBellow(matU, idxPivot);
-			}
 		}
 
 		for (unsigned i = 0; i < matU.getSize(); ++i)
@@ -153,6 +143,27 @@ void MatrixSquare::decomposeToPlu(bool strictLU)
 		_calcLu = true;
 	}
 }
+
+
+void MatrixSquare::decomposeToStrictLu()
+{
+	if (!_calcStrictLu) {
+		this->createLu();
+		MatrixSquare matU(*this);
+		for (unsigned idxPivot = 0; idxPivot < matU.getSize() - 1; idxPivot++) {
+			if (putils::areEqual(matU(idxPivot, idxPivot), 0.0)) {
+				this->destroyLu();
+				throw std::logic_error(messages::MATRIX_NOT_LU);
+			}
+			this->nullifyElementBellow(matU, idxPivot);
+		}
+		for (unsigned i = 0; i < matU.getSize(); ++i)
+			for (unsigned j = i; j < matU.getSize(); ++j)
+				_matsPLU.matU->setValue(matU(i, j), i, j);
+		_calcStrictLu = true;
+	}
+}
+
 
 void MatrixSquare::findInverseByBackSubstitution(MatrixTriangular* matrix, MatrixTriangular* resp) const
 {
@@ -176,24 +187,24 @@ void MatrixSquare::findInverseByBackSubstitution(MatrixTriangular* matrix, Matri
 
 const PLU& MatrixSquare::getPLU()
 {
-	this->decomposeToPlu(false);
+	this->decomposeToPlu();
 
 
 	return _matsPLU;
 }
 
-const PLU& MatrixSquare::getLU()
+const PLU& MatrixSquare::getStrictLU()
 {
-	this->decomposeToPlu(true);
+	this->decomposeToStrictLu();
 
-	
+
 	return _matsPLU;
 }
 
 bool MatrixSquare::isLUDecomposable()
 {
 	try {
-		this->decomposeToPlu(true);
+		this->decomposeToStrictLu();
 		return true;
 	}
 	catch (...) {
@@ -226,7 +237,7 @@ MatrixTriangular MatrixSquare::extractUpperPart() const
 
 MatrixSquare MatrixSquare::getInverse()
 {
-	this->decomposeToPlu(false);
+	this->decomposeToPlu();
 	if (!this->isInvertible()) throw std::out_of_range(messages::MATRIX_SINGULAR);
 
 	MatrixTriangular invU(this->getSize(), false);
@@ -257,7 +268,7 @@ bool MatrixSquare::isPositiveDefinite()
 
 double MatrixSquare::determinant()
 {
-	this->decomposeToPlu(false);
+	this->decomposeToPlu();
 
 	double resp{1.0};
 

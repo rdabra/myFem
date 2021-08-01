@@ -22,10 +22,12 @@ private:
 	PLU _matsPLU;
 	bool _changeSignForDet{ false };
 	bool _calcLu{ false };
+	bool _calcStrictLu{ false };
 	bool _createLu{ false };
 	void swapRowsBellow(MatrixSquare& matU, const unsigned& idxPivot);
 	void nullifyElementBellow(MatrixSquare& matU, const unsigned& idxPivot) const;
-	void decomposeToPlu(bool strictLU);
+	void decomposeToPlu();
+	void decomposeToStrictLu();
 	void findInverseByBackSubstitution(MatrixTriangular* matrix, MatrixTriangular* resp) const;
 
 protected:
@@ -34,19 +36,9 @@ protected:
 
 public:
 	MatrixSquare() = default;
-
-	explicit MatrixSquare(const unsigned& size) : Matrix(size, size)
-	{
-	}
-
-	MatrixSquare(const MatrixSquare& matrix) : Matrix(matrix)
-	{
-	}
-
-	MatrixSquare(MatrixSquare&& matrix) noexcept : Matrix(std::move(matrix))
-	{
-	}
-
+	explicit MatrixSquare(const unsigned& size) : Matrix(size, size) { }
+	MatrixSquare(const MatrixSquare& matrix) : Matrix(matrix) {}
+	MatrixSquare(MatrixSquare&& matrix) noexcept : Matrix(std::move(matrix)) {}
 	~MatrixSquare() override;
 	MatrixSquare& operator=(const MatrixSquare& matrix);
 	MatrixSquare& operator=(MatrixSquare&& matrix) noexcept;
@@ -65,7 +57,7 @@ public:
 	virtual double trace() const;
 	virtual double determinant();
 	virtual const PLU& getPLU();
-	virtual const PLU& getLU();
+	virtual const PLU& getStrictLU();
 	virtual bool isLUDecomposable();
 	virtual bool isInvertible();
 	MatrixTriangular extractLowerPart() const;
