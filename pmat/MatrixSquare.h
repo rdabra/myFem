@@ -2,11 +2,14 @@
 
 #include "Matrix.h"
 
+
 class MatrixTriangular;
 
 class MatrixSquare;
 
-struct PLU
+class MatrixSymmetric;
+
+struct D_PLU
 {
 	MatrixSquare* matP{ nullptr };
 	MatrixTriangular* matL{ nullptr };
@@ -14,25 +17,37 @@ struct PLU
 	std::vector<std::pair<unsigned, unsigned>> swappedRows;
 };
 
+struct D_SAS
+{
+	MatrixSymmetric* matS{ nullptr };
+	MatrixSymmetric* matAS{ nullptr };
+};
+
 
 class MatrixSquare : public Matrix
 {
-public:
 private:
-	PLU _matsPLU;
+	D_PLU _matsPLU;
+	D_SAS _matsSAS;
 	bool _changeSignForDet{ false };
 	bool _calcLu{ false };
 	bool _calcStrictLu{ false };
+	bool _calcSas{ false };
 	bool _createLu{ false };
+	bool _createSas{ false };
 	void swapRowsBellow(MatrixSquare& matU, const unsigned& idxPivot);
 	void nullifyElementBellow(MatrixSquare& matU, const unsigned& idxPivot) const;
 	void decomposeToPlu();
 	void decomposeToStrictLu();
+	void decomposeToSas();
 	void findInverseByBackSubstitution(MatrixTriangular* matrix, MatrixTriangular* resp) const;
 
 protected:
 	void createLu();
 	void destroyLu();
+	void createSas();
+	void destroySas();
+
 
 public:
 	MatrixSquare() = default;
@@ -40,6 +55,7 @@ public:
 	MatrixSquare(const MatrixSquare& matrix) : Matrix(matrix) {}
 	MatrixSquare(MatrixSquare&& matrix) noexcept : Matrix(std::move(matrix)) {}
 	~MatrixSquare() override;
+	void reset(const unsigned& size) { Matrix::reset(size,size); }
 	MatrixSquare& operator=(const MatrixSquare& matrix);
 	MatrixSquare& operator=(MatrixSquare&& matrix) noexcept;
 	MatrixSquare operator+(const MatrixSquare& matrix) const;
@@ -56,9 +72,9 @@ public:
 	void setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex) override;
 	virtual double trace() const;
 	virtual double determinant();
-	virtual const PLU& getPLU();
-	virtual const PLU& getStrictLU();
-	virtual bool isLUDecomposable();
+	virtual const D_PLU& getPLU();
+	virtual const D_PLU& getStrictLU();
+	virtual bool isStrictLUDecomposable();
 	virtual bool isInvertible();
 	MatrixTriangular extractLowerPart() const;
 	MatrixTriangular extractUpperPart() const;

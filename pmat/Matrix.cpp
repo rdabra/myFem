@@ -33,7 +33,15 @@ Matrix::Matrix(Matrix&& matrix) noexcept
 	matrix.~Matrix();
 }
 
-const double& Matrix::operator()(const unsigned& rowIndex, const unsigned& columnIndex) const
+void Matrix::reset(const unsigned& rowSize, const unsigned& columnSize)
+{
+	_matrix.clear();
+	_rowSize = rowSize;
+	_columnSize = columnSize;
+	_matrix.resize(this->Matrix::getVectorSize());
+}
+
+double Matrix::operator()(const unsigned& rowIndex, const unsigned& columnIndex) const
 {
 	this->validateIndex(rowIndex, columnIndex);
 	return _matrix[this->getVectorIndex(rowIndex, columnIndex)];

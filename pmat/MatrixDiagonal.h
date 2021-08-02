@@ -21,7 +21,7 @@ public:
 	MatrixDiagonal& operator=(const MatrixDiagonal& matrix);
 	MatrixDiagonal& operator=(MatrixDiagonal&& matrix) noexcept;
 	void setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex) override;
-	const double& operator()(const unsigned& rowIndex, const unsigned& columnIndex) const override;
+	double operator()(const unsigned& rowIndex, const unsigned& columnIndex) const override;
 	double dotProduct(const Matrix& matrix) const override;
 	void plus(const MatrixDiagonal& matrix, MatrixDiagonal& resp) const;
 	virtual void addBy(const MatrixDiagonal& matrix);

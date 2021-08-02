@@ -2,17 +2,19 @@
 #include "MatrixSymmetric.h"
 
 
-MatrixSymmetric::MatrixSymmetric(const unsigned& size)
+MatrixSymmetric::MatrixSymmetric(const unsigned& size, bool antiSymmetric)
 {
 	_rowSize = size;
 	_columnSize = size;
-	_matTri.resize(size, true);
+	_antiSymmetric = antiSymmetric;
+	_matTri.reset(size, true);
 }
 
 MatrixSymmetric::MatrixSymmetric(const MatrixSymmetric& matrix)
 {
 	_rowSize = matrix.getSize();
 	_columnSize = matrix.getSize();
+	_antiSymmetric = matrix.isAntiSymmetric();
 	_matTri = matrix._matTri;
 }
 
@@ -20,13 +22,18 @@ MatrixSymmetric::MatrixSymmetric(MatrixSymmetric&& matrix) noexcept
 {
 	_rowSize = matrix._rowSize;
 	_columnSize = matrix._columnSize;
+	_antiSymmetric = matrix.isAntiSymmetric();
 	_matTri = std::move(matrix._matTri);
 	matrix.~MatrixSymmetric();
 }
 
-const double& MatrixSymmetric::operator()(const unsigned& rowIndex, const unsigned& columnIndex) const
+double MatrixSymmetric::operator()(const unsigned& rowIndex, const unsigned& columnIndex) const
 {
-	return (columnIndex > rowIndex) ? _matTri(columnIndex, rowIndex) : _matTri(rowIndex, columnIndex);
+	return (columnIndex > rowIndex)
+		       ? this->isAntiSymmetric()
+			         ? putils::MINUS_ONE * _matTri(columnIndex, rowIndex)
+			         : _matTri(columnIndex, rowIndex)
+		       : _matTri(rowIndex, columnIndex);
 }
 
 void MatrixSymmetric::setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex)
@@ -34,11 +41,12 @@ void MatrixSymmetric::setValue(const double& value, const unsigned& rowIndex, co
 	_matTri.setValue(value, rowIndex, columnIndex);
 }
 
-void MatrixSymmetric::resize(const unsigned& size)
+void MatrixSymmetric::reset(const unsigned& size, bool antiSymmetric)
 {
 	_rowSize = size;
 	_columnSize = size;
-	_matTri.resize(size, true);
+	_antiSymmetric = antiSymmetric;
+	_matTri.reset(size, true);
 }
 
 bool MatrixSymmetric::operator==(MatrixSymmetric& matrix) const
@@ -51,6 +59,7 @@ MatrixSymmetric& MatrixSymmetric::operator=(const MatrixSymmetric& matrix)
 	if (!(this == &matrix)) {
 		_rowSize = matrix.getSize();
 		_columnSize = matrix.getSize();
+		_antiSymmetric = matrix.isAntiSymmetric();
 		_matTri = matrix._matTri;
 	}
 
@@ -61,6 +70,7 @@ MatrixSymmetric& MatrixSymmetric::operator=(MatrixSymmetric&& matrix) noexcept
 {
 	_rowSize = matrix.getSize();
 	_columnSize = matrix.getSize();
+	_antiSymmetric = matrix.isAntiSymmetric();
 	_matTri = std::move(matrix._matTri);
 
 	matrix.~MatrixSymmetric();
@@ -108,7 +118,7 @@ void MatrixSymmetric::minus(const MatrixSymmetric& matrix, MatrixSymmetric& resp
 
 MatrixSymmetric MatrixSymmetric::operator+(const MatrixSymmetric& matrix) const
 {
-	MatrixSymmetric resp(matrix.getSize());
+	MatrixSymmetric resp(matrix.getSize(), matrix.isAntiSymmetric());
 	this->plus(matrix, resp);
 
 	return resp;
@@ -116,7 +126,7 @@ MatrixSymmetric MatrixSymmetric::operator+(const MatrixSymmetric& matrix) const
 
 MatrixSymmetric MatrixSymmetric::operator-(const MatrixSymmetric& matrix) const
 {
-	MatrixSymmetric resp(matrix.getSize());
+	MatrixSymmetric resp(matrix.getSize(), matrix.isAntiSymmetric());
 	this->minus(matrix, resp);
 
 	return resp;
@@ -134,7 +144,7 @@ void MatrixSymmetric::multiplyBy(const double& scalar)
 
 MatrixSymmetric MatrixSymmetric::operator*(const double& scalar) const
 {
-	MatrixSymmetric resp(this->getSize());
+	MatrixSymmetric resp(this->getSize(), this->isAntiSymmetric());
 
 	for (unsigned i = 0; i < this->getSize(); i++)
 		for (unsigned j = 0; j <= i; j++)

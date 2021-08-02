@@ -27,7 +27,7 @@ void MatrixDiagonal::setValue(const double& value, const unsigned& rowIndex, con
 	_matrix[this->getVectorIndex(rowIndex, rowIndex)] = value;
 }
 
-const double& MatrixDiagonal::operator()(const unsigned& rowIndex, const unsigned& columnIndex) const
+double MatrixDiagonal::operator()(const unsigned& rowIndex, const unsigned& columnIndex) const
 {
 	validateIndex(rowIndex, columnIndex);
 

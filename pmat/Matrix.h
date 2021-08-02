@@ -30,7 +30,8 @@ public:
 	Matrix(const Matrix& matrix);
 	Matrix(Matrix&& matrix) noexcept;
 	virtual ~Matrix() = default;
-	virtual const double& operator()(const unsigned& rowIndex, const unsigned& columnIndex) const;
+	void reset(const unsigned& rowSize, const unsigned& columnSize);
+	virtual double operator()(const unsigned& rowIndex, const unsigned& columnIndex) const;
 	virtual void setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex);
 	virtual const unsigned& getRowSize(void) const { return _rowSize; }
 	virtual const unsigned& getColumnSize(void) const { return _columnSize; }

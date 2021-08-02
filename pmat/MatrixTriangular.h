@@ -23,9 +23,9 @@ public:
 	MatrixTriangular(MatrixTriangular&& matrix) noexcept;
 	~MatrixTriangular() override = default;
 	const bool& isLower() const { return _isLower; }
-	void resize(const unsigned& size, bool isLower);
+	void reset(const unsigned& size, bool isLower);
 	void setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex) override;
-	const double& operator()(const unsigned& rowIndex, const unsigned& columnIndex) const override;
+	double operator()(const unsigned& rowIndex, const unsigned& columnIndex) const override;
 	bool operator==(MatrixTriangular& matrix) const;
 	bool operator==(MatrixSquare& matrix) const { return MatrixSquare::operator==(matrix); }
 	MatrixTriangular& operator=(const MatrixTriangular& matrix);

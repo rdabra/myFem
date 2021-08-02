@@ -126,18 +126,24 @@ TEST(TestMatrixSquare, TestDecompPLU) {
 	B.setValue(3.0, 2, 2);
 
 
-	PLU mats = A.getPLU();
+	D_PLU mats = A.getPLU();
 
 	MatrixSquare PA((*mats.matP) * A);
 	MatrixSquare LU((*mats.matL) * (*mats.matU));
 
-	PLU mats1 = B.getPLU();
+	D_PLU mats1 = B.getPLU();
 
 	MatrixSquare PB((*mats1.matP) * B);
 	MatrixSquare LU1((*mats1.matL) * (*mats1.matU));
-	
+
+	D_PLU mats2 = A.getStrictLU();
+
+	MatrixSquare LU2((*mats2.matL) * (*mats2.matU));
+
+
 	EXPECT_TRUE(PA == LU);
 	EXPECT_TRUE(PB == LU1);
+	EXPECT_TRUE(A == LU2);
 
 }
 

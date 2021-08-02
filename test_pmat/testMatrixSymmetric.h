@@ -6,7 +6,7 @@
 #include "MatrixSymmetric.cpp"
 
 TEST(MatrixSymmetric, TestEqualityOperator) {
-	MatrixSymmetric z(4);
+	MatrixSymmetric z(4,false);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -18,7 +18,7 @@ TEST(MatrixSymmetric, TestEqualityOperator) {
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
-	MatrixSymmetric v(4);
+	MatrixSymmetric v(4,false);
 	v.setValue(1.0, 0, 0);
 	v.setValue(4.0, 1, 0);
 	v.setValue(5.0, 1, 1);
@@ -34,7 +34,7 @@ TEST(MatrixSymmetric, TestEqualityOperator) {
 }
 
 TEST(MatrixSymmetric, TestDotProduct) {
-	MatrixSymmetric z(4);
+	MatrixSymmetric z(4, false);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -46,7 +46,7 @@ TEST(MatrixSymmetric, TestDotProduct) {
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
-	MatrixSymmetric v(4);
+	MatrixSymmetric v(4, false);
 	v.setValue(1.5, 0, 0);
 	v.setValue(4.5, 1, 0);
 	v.setValue(5.5, 1, 1);
@@ -65,7 +65,7 @@ TEST(MatrixSymmetric, TestDotProduct) {
 }
 
 TEST(MatrixSymmetric, TestPlus) {
-	MatrixSymmetric z(4);
+	MatrixSymmetric z(4, false);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -77,7 +77,7 @@ TEST(MatrixSymmetric, TestPlus) {
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
-	MatrixSymmetric v(4);
+	MatrixSymmetric v(4, false);
 	v.setValue(1.0, 0, 0);
 	v.setValue(4.0, 1, 0);
 	v.setValue(5.0, 1, 1);
@@ -89,7 +89,7 @@ TEST(MatrixSymmetric, TestPlus) {
 	v.setValue(12.0, 3, 2);
 	v.setValue(13.0, 3, 3);
 
-	MatrixSymmetric resp(4);
+	MatrixSymmetric resp(4, false);
 	resp.setValue(2.0, 0, 0);
 	resp.setValue(8.0, 1, 0);
 	resp.setValue(10.0, 1, 1);
@@ -102,7 +102,7 @@ TEST(MatrixSymmetric, TestPlus) {
 	resp.setValue(26.0, 3, 3);
 
 
-	MatrixSymmetric r1(4);
+	MatrixSymmetric r1(4, false);
 	z.plus(v, r1);
 	MatrixSymmetric r2(z + v);
 	z.addBy(v);
@@ -113,7 +113,7 @@ TEST(MatrixSymmetric, TestPlus) {
 }
 
 TEST(MatrixSymmetric, TestMinus) {
-	MatrixSymmetric z(4);
+	MatrixSymmetric z(4, false);
 	z.setValue(2.0, 0, 0);
 	z.setValue(8.0, 1, 0);
 	z.setValue(10.0, 1, 1);
@@ -125,7 +125,7 @@ TEST(MatrixSymmetric, TestMinus) {
 	z.setValue(24.0, 3, 2);
 	z.setValue(26.0, 3, 3);
 
-	MatrixSymmetric v(4);
+	MatrixSymmetric v(4, false);
 	v.setValue(1.0, 0, 0);
 	v.setValue(4.0, 1, 0);
 	v.setValue(5.0, 1, 1);
@@ -137,7 +137,7 @@ TEST(MatrixSymmetric, TestMinus) {
 	v.setValue(12.0, 3, 2);
 	v.setValue(13.0, 3, 3);
 
-	MatrixSymmetric resp(4);
+	MatrixSymmetric resp(4, false);
 	resp.setValue(1.0, 0, 0);
 	resp.setValue(4.0, 1, 0);
 	resp.setValue(5.0, 1, 1);
@@ -149,7 +149,7 @@ TEST(MatrixSymmetric, TestMinus) {
 	resp.setValue(12.0, 3, 2);
 	resp.setValue(13.0, 3, 3);
 
-	MatrixSymmetric r1(4);
+	MatrixSymmetric r1(4, false);
 	z.minus(v, r1);
 	MatrixSymmetric r2(z - v);
 	z.subtractBy(v);
@@ -161,7 +161,7 @@ TEST(MatrixSymmetric, TestMinus) {
 }
 
 TEST(MatrixSymmetric, TestTimes) {
-	MatrixSymmetric z(4);
+	MatrixSymmetric z(4, false);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -173,7 +173,7 @@ TEST(MatrixSymmetric, TestTimes) {
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
-	MatrixSymmetric v(4);
+	MatrixSymmetric v(4, false);
 	v.setValue(2.0, 0, 0);
 	v.setValue(5.0, 1, 0);
 	v.setValue(6.0, 1, 1);
@@ -206,7 +206,7 @@ TEST(MatrixSymmetric, TestTimes) {
 	resp.setValue(468.0, 3, 2);
 	resp.setValue(580.0, 3, 3);
 
-	MatrixSymmetric resp1(4);
+	MatrixSymmetric resp1(4, false);
 	resp1.setValue(2.0, 0, 0);
 	resp1.setValue(8.0, 1, 0);
 	resp1.setValue(10.0, 1, 1);
@@ -235,7 +235,7 @@ TEST(MatrixSymmetric, TestTimes) {
 
 TEST(MatrixSymmetric, TestFrobenius)
 {
-	MatrixSymmetric z(4);
+	MatrixSymmetric z(4, false);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -255,7 +255,7 @@ TEST(MatrixSymmetric, TestFrobenius)
 
 TEST(MatrixSymmetric, TestDeterminant)
 {
-	MatrixSymmetric z(4);
+	MatrixSymmetric z(4, false);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -272,7 +272,7 @@ TEST(MatrixSymmetric, TestDeterminant)
 
 TEST(MatrixSymmetric, TestTranspose)
 {
-	MatrixSymmetric z(4);
+	MatrixSymmetric z(4, false);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -294,7 +294,7 @@ TEST(MatrixSymmetric, TestTranspose)
 TEST(MatrixSymmetric, TestMisc)
 {
 
-	MatrixSymmetric z(4);
+	MatrixSymmetric z(4, false);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -306,7 +306,7 @@ TEST(MatrixSymmetric, TestMisc)
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
-	MatrixSymmetric v(4);
+	MatrixSymmetric v(4, false);
 	v.setValue(1.0, 0, 0);
 	v.setValue(4.0, 1, 0);
 	v.setValue(5.0, 1, 1);
@@ -318,7 +318,7 @@ TEST(MatrixSymmetric, TestMisc)
 	v.setValue(12.0, 3, 2);
 	v.setValue(13.0, 3, 3);
 
-	MatrixSymmetric resp(4);
+	MatrixSymmetric resp(4, false);
 	resp.setValue(1.0, 0, 0);
 	resp.setValue(4.0, 1, 0);
 	resp.setValue(5.0, 1, 1);
@@ -330,7 +330,7 @@ TEST(MatrixSymmetric, TestMisc)
 	resp.setValue(12.0, 3, 2);
 	resp.setValue(13.0, 3, 3);
 
-	MatrixSymmetric resp1(2);
+	MatrixSymmetric resp1(2, false);
 	resp1.setValue(0.0, 0, 0);
 	resp1.setValue(0.0, 1, 0);
 	resp1.setValue(0.0, 1, 1);
@@ -339,7 +339,7 @@ TEST(MatrixSymmetric, TestMisc)
 	MatrixSymmetric a;
 	a = (std::move(z));
 
-	v.resize(2);
+	v.reset(2,false);
 
 
 	EXPECT_TRUE(a == resp);

@@ -36,7 +36,7 @@ MatrixTriangular::MatrixTriangular(MatrixTriangular&& matrix) noexcept
 	matrix.~MatrixTriangular();
 }
 
-void MatrixTriangular::resize(const unsigned& size, bool isLower)
+void MatrixTriangular::reset(const unsigned& size, bool isLower)
 {
 	_matrix.clear();
 	_rowSize = size;
@@ -54,7 +54,7 @@ void MatrixTriangular::setValue(const double& value, const unsigned& rowIndex, c
 	_matrix[this->getVectorIndex(rowIndex, columnIndex)] = value;
 }
 
-const double& MatrixTriangular::operator()(const unsigned& rowIndex, const unsigned& columnIndex) const
+double MatrixTriangular::operator()(const unsigned& rowIndex, const unsigned& columnIndex) const
 {
 	validateIndex(rowIndex, columnIndex);
 
@@ -273,7 +273,7 @@ void MatrixTriangular::times(const MatrixSquare& matrix, MatrixSquare& resp) con
 	if (this->isLower()) {
 		for (unsigned i = 0; i < this->getSize(); i++)
 			for (unsigned j = 0; j < this->getSize(); j++) {
-				double aux = 0.0;
+				double aux = 0.0000000000;
 				for (unsigned k = 0; k <= i; k++)
 					aux += (*this)(i, k) * matrix(k, j);
 				resp.setValue(aux, i, j);
@@ -447,7 +447,7 @@ void MatrixTriangular::fillRandomly(const double& min, const double& max)
 
 double MatrixTriangular::determinant()
 {
-	double resp = 1.0;
+	double resp = 1.0000000000;
 
 	for (unsigned i = 0; i < this->getSize(); i++)
 		resp *= (*this)(i, i);
