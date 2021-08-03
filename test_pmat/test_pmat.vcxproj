@@ -33,6 +33,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClInclude Include="testMatrixDiagonal.h" />
     <ClInclude Include="testMatrixSymmetric.h" />
     <ClInclude Include="testMatrixTriangular.h" />
     <ClInclude Include="pch.h" />

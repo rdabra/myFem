@@ -1,16 +1,15 @@
 #pragma once
 #include "MatrixSquare.h"
 
-/**
- * @TODO Implementar um pai para MatrixDiagonal que é MatrixSymmetric
- * @TODO Em MatrixSymmetric implementar Cholesky
-*/
 class MatrixDiagonal final :
 	public MatrixSquare
 {
 protected:
 	unsigned getVectorIndex(const unsigned& i, const unsigned& j) const override { return i; }
 	unsigned getVectorSize() const override { return _rowSize; }
+	void decomposeToPlu() override;
+	void decomposeToStrictLu() override;
+	void decomposeToSas() override;
 
 public:
 	MatrixDiagonal() = default;
@@ -20,19 +19,34 @@ public:
 	~MatrixDiagonal() override = default;
 	MatrixDiagonal& operator=(const MatrixDiagonal& matrix);
 	MatrixDiagonal& operator=(MatrixDiagonal&& matrix) noexcept;
+	bool operator==(MatrixDiagonal& matrix) const;
+	bool operator==(MatrixSquare& matrix) const { return MatrixSquare::operator==(matrix); }
+	MatrixSquare asMatrixSquare() const;
+	MatrixDiagonal operator+(const MatrixDiagonal& matrix) const;
+	MatrixDiagonal operator-(const MatrixDiagonal& matrix) const;
+	virtual void subtractBy(const MatrixDiagonal& matrix);
 	void setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex) override;
 	double operator()(const unsigned& rowIndex, const unsigned& columnIndex) const override;
 	double dotProduct(const Matrix& matrix) const override;
 	void plus(const MatrixDiagonal& matrix, MatrixDiagonal& resp) const;
 	virtual void addBy(const MatrixDiagonal& matrix);
 	void minus(const MatrixDiagonal& matrix, MatrixDiagonal& resp) const;
-	virtual void subtractBy(const MatrixDiagonal& matrix);
 	void times(const MatrixDiagonal& matrix, MatrixDiagonal& resp) const;
+	void times(const MatrixSquare& matrix, MatrixSquare& resp) const override { MatrixSquare::times(matrix, resp); };
+	void times(const Matrix& matrix, Matrix& resp) const override { MatrixSquare::times(matrix, resp); }
 	void times(const Vector& vector, Vector& resp) const override;
 	void times(const double& scalar, MatrixDiagonal& resp) const;
+	void times(const double& scalar, MatrixSquare& resp) const override { MatrixSquare::times(scalar, resp); }
+	void times(const double& scalar, Matrix& resp) const  override { MatrixSquare::times(scalar, resp); }
 	void multiplyBy(const double& scalar) override;
 	double frobeniusNorm() const override;
 	void transpose() override {}
 	void fillRandomly(const double& min, const double& max) override;
 	double determinant() override;
+	bool isStrictLUDecomposable() override;
+	bool isInvertible() override;
+	MatrixTriangular extractLowerPart() const override;
+	MatrixTriangular extractUpperPart() const override;
+	MatrixSquare getInverse() override;
+	bool isPositiveDefinite() override;
 };

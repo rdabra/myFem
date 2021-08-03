@@ -2,6 +2,7 @@
 #include "MatrixSquare.h"
 #include "MatrixTriangular.h" // In order to define the class completely
 #include "MatrixSymmetric.h" // In order to define the class completely
+#include "MatrixAntiSymmetric.h" // In order to define the class completely
 
 
 void MatrixSquare::swapRowsBellow(MatrixSquare& matU, const unsigned& idxPivot)
@@ -66,9 +67,8 @@ void MatrixSquare::createSas()
 {
 	this->destroySas();
 
-	_matsSAS.matAS = new MatrixSymmetric(this->getSize(), true);
-	_matsSAS.matS = new MatrixSymmetric(this->getSize(), false);
-
+	_matsSAS.matS = new MatrixSymmetric(this->getSize());
+	_matsSAS.matAS = new MatrixSkewSymmetric(this->getSize());
 
 	_createSas = true;
 }
@@ -236,6 +236,14 @@ const D_PLU& MatrixSquare::getStrictLU()
 
 
 	return _matsPLU;
+}
+
+const D_SAS& MatrixSquare::getSAS()
+{
+	this->decomposeToSas();
+
+
+	return _matsSAS;
 }
 
 bool MatrixSquare::isStrictLUDecomposable()

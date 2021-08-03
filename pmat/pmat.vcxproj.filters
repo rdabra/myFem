@@ -42,7 +42,13 @@
     <ClInclude Include="utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AbstractMatrixSymAntiSym.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="MatrixSymmetric.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixAntiSymmetric.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -68,7 +74,13 @@
     <ClCompile Include="MatrixDiagonal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AbstractMatrixSymAntiSym.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="MatrixSymmetric.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MatrixAntiSymmetric.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

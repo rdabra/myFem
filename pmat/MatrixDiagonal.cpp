@@ -1,21 +1,53 @@
 #include "pch.h"
 #include "MatrixDiagonal.h"
+#include "MatrixSymmetric.h" // In order to define the class completely
+#include "MatrixAntiSymmetric.h" // In order to define the class completely
+
+
+void MatrixDiagonal::decomposeToPlu()
+{
+	if (!_calcLu) {
+		this->createLu();
+		for (unsigned i = 0; i < this->getSize(); i++)
+			_matsPLU.matU->setValue((*this)(i, i), i, i);
+
+		_calcLu = true;
+	}
+}
+
+void MatrixDiagonal::decomposeToStrictLu()
+{
+	if (!this->isInvertible()) throw std::out_of_range(messages::MATRIX_NOT_LU);
+	this->decomposeToPlu();
+}
+
+void MatrixDiagonal::decomposeToSas()
+{
+	if (!_calcSas) {
+		this->createSas();
+		for (unsigned i = 0; i < this->getSize(); ++i) {
+			_matsSAS.matS->setValue(.5000000000 * (*this)(i, i), i, i);
+			_matsSAS.matAS->setValue((*_matsSAS.matS)(i,i), i, i);
+		}
+		_calcSas = true;
+	}
+}
 
 MatrixDiagonal::MatrixDiagonal(const unsigned& size)
 {
 	_rowSize = size;
 	_columnSize = size;
-	_matrix.resize(this->getVectorSize());
+	_matrix.resize(this->MatrixDiagonal::getVectorSize());
 }
 
 MatrixDiagonal::MatrixDiagonal(const MatrixDiagonal& matrix)
 {
 	_rowSize = matrix._rowSize;
 	_columnSize = matrix._columnSize;
-	_matrix.resize(this->getVectorSize());
+	_matrix.resize(this->MatrixDiagonal::getVectorSize());
 
 	for (unsigned i = 0; i < this->getSize(); i++)
-		_matrix.push_back(matrix(i, i));
+		this->MatrixDiagonal::setValue(matrix(i, i), i, i);
 }
 
 void MatrixDiagonal::setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex)
@@ -56,6 +88,40 @@ MatrixDiagonal& MatrixDiagonal::operator=(MatrixDiagonal&& matrix) noexcept
 	matrix.~MatrixDiagonal();
 
 	return (*this);
+}
+
+bool MatrixDiagonal::operator==(MatrixDiagonal& matrix) const
+{
+	for (unsigned i = 0; i < this->getRowSize(); i++)
+		if (!putils::areEqual((*this)(i, i), matrix(i, i))) return false;
+	return true;
+}
+
+MatrixSquare MatrixDiagonal::asMatrixSquare() const
+{
+	MatrixSquare resp(this->getSize());
+	for (unsigned i = 0; i < this->getSize(); ++i) {
+		for (unsigned j = 0; j < this->getSize(); ++j)
+			resp.setValue((*this)(i, j), i, j);
+	}
+
+	return resp;
+}
+
+MatrixDiagonal MatrixDiagonal::operator+(const MatrixDiagonal& matrix) const
+{
+	MatrixDiagonal resp(matrix.getSize());
+	this->plus(matrix, resp);
+
+	return resp;
+}
+
+MatrixDiagonal MatrixDiagonal::operator-(const MatrixDiagonal& matrix) const
+{
+	MatrixDiagonal resp(matrix.getSize());
+	this->minus(matrix, resp);
+
+	return resp;
 }
 
 double MatrixDiagonal::dotProduct(const Matrix& matrix) const
@@ -102,6 +168,7 @@ void MatrixDiagonal::subtractBy(const MatrixDiagonal& matrix)
 	for (unsigned i = 0; i < this->getRowSize(); i++)
 		this->setValue((*this)(i, i) - matrix(i, i), i, i);
 }
+
 
 void MatrixDiagonal::times(const MatrixDiagonal& matrix, MatrixDiagonal& resp) const
 {
@@ -161,10 +228,61 @@ void MatrixDiagonal::fillRandomly(const double& min, const double& max)
 
 double MatrixDiagonal::determinant()
 {
-	double resp = 1.0;
+	double resp = 1.0000000000;
 
 	for (unsigned i = 0; i < this->getSize(); i++)
 		resp *= (*this)(i, i);
 
 	return resp;
+}
+
+bool MatrixDiagonal::isStrictLUDecomposable()
+{
+	for (unsigned i = 0; i < this->getSize(); i++)
+		if (putils::areEqual((*this)(i, i), putils::ZERO)) return false;
+
+	return true;
+}
+
+bool MatrixDiagonal::isInvertible()
+{
+	return this->isStrictLUDecomposable();
+}
+
+MatrixTriangular MatrixDiagonal::extractLowerPart() const
+{
+	MatrixTriangular resp(this->getSize(), true);
+	for (unsigned i = 0; i < this->getSize(); i++)
+		resp.setValue((*this)(i, i), i, i);
+
+	return resp;
+}
+
+MatrixTriangular MatrixDiagonal::extractUpperPart() const
+{
+	MatrixTriangular resp(this->getSize(), false);
+	for (unsigned i = 0; i < this->getSize(); i++)
+		resp.setValue((*this)(i, i), i, i);
+
+	return resp;
+}
+
+MatrixSquare MatrixDiagonal::getInverse()
+{
+	if (!this->isInvertible()) throw std::out_of_range(messages::MATRIX_SINGULAR);
+
+	MatrixSquare resp(this->getSize());
+
+	for (unsigned i = 0; i < this->getSize(); i++)
+		resp.setValue(1.0000000000 / (*this)(i, i), i, i);
+
+	return resp;
+}
+
+bool MatrixDiagonal::isPositiveDefinite()
+{
+	for (unsigned i = 0; i < this->getSize(); i++)
+		if ((*this)(i, i) < putils::ZERO) return false;
+
+	return true;
 }

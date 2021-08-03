@@ -193,7 +193,6 @@ TEST(TestMatrixSquare, TestInverse) {
 	invA.setValue(-4.0, 3, 2);
 	invA.setValue(1.0, 3, 3);
 
-	MatrixSquare B(A * A.getInverse());
 	
 	EXPECT_TRUE(A.getInverse() == invA);
 
@@ -410,24 +409,53 @@ TEST(TestMatrixSquare, TestMisc) {
 TEST(TestMatrixSquare, TestPositiveDefinite) {
 	MatrixSquare z(4);
 	z.setValue(1.0, 0, 0);
-	z.setValue(2.0, 0, 1);
-	z.setValue(3.0, 0, 2);
-	z.setValue(4.0, 0, 3);
-	z.setValue(5.0, 1, 0);
-	z.setValue(6.0, 1, 1);
-	z.setValue(7.0, 1, 2);
-	z.setValue(8.0, 1, 3);
-	z.setValue(9.0, 2, 0);
-	z.setValue(10.0, 2, 1);
-	z.setValue(11.0, 2, 2);
-	z.setValue(12.0, 2, 3);
-	z.setValue(13.0, 3, 0);
-	z.setValue(14.0, 3, 1);
-	z.setValue(15.0, 3, 2);
-	z.setValue(16.0, 3, 3);
-
-//	PLU plu = z.getLU();
+	z.setValue(-1.0, 0, 1);
+	z.setValue(2.0, 0, 2);
+	z.setValue(0.0, 0, 3);
+	z.setValue(-1.0, 1, 0);
+	z.setValue(4.0, 1, 1);
+	z.setValue(-1.0, 1, 2);
+	z.setValue(1.0, 1, 3);
+	z.setValue(2.0, 2, 0);
+	z.setValue(-1.0, 2, 1);
+	z.setValue(6.0, 2, 2);
+	z.setValue(-2.0, 2, 3);
+	z.setValue(0.0, 3, 0);
+	z.setValue(1.0, 3, 1);
+	z.setValue(-2.0, 3, 2);
+	z.setValue(4.0, 3, 3);
 
 
-	EXPECT_TRUE(true);
+
+	EXPECT_TRUE(z.isPositiveDefinite());
+}
+
+
+TEST(TestMatrixSquare, TestSymmetricAntiSym) {
+	MatrixSquare A(4);
+
+	A.setValue(1.0, 0, 0);
+	A.setValue(2.0, 0, 1);
+	A.setValue(3.0, 0, 2);
+	A.setValue(4.0, 0, 3);
+
+	A.setValue(1.0, 1, 0);
+	A.setValue(3.0, 1, 1);
+	A.setValue(2.0, 1, 2);
+	A.setValue(5.0, 1, 3);
+
+	A.setValue(2.0, 2, 0);
+	A.setValue(1.0, 2, 1);
+	A.setValue(6.0, 2, 2);
+	A.setValue(3.0, 2, 3);
+
+	A.setValue(3.0, 3, 0);
+	A.setValue(2.0, 3, 1);
+	A.setValue(1.0, 3, 2);
+	A.setValue(1.0, 3, 3);
+
+	D_SAS matSas = A.getSAS();
+
+	EXPECT_TRUE(A == (*matSas.matAS) + (*matSas.matS));
+
 }

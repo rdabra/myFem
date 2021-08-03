@@ -24,11 +24,8 @@ Matrix::Matrix(Matrix&& matrix) noexcept
 {
 	_rowSize = matrix.getRowSize();
 	_columnSize = matrix.getColumnSize();
-	_matrix.resize(this->Matrix::getVectorSize());
+	_matrix = std::move(matrix._matrix);
 
-	for (unsigned i = 0; i < this->Matrix::getRowSize(); i++)
-		for (unsigned j = 0; j < this->Matrix::getColumnSize(); j++)
-			this->Matrix::setValue(matrix(i, j), i, j);
 
 	matrix.~Matrix();
 }

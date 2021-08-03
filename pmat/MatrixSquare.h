@@ -9,6 +9,8 @@ class MatrixSquare;
 
 class MatrixSymmetric;
 
+class MatrixSkewSymmetric;
+
 struct D_PLU
 {
 	MatrixSquare* matP{ nullptr };
@@ -20,13 +22,13 @@ struct D_PLU
 struct D_SAS
 {
 	MatrixSymmetric* matS{ nullptr };
-	MatrixSymmetric* matAS{ nullptr };
+	MatrixSkewSymmetric* matAS{ nullptr };
 };
 
 
 class MatrixSquare : public Matrix
 {
-private:
+protected:
 	D_PLU _matsPLU;
 	D_SAS _matsSAS;
 	bool _changeSignForDet{ false };
@@ -37,17 +39,14 @@ private:
 	bool _createSas{ false };
 	void swapRowsBellow(MatrixSquare& matU, const unsigned& idxPivot);
 	void nullifyElementBellow(MatrixSquare& matU, const unsigned& idxPivot) const;
-	void decomposeToPlu();
-	void decomposeToStrictLu();
-	void decomposeToSas();
 	void findInverseByBackSubstitution(MatrixTriangular* matrix, MatrixTriangular* resp) const;
-
-protected:
 	void createLu();
 	void destroyLu();
 	void createSas();
 	void destroySas();
-
+	virtual void decomposeToPlu();
+	virtual void decomposeToStrictLu();
+	virtual void decomposeToSas();
 
 public:
 	MatrixSquare() = default;
@@ -74,10 +73,11 @@ public:
 	virtual double determinant();
 	virtual const D_PLU& getPLU();
 	virtual const D_PLU& getStrictLU();
+	virtual const D_SAS& getSAS();
 	virtual bool isStrictLUDecomposable();
 	virtual bool isInvertible();
-	MatrixTriangular extractLowerPart() const;
-	MatrixTriangular extractUpperPart() const;
-	MatrixSquare getInverse();
-	bool isPositiveDefinite();
+	virtual MatrixTriangular extractLowerPart() const;
+	virtual MatrixTriangular extractUpperPart() const;
+	virtual MatrixSquare getInverse();
+	virtual bool isPositiveDefinite();
 };

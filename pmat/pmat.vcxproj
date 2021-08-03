@@ -153,8 +153,10 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="MatrixAntiSymmetric.h" />
     <ClInclude Include="MatrixDiagonal.h" />
     <ClInclude Include="MatrixSquare.h" />
+    <ClInclude Include="AbstractMatrixSymAntiSym.h" />
     <ClInclude Include="MatrixSymmetric.h" />
     <ClInclude Include="MatrixTriangular.h" />
     <ClInclude Include="Messages.h" />
@@ -164,8 +166,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="MatrixAntiSymmetric.cpp" />
     <ClCompile Include="MatrixDiagonal.cpp" />
     <ClCompile Include="MatrixSquare.cpp" />
+    <ClCompile Include="AbstractMatrixSymAntiSym.cpp" />
     <ClCompile Include="MatrixSymmetric.cpp" />
     <ClCompile Include="MatrixTriangular.cpp" />
     <ClCompile Include="pch.cpp">

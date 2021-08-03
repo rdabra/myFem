@@ -32,9 +32,8 @@ public:
 	MatrixTriangular& operator=(MatrixTriangular&& matrix) noexcept;
 	MatrixSquare asMatrixSquare() const;
 	double dotProduct(const Matrix& matrix) const override;
-	void plus(const MatrixTriangular& matrix, MatrixSquare& resp) const;
+	void plus(const MatrixTriangular& matrix, MatrixSquare& resp) const; 
 	virtual void addBy(const MatrixTriangular& matrix);
-	void addBy(const Matrix& matrix) override { Matrix::addBy(matrix); }
 	void minus(const MatrixTriangular& matrix, MatrixSquare& resp) const;
 	MatrixSquare operator+(const MatrixTriangular& matrix) const;
 	MatrixSquare operator-(const MatrixTriangular& matrix) const;
