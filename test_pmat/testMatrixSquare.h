@@ -456,6 +456,6 @@ TEST(TestMatrixSquare, TestSymmetricAntiSym) {
 
 	D_SAS matSas = A.getSAS();
 
-	EXPECT_TRUE(A == (*matSas.matAS) + (*matSas.matS));
+	EXPECT_TRUE(A == (*matSas.matS) + (*matSas.matAS));
 
 }

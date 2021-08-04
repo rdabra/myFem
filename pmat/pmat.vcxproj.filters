@@ -42,13 +42,13 @@
     <ClInclude Include="utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AbstractMatrixSymAntiSym.h">
+    <ClInclude Include="AbstractMatrixSymSkewSym.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MatrixSymmetric.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MatrixAntiSymmetric.h">
+    <ClInclude Include="MatrixSkewSymmetric.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -74,13 +74,13 @@
     <ClCompile Include="MatrixDiagonal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AbstractMatrixSymAntiSym.cpp">
+    <ClCompile Include="AbstractMatrixSymSkewSym.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MatrixSymmetric.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MatrixAntiSymmetric.cpp">
+    <ClCompile Include="MatrixSkewSymmetric.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -2,7 +2,7 @@
 #include "MatrixSquare.h"
 #include "MatrixTriangular.h" // In order to define the class completely
 #include "MatrixSymmetric.h" // In order to define the class completely
-#include "MatrixAntiSymmetric.h" // In order to define the class completely
+#include "MatrixSkewSymmetric.h" // In order to define the class completely
 
 
 void MatrixSquare::swapRowsBellow(MatrixSquare& matU, const unsigned& idxPivot)

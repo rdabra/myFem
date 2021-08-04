@@ -2,11 +2,11 @@
 
 #include "pch.h"
 
-#include "AbstractMatrixSymAntiSym.h"
-#include "AbstractMatrixSymAntiSym.cpp"
+#include "AbstractMatrixSymSkewSym.h"
+#include "AbstractMatrixSymSkewSym.cpp"
 
 TEST(MatrixSymmetric, TestEqualityOperator) {
-	AbstractMatSymSkewSym z(4,false);
+	MatrixSymmetric z(4);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -18,7 +18,7 @@ TEST(MatrixSymmetric, TestEqualityOperator) {
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
-	AbstractMatSymSkewSym v(4,false);
+	MatrixSymmetric v(4);
 	v.setValue(1.0, 0, 0);
 	v.setValue(4.0, 1, 0);
 	v.setValue(5.0, 1, 1);
@@ -34,7 +34,7 @@ TEST(MatrixSymmetric, TestEqualityOperator) {
 }
 
 TEST(MatrixSymmetric, TestDotProduct) {
-	AbstractMatSymSkewSym z(4, false);
+	MatrixSymmetric z(4);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -46,7 +46,7 @@ TEST(MatrixSymmetric, TestDotProduct) {
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
-	AbstractMatSymSkewSym v(4, false);
+	MatrixSymmetric v(4);
 	v.setValue(1.5, 0, 0);
 	v.setValue(4.5, 1, 0);
 	v.setValue(5.5, 1, 1);
@@ -65,7 +65,7 @@ TEST(MatrixSymmetric, TestDotProduct) {
 }
 
 TEST(MatrixSymmetric, TestPlus) {
-	AbstractMatSymSkewSym z(4, false);
+	MatrixSymmetric z(4);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -77,7 +77,7 @@ TEST(MatrixSymmetric, TestPlus) {
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
-	AbstractMatSymSkewSym v(4, false);
+	MatrixSymmetric v(4);
 	v.setValue(1.0, 0, 0);
 	v.setValue(4.0, 1, 0);
 	v.setValue(5.0, 1, 1);
@@ -89,7 +89,7 @@ TEST(MatrixSymmetric, TestPlus) {
 	v.setValue(12.0, 3, 2);
 	v.setValue(13.0, 3, 3);
 
-	AbstractMatSymSkewSym resp(4, false);
+	MatrixSymmetric resp(4);
 	resp.setValue(2.0, 0, 0);
 	resp.setValue(8.0, 1, 0);
 	resp.setValue(10.0, 1, 1);
@@ -120,9 +120,9 @@ TEST(MatrixSymmetric, TestPlus) {
 	resp1.setValue(26.0, 3, 3);
 
 
-	AbstractMatSymSkewSym r1(4, false);
+	MatrixSymmetric r1(4);
 	z.plus(v, r1);
-	MatrixSquare r2(z + v);
+	MatrixSymmetric r2(z + v);
 	z.addBy(v);
 
 	EXPECT_TRUE(resp == r1);
@@ -131,7 +131,7 @@ TEST(MatrixSymmetric, TestPlus) {
 }
 
 TEST(MatrixSymmetric, TestMinus) {
-	AbstractMatSymSkewSym z(4, false);
+	MatrixSymmetric z(4);
 	z.setValue(2.0, 0, 0);
 	z.setValue(8.0, 1, 0);
 	z.setValue(10.0, 1, 1);
@@ -143,7 +143,7 @@ TEST(MatrixSymmetric, TestMinus) {
 	z.setValue(24.0, 3, 2);
 	z.setValue(26.0, 3, 3);
 
-	AbstractMatSymSkewSym v(4, false);
+	MatrixSymmetric v(4);
 	v.setValue(1.0, 0, 0);
 	v.setValue(4.0, 1, 0);
 	v.setValue(5.0, 1, 1);
@@ -155,7 +155,7 @@ TEST(MatrixSymmetric, TestMinus) {
 	v.setValue(12.0, 3, 2);
 	v.setValue(13.0, 3, 3);
 
-	AbstractMatSymSkewSym resp(4, false);
+	MatrixSymmetric resp(4);
 	resp.setValue(1.0, 0, 0);
 	resp.setValue(4.0, 1, 0);
 	resp.setValue(5.0, 1, 1);
@@ -180,9 +180,9 @@ TEST(MatrixSymmetric, TestMinus) {
 	resp1.setValue(13.0, 3, 3);
 
 	
-	AbstractMatSymSkewSym r1(4, false);
+	MatrixSymmetric r1(4);
 	z.minus(v, r1);
-	MatrixSquare r2(z - v);
+	MatrixSymmetric r2(z - v);
 	z.subtractBy(v);
 
 	EXPECT_TRUE(resp == r1);
@@ -192,7 +192,7 @@ TEST(MatrixSymmetric, TestMinus) {
 }
 
 TEST(MatrixSymmetric, TestTimes) {
-	AbstractMatSymSkewSym z(4, false);
+	MatrixSymmetric z(4);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -204,7 +204,7 @@ TEST(MatrixSymmetric, TestTimes) {
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
-	AbstractMatSymSkewSym v(4, false);
+	MatrixSymmetric v(4);
 	v.setValue(2.0, 0, 0);
 	v.setValue(5.0, 1, 0);
 	v.setValue(6.0, 1, 1);
@@ -237,7 +237,7 @@ TEST(MatrixSymmetric, TestTimes) {
 	resp.setValue(468.0, 3, 2);
 	resp.setValue(580.0, 3, 3);
 
-	AbstractMatSymSkewSym resp1(4, false);
+	MatrixSymmetric resp1(4);
 	resp1.setValue(2.0, 0, 0);
 	resp1.setValue(8.0, 1, 0);
 	resp1.setValue(10.0, 1, 1);
@@ -252,7 +252,7 @@ TEST(MatrixSymmetric, TestTimes) {
 	MatrixSquare r1(4);
 	z.times(v, r1);
 	MatrixSquare r2(z * v);
-	AbstractMatSymSkewSym r3;
+	MatrixSymmetric r3;
 	r3 = z;
 
 	r3.multiplyBy(2.0);
@@ -266,7 +266,7 @@ TEST(MatrixSymmetric, TestTimes) {
 
 TEST(MatrixSymmetric, TestFrobenius)
 {
-	AbstractMatSymSkewSym z(4, false);
+	MatrixSymmetric z(4);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -286,7 +286,7 @@ TEST(MatrixSymmetric, TestFrobenius)
 
 TEST(MatrixSymmetric, TestDeterminant)
 {
-	AbstractMatSymSkewSym z(4, false);
+	MatrixSymmetric z(4);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -303,7 +303,7 @@ TEST(MatrixSymmetric, TestDeterminant)
 
 TEST(MatrixSymmetric, TestTranspose)
 {
-	AbstractMatSymSkewSym z(4, false);
+	MatrixSymmetric z(4);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -315,7 +315,7 @@ TEST(MatrixSymmetric, TestTranspose)
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
-	AbstractMatSymSkewSym v(z);
+	MatrixSymmetric v(z);
 	
 	z.transpose();
 
@@ -325,7 +325,7 @@ TEST(MatrixSymmetric, TestTranspose)
 TEST(MatrixSymmetric, TestMisc)
 {
 
-	AbstractMatSymSkewSym z(4, false);
+	MatrixSymmetric z(4);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -337,7 +337,7 @@ TEST(MatrixSymmetric, TestMisc)
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
-	AbstractMatSymSkewSym v(4, false);
+	MatrixSymmetric v(4);
 	v.setValue(1.0, 0, 0);
 	v.setValue(4.0, 1, 0);
 	v.setValue(5.0, 1, 1);
@@ -349,7 +349,7 @@ TEST(MatrixSymmetric, TestMisc)
 	v.setValue(12.0, 3, 2);
 	v.setValue(13.0, 3, 3);
 
-	AbstractMatSymSkewSym resp(4, false);
+	MatrixSymmetric resp(4);
 	resp.setValue(1.0, 0, 0);
 	resp.setValue(4.0, 1, 0);
 	resp.setValue(5.0, 1, 1);
@@ -361,16 +361,16 @@ TEST(MatrixSymmetric, TestMisc)
 	resp.setValue(12.0, 3, 2);
 	resp.setValue(13.0, 3, 3);
 
-	AbstractMatSymSkewSym resp1(2, false);
+	MatrixSymmetric resp1(2);
 	resp1.setValue(0.0, 0, 0);
 	resp1.setValue(0.0, 1, 0);
 	resp1.setValue(0.0, 1, 1);
 
 	
-	AbstractMatSymSkewSym a;
+	MatrixSymmetric a;
 	a = (std::move(z));
 
-	v.reset(2,false);
+	v.reset(2);
 
 
 	EXPECT_TRUE(a == resp);

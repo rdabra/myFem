@@ -1,5 +1,6 @@
 #pragma once
-#include "AbstractMatrixSymAntiSym.h"
+
+#include "AbstractMatrixSymSkewSym.h"
 
 /**
  * @TODO Em MatrixSymmetric implementar Cholesky
@@ -18,9 +19,12 @@ public:
 	MatrixSymmetric& operator=(const MatrixSymmetric& matrix);
 	MatrixSymmetric& operator=(MatrixSymmetric&& matrix) noexcept;
 	MatrixSymmetric operator+(const MatrixSymmetric& matrix) const;
+	MatrixSquare operator+(const AbstractMatSymSkewSym& matrix) const { return MatrixSquare::operator+(matrix); }
 	MatrixSymmetric operator-(const MatrixSymmetric& matrix) const;
+	MatrixSquare operator-(const AbstractMatSymSkewSym& matrix) const { return MatrixSquare::operator-(matrix); }
+	MatrixSquare operator*(const MatrixSymmetric& matrix) const { return AbstractMatSymSkewSym::operator*(matrix); }
 	MatrixSymmetric operator*(const double& scalar) const;
-	void transpose() override {};
+	void transpose() override {}
 
 };
 

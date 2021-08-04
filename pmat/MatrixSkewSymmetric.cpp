@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "MatrixAntiSymmetric.h"
+#include "MatrixSkewSymmetric.h"
 
 
 MatrixSkewSymmetric::MatrixSkewSymmetric(const unsigned& size)

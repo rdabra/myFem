@@ -4,19 +4,45 @@
 #include <iostream>
 #include <vector>
 #include "MatrixSquare.h"
+#include "AbstractMatrixSymAntiSym.h"
 
 
 int main()
 {
 
-	double a{ 3.1234567865888 };
-	double b{ 3.1234567865321 };
+	MatrixSquare z(2);
+	z.setValue(1.0, 0, 0);
+	z.setValue(3.0, 0, 1);
+	z.setValue(2.0, 1, 0);
+	z.setValue(4.0, 1, 1);
 
-	double c = 1.0 / 10.0;
-	
+	D_SAS matSas = z.getSAS();
 
-	std::cout << (putils::areEqual(a, b) ? "true" : "false") << "\n";
+
+	for (unsigned i = 0; i < matSas.matS->getSize(); ++i) {
+		for (unsigned j = 0; j < matSas.matS->getSize(); ++j)
+			std::cout << (*matSas.matS)(i, j) << " ";
+		std::cout << "\n";
+	}
+
+	std::cout << "\n";
 	
+	for (unsigned i = 0; i < matSas.matS->getSize(); ++i) {
+		for (unsigned j = 0; j < matSas.matS->getSize(); ++j)
+			std::cout << (*matSas.matAS)(i, j) << " ";
+		std::cout << "\n";
+	}
+
+	std::cout << "\n";
+	
+	MatrixSquare x((*matSas.matAS) + (*matSas.matS));
+	for (unsigned i = 0; i < matSas.matS->getSize(); ++i) {
+		for (unsigned j = 0; j < matSas.matS->getSize(); ++j)
+			std::cout << x(i, j) << " ";
+		std::cout << "\n";
+	}
+
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

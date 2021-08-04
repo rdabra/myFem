@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "MatrixDiagonal.h"
 #include "MatrixSymmetric.h" // In order to define the class completely
-#include "MatrixAntiSymmetric.h" // In order to define the class completely
+#include "MatrixSkewSymmetric.h" // In order to define the class completely
 
 
 void MatrixDiagonal::decomposeToPlu()
