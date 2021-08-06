@@ -11,3 +11,4 @@
 #include "testMatrixTriangular.h"
 #include "testMatrixSymmetric.h"
 #include "testMatrixDiagonal.h"
+#include "testMatrixSkewSymmetric.h"

@@ -123,7 +123,7 @@ MatrixSquare MatrixTriangular::asMatrixSquare() const
 			resp.setValue((*this)(i, j), i, j);
 	}
 
-	return resp;	
+	return resp;
 }
 
 double MatrixTriangular::dotProduct(const Matrix& matrix) const

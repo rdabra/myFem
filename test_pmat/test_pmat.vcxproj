@@ -34,6 +34,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClInclude Include="testMatrixDiagonal.h" />
+    <ClInclude Include="testMatrixSkewSymmetric.h" />
     <ClInclude Include="testMatrixSymmetric.h" />
     <ClInclude Include="testMatrixTriangular.h" />
     <ClInclude Include="pch.h" />

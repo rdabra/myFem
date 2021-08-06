@@ -125,6 +125,21 @@ TEST(TestMatrixSquare, TestDecompPLU) {
 	B.setValue(5.0, 2, 1);
 	B.setValue(3.0, 2, 2);
 
+	MatrixSquare C(3);
+
+	C.setValue(1.0, 0, 0);
+	C.setValue(1.0, 0, 1);
+	C.setValue(1.0, 0, 2);
+
+	C.setValue(1.0, 1, 0);
+	C.setValue(1.0, 1, 1);
+	C.setValue(3.0, 1, 2);
+
+	C.setValue(2.0, 2, 0);
+	C.setValue(5.0, 2, 1);
+	C.setValue(8.0, 2, 2);
+
+
 
 	D_PLU mats = A.getPLU();
 
@@ -141,9 +156,12 @@ TEST(TestMatrixSquare, TestDecompPLU) {
 	MatrixSquare LU2((*mats2.matL) * (*mats2.matU));
 
 
+
 	EXPECT_TRUE(PA == LU);
 	EXPECT_TRUE(PB == LU1);
 	EXPECT_TRUE(A == LU2);
+	EXPECT_FALSE(C.isStrictLUDecomposable());
+
 
 }
 

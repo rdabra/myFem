@@ -75,7 +75,7 @@ void MatrixSquare::createSas()
 
 void MatrixSquare::destroySas()
 {
-	if (_createLu) {
+	if (_createSas) {
 		delete _matsSAS.matS;
 		delete _matsSAS.matAS;
 		_createSas = false;
