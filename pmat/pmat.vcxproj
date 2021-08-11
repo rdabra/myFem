@@ -153,12 +153,14 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="MatrixLowerTriangular.h" />
     <ClInclude Include="MatrixSkewSymmetric.h" />
     <ClInclude Include="MatrixDiagonal.h" />
     <ClInclude Include="MatrixSquare.h" />
-    <ClInclude Include="AbstractMatrixSymSkewSym.h" />
+    <ClInclude Include="AbstractMatrixSymmetry.h" />
     <ClInclude Include="MatrixSymmetric.h" />
-    <ClInclude Include="MatrixTriangular.h" />
+    <ClInclude Include="AbstractMatrixTriangular.h" />
+    <ClInclude Include="MatrixUpperTriangular.h" />
     <ClInclude Include="Messages.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="utils.h" />
@@ -166,12 +168,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="MatrixLowerTriangular.cpp" />
     <ClCompile Include="MatrixSkewSymmetric.cpp" />
     <ClCompile Include="MatrixDiagonal.cpp" />
     <ClCompile Include="MatrixSquare.cpp" />
-    <ClCompile Include="AbstractMatrixSymSkewSym.cpp" />
+    <ClCompile Include="AbstractMatrixSymmetry.cpp" />
     <ClCompile Include="MatrixSymmetric.cpp" />
-    <ClCompile Include="MatrixTriangular.cpp" />
+    <ClCompile Include="AbstractMatrixTriangular.cpp" />
+    <ClCompile Include="MatrixUpperTriangular.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

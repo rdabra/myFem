@@ -1,8 +1,8 @@
 #pragma once
-#include "AbstractMatrixSymSkewSym.h"
+#include "AbstractMatrixSymmetry.h"
 
 class MatrixSkewSymmetric :
-    public AbstractMatSymSkewSym
+    public AbstractMatrixSymmetry
 {
 
 public:
@@ -15,10 +15,10 @@ public:
 	MatrixSkewSymmetric& operator=(const MatrixSkewSymmetric & matrix);
 	MatrixSkewSymmetric& operator=(MatrixSkewSymmetric && matrix) noexcept;
 	MatrixSkewSymmetric operator+(const MatrixSkewSymmetric& matrix) const;
-	MatrixSquare operator+(const AbstractMatSymSkewSym& matrix) const { return MatrixSquare::operator+(matrix); }
+	MatrixSquare operator+(const AbstractMatrixSymmetry& matrix) const { return MatrixSquare::operator+(matrix); }
 	MatrixSkewSymmetric operator-(const MatrixSkewSymmetric& matrix) const;
-	MatrixSquare operator-(const AbstractMatSymSkewSym& matrix) const { return MatrixSquare::operator-(matrix); }
-	MatrixSquare operator*(const MatrixSkewSymmetric& matrix) const { return AbstractMatSymSkewSym::operator*(matrix); }
+	MatrixSquare operator-(const AbstractMatrixSymmetry& matrix) const { return MatrixSquare::operator-(matrix); }
+	MatrixSquare operator*(const MatrixSkewSymmetric& matrix) const { return AbstractMatrixSymmetry::operator*(matrix); }
 	MatrixSkewSymmetric operator*(const double& scalar) const;
 	void transpose() override;
 

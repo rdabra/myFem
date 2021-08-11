@@ -6,7 +6,7 @@ MatrixSkewSymmetric::MatrixSkewSymmetric(const unsigned& size)
 {
 	_rowSize = size;
 	_columnSize = size;
-	_matTri.reset(size, true);
+	_matTri.reset(size);
 }
 
 MatrixSkewSymmetric::MatrixSkewSymmetric(const MatrixSkewSymmetric& matrix)

@@ -6,7 +6,7 @@ MatrixSymmetric::MatrixSymmetric(const unsigned& size)
 {
 	_rowSize = size;
 	_columnSize = size;
-	_matTri.reset(size, true);
+	_matTri.reset(size);
 }
 
 MatrixSymmetric::MatrixSymmetric(const MatrixSymmetric& matrix)

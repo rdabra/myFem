@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "MatrixSquare.h"
-#include "MatrixTriangular.h" // In order to define the class completely
+#include "MatrixLowerTriangular.h" // In order to define the class completely
+#include "MatrixUpperTriangular.h" // In order to define the class completely
 #include "MatrixSymmetric.h" // In order to define the class completely
 #include "MatrixSkewSymmetric.h" // In order to define the class completely
 
@@ -41,13 +42,13 @@ void MatrixSquare::createLu()
 	this->destroyLu();
 
 	_matsPLU.matP = new MatrixSquare(this->getSize());
-	_matsPLU.matU = new MatrixTriangular(this->getSize(), false);
-	_matsPLU.matL = new MatrixTriangular(this->getSize(), true);
+	_matsPLU.matU = new MatrixUpperTriangular(this->getSize());
+	_matsPLU.matL = new MatrixLowerTriangular(this->getSize());
 	_changeSignForDet = false;
 
 	for (unsigned j = 0; j < this->getSize(); j++) {
-		_matsPLU.matL->setValue(1.0000000000, j, j);
-		_matsPLU.matP->setValue(1.0000000000, j, j);
+		_matsPLU.matL->setValue(putils::ONE, j, j);
+		_matsPLU.matP->setValue(putils::ONE, j, j);
 	}
 
 	_createLu = true;
@@ -143,7 +144,7 @@ void MatrixSquare::setValue(const double& value, const unsigned& rowIndex, const
 
 double MatrixSquare::trace() const
 {
-	double resp = 0.0000000000;
+	double resp = putils::ZERO;
 	for (unsigned i = 0; i < this->getSize(); i++)
 		resp += (*this)(i, i);
 	return resp;
@@ -194,15 +195,15 @@ void MatrixSquare::decomposeToSas()
 		this->createSas();
 		for (unsigned i = 0; i < this->getSize(); ++i)
 			for (unsigned j = 0; j <= i; ++j) {
-				_matsSAS.matS->setValue(.5000000000 * ((*this)(i, j) + (*this)(j, i)), i, j);
-				_matsSAS.matAS->setValue(.5000000000 * ((*this)(i, j) - (*this)(j, i)), i, j);
+				_matsSAS.matS->setValue(putils::HALF * ((*this)(i, j) + (*this)(j, i)), i, j);
+				_matsSAS.matAS->setValue(putils::HALF * ((*this)(i, j) - (*this)(j, i)), i, j);
 			}
 		_calcSas = true;
 	}
 }
 
 
-void MatrixSquare::findInverseByBackSubstitution(MatrixTriangular* matrix, MatrixTriangular* resp) const
+void MatrixSquare::findInverseByBackSubstitution(AbstractMatrixTriangular* matrix, AbstractMatrixTriangular* resp) const
 {
 	std::vector<unsigned> ids(matrix->getSize());
 
@@ -212,9 +213,9 @@ void MatrixSquare::findInverseByBackSubstitution(MatrixTriangular* matrix, Matri
 		for (unsigned k = 0; k < matrix->getSize(); k++) ids[k] = matrix->getSize() - k - 1;
 
 	for (unsigned idxPivot = 0; idxPivot < matrix->getSize(); idxPivot++) {
-		resp->setValue(1.0 / (*matrix)(ids[idxPivot], ids[idxPivot]), ids[idxPivot], ids[idxPivot]);
+		resp->setValue(putils::ONE / (*matrix)(ids[idxPivot], ids[idxPivot]), ids[idxPivot], ids[idxPivot]);
 		for (unsigned i = idxPivot + 1; i < matrix->getSize(); i++) {
-			double num{0.0000000000};
+			double num{putils::ZERO};
 			for (unsigned j = idxPivot; j < i; j++)
 				num -= (*matrix)(ids[i], ids[j]) * (*resp)(ids[j], ids[idxPivot]);
 			resp->setValue(num / (*matrix)(ids[i], ids[i]), ids[i], ids[idxPivot]);
@@ -262,18 +263,18 @@ bool MatrixSquare::isInvertible()
 	return !putils::areEqual(this->determinant(), putils::ZERO);
 }
 
-MatrixTriangular MatrixSquare::extractLowerPart() const
+MatrixLowerTriangular MatrixSquare::extractLowerPart() const
 {
-	MatrixTriangular resp(this->getSize(), true);
+	MatrixLowerTriangular resp(this->getSize());
 	for (unsigned i = 0; i < this->getSize(); ++i)
 		for (unsigned j = 0; j <= i; ++j)
 			resp.setValue((*this)(i, j), i, j);
 	return resp;
 }
 
-MatrixTriangular MatrixSquare::extractUpperPart() const
+MatrixUpperTriangular MatrixSquare::extractUpperPart() const
 {
-	MatrixTriangular resp(this->getSize(), false);
+	MatrixUpperTriangular resp(this->getSize());
 	for (unsigned i = 0; i < this->getSize(); ++i)
 		for (unsigned j = i; j < this->getSize(); ++j)
 			resp.setValue((*this)(i, j), i, j);
@@ -285,10 +286,10 @@ MatrixSquare MatrixSquare::getInverse()
 	this->decomposeToPlu();
 	if (!this->isInvertible()) throw std::out_of_range(messages::MATRIX_SINGULAR);
 
-	MatrixTriangular invU(this->getSize(), false);
+	MatrixUpperTriangular invU(this->getSize());
 	this->findInverseByBackSubstitution(_matsPLU.matU, &invU);
 
-	MatrixTriangular invL(this->getSize(), true);
+	MatrixLowerTriangular invL(this->getSize());
 	this->findInverseByBackSubstitution(_matsPLU.matL, &invL);
 
 	MatrixSquare resp(invU * invL);
@@ -315,7 +316,7 @@ double MatrixSquare::determinant()
 {
 	this->decomposeToPlu();
 
-	double resp{1.0000000000};
+	double resp{putils::ONE};
 
 	for (unsigned i = 0; i < this->getSize(); i++)
 		resp *= (*_matsPLU.matU)(i, i);

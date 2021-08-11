@@ -376,8 +376,8 @@ TEST(TestMatrixSquare, TestMisc) {
 	A.setValue(1.0, 3, 2);
 	A.setValue(1.0, 3, 3);
 	
-	MatrixTriangular ALower(4,true);
-	MatrixTriangular AUpper(4, false);
+	AbstractMatrixTriangular ALower(4,true);
+	AbstractMatrixTriangular AUpper(4, false);
 
 	ALower.setValue(1.0, 0, 0);
 

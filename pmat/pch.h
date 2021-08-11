@@ -11,7 +11,7 @@
 #include "framework.h"
 #include "Matrix.h"
 #include "MatrixSquare.h"
-#include "MatrixTriangular.h"
+#include "AbstractMatrixTriangular.h"
 #include "Vector.h"
 
 #endif //PCH_H

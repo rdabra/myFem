@@ -3,43 +3,71 @@
   <Class Name="Matrix" Collapsed="true">
     <Position X="4.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BGCBAgABAATAAAAEGAMAAQIABgigYIBAmCigCwAAABA=</HashCode>
+      <HashCode>BGCBAgAFAATAAAAEGAMAAQIABgigYIBAmCigCwAAABA=</HashCode>
       <FileName>Matrix.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MatrixSquare" Collapsed="true">
     <Position X="4" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAIoAIAAQIAEAAAAAAIAAIBAMAAAAAAQCIAoAAAQAAE=</HashCode>
+      <HashCode>BAYoAIAEQIQUIABAgAIACIBAMkAAAIAQCIAoAAgQAAE=</HashCode>
       <FileName>MatrixSquare.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="MatrixTriangular" Collapsed="true">
+  <Class Name="AbstractMatrixTriangular" Collapsed="true">
     <Position X="3.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAABAAEBAARAAAAEEAMAAQAAIggAIMBACSCgAoAAAAA=</HashCode>
-      <FileName>MatrixTriangular.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="MatrixSymmetric" Collapsed="true">
-    <Position X="6" Y="3.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAACAAAAAAAAAQAEAIAAQAAAAAAIABAAQAgAQAACAA=</HashCode>
-      <FileName>MatrixSymmetric.h</FileName>
+      <HashCode>AABBAAgFAARAAAAEEAMAAQAAIggCAEBACCCAAgAAAAA=</HashCode>
+      <FileName>AbstractMatrixTriangular.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MatrixDiagonal" Collapsed="true">
     <Position X="1.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAAAAAABAARAAAAAEAMAAAAAIwgAIIBICCAgAAAAAAA=</HashCode>
+      <HashCode>BAYIAIABQARAAABAkAMAAQAAIwgCIIBICCAoAAAAAAA=</HashCode>
       <FileName>MatrixDiagonal.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Vector" Collapsed="true">
-    <Position X="6.5" Y="1.5" Width="1.5" />
+    <Position X="6.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BEAAAAAAAIBAAAAAEAMIAQAAAgAAIIBAAGAgAAIAAAA=</HashCode>
       <FileName>Vector.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MatrixLowerTriangular" Collapsed="true">
+    <Position X="4.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAFAARAAAAEEgMAAQAAAkAAIMBAAAAgAgAAAgA=</HashCode>
+      <FileName>MatrixLowerTriangular.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MatrixUpperTriangular" Collapsed="true">
+    <Position X="3" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAFAARAAAAEEAMABQAAAgAAIMBAAAIgAgAAAgA=</HashCode>
+      <FileName>MatrixUpperTriangular.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AbstractMatrixSymmetry" Collapsed="true">
+    <Position X="8.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAEAABAAAAAEAMAAQAAAAAAIIBACCAgAQAACAA=</HashCode>
+      <FileName>AbstractMatrixSymmetry.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MatrixSkewSymmetric" Collapsed="true">
+    <Position X="10.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAEAAAAAAAAAAAAAAACAAgAAAAAAg=</HashCode>
+      <FileName>MatrixSkewSymmetric.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MatrixSymmetric" Collapsed="true">
+    <Position X="7" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAQAEAAAAAAAAAAAAAAACAAgAAAAAAA=</HashCode>
+      <FileName>MatrixSymmetric.h</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

@@ -7,7 +7,12 @@ namespace putils
 
 	static double ZERO = 0.0000000000;
 
+	static double ONE = 1.0000000000;
+
 	static double MINUS_ONE = -1.0000000000;
+
+	static double HALF = 0.5000000000;
+
 
 	static inline const double& max(const double& a, const double& b) { return a > b ? a : b; };
 	static inline double abs(const double& a) { return a > ZERO ? a : -a; };

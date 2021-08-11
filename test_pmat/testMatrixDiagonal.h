@@ -179,8 +179,8 @@ TEST(TestMatrixDiagonal, TestMisc) {
 	A.setValue(3.0, 2, 2);
 	A.setValue(4.0, 3, 3);
 
-	MatrixTriangular ALower(4, true);
-	MatrixTriangular AUpper(4, false);
+	AbstractMatrixTriangular ALower(4, true);
+	AbstractMatrixTriangular AUpper(4, false);
 
 	ALower.setValue(1.0, 0, 0);
 	ALower.setValue(2.0, 1, 1);

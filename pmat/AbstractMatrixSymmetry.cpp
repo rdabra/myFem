@@ -1,27 +1,27 @@
 #include "pch.h"
-#include "AbstractMatrixSymSkewSym.h"
+#include "AbstractMatrixSymmetry.h"
 
 
 
-void AbstractMatSymSkewSym::setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex)
+void AbstractMatrixSymmetry::setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex)
 {
 	_matTri.setValue(value, rowIndex, columnIndex);
 }
 
-void AbstractMatSymSkewSym::reset(const unsigned& size)
+void AbstractMatrixSymmetry::reset(const unsigned& size)
 {
 	_rowSize = size;
 	_columnSize = size;
-	_matTri.reset(size, true);
+	_matTri.reset(size);
 }
 
-bool AbstractMatSymSkewSym::operator==(AbstractMatSymSkewSym& matrix) const
+bool AbstractMatrixSymmetry::operator==(AbstractMatrixSymmetry& matrix) const
 {
 	return _matTri == matrix._matTri;
 }
 
 
-void AbstractMatSymSkewSym::plus(const AbstractMatSymSkewSym& matrix, AbstractMatSymSkewSym& resp) const
+void AbstractMatrixSymmetry::plus(const AbstractMatrixSymmetry& matrix, AbstractMatrixSymmetry& resp) const
 {
 	this->validateOperands(matrix);
 	this->validateResponse(resp);
@@ -31,12 +31,12 @@ void AbstractMatSymSkewSym::plus(const AbstractMatSymSkewSym& matrix, AbstractMa
 			resp.setValue((*this)(i, j) + matrix(i, j), i, j);
 }
 
-void AbstractMatSymSkewSym::addBy(const AbstractMatSymSkewSym& matrix)
+void AbstractMatrixSymmetry::addBy(const AbstractMatrixSymmetry& matrix)
 {
 	_matTri.addBy(matrix._matTri);
 }
 
-double AbstractMatSymSkewSym::dotProduct(const AbstractMatSymSkewSym& matrix) const
+double AbstractMatrixSymmetry::dotProduct(const AbstractMatrixSymmetry& matrix) const
 {
 	this->validateOperands(matrix);
 	double resp{ 0.0 };
@@ -50,7 +50,7 @@ double AbstractMatSymSkewSym::dotProduct(const AbstractMatSymSkewSym& matrix) co
 }
 
 
-void AbstractMatSymSkewSym::minus(const AbstractMatSymSkewSym& matrix, AbstractMatSymSkewSym& resp) const
+void AbstractMatrixSymmetry::minus(const AbstractMatrixSymmetry& matrix, AbstractMatrixSymmetry& resp) const
 {
 	this->validateOperands(matrix);
 	this->validateResponse(resp);
@@ -60,17 +60,17 @@ void AbstractMatSymSkewSym::minus(const AbstractMatSymSkewSym& matrix, AbstractM
 			resp.setValue((*this)(i, j) - matrix(i, j), i, j);
 }
 
-void AbstractMatSymSkewSym::subtractBy(const AbstractMatSymSkewSym& matrix)
+void AbstractMatrixSymmetry::subtractBy(const AbstractMatrixSymmetry& matrix)
 {
 	_matTri.subtractBy(matrix._matTri);
 }
 
-void AbstractMatSymSkewSym::multiplyBy(const double& scalar)
+void AbstractMatrixSymmetry::multiplyBy(const double& scalar)
 {
 	_matTri.multiplyBy(scalar);
 }
 
-double AbstractMatSymSkewSym::frobeniusNorm() const
+double AbstractMatrixSymmetry::frobeniusNorm() const
 {
 	return std::sqrt(this->dotProduct((*this)));
 }

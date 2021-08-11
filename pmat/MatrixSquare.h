@@ -3,7 +3,11 @@
 #include "Matrix.h"
 
 
-class MatrixTriangular;
+class AbstractMatrixTriangular;
+
+class MatrixLowerTriangular;
+
+class MatrixUpperTriangular;
 
 class MatrixSquare;
 
@@ -14,8 +18,8 @@ class MatrixSkewSymmetric;
 struct D_PLU
 {
 	MatrixSquare* matP{ nullptr };
-	MatrixTriangular* matL{ nullptr };
-	MatrixTriangular* matU{ nullptr };
+	MatrixLowerTriangular* matL{ nullptr };
+	MatrixUpperTriangular* matU{ nullptr };
 	std::vector<std::pair<unsigned, unsigned>> swappedRows;
 };
 
@@ -39,7 +43,7 @@ protected:
 	bool _createSas{ false };
 	void swapRowsBellow(MatrixSquare& matU, const unsigned& idxPivot);
 	void nullifyElementBellow(MatrixSquare& matU, const unsigned& idxPivot) const;
-	void findInverseByBackSubstitution(MatrixTriangular* matrix, MatrixTriangular* resp) const;
+	void findInverseByBackSubstitution(AbstractMatrixTriangular* matrix, AbstractMatrixTriangular* resp) const;
 	void createLu();
 	void destroyLu();
 	void createSas();
@@ -54,7 +58,7 @@ public:
 	MatrixSquare(const MatrixSquare& matrix) : Matrix(matrix) {}
 	MatrixSquare(MatrixSquare&& matrix) noexcept : Matrix(std::move(matrix)) {}
 	~MatrixSquare() override;
-	void reset(const unsigned& size) { Matrix::reset(size,size); }
+	virtual void reset(const unsigned& size) { Matrix::reset(size,size); }
 	MatrixSquare& operator=(const MatrixSquare& matrix);
 	MatrixSquare& operator=(MatrixSquare&& matrix) noexcept;
 	MatrixSquare operator+(const MatrixSquare& matrix) const;
@@ -76,8 +80,8 @@ public:
 	virtual const D_SAS& getSAS();
 	virtual bool isStrictLUDecomposable();
 	virtual bool isInvertible();
-	virtual MatrixTriangular extractLowerPart() const;
-	virtual MatrixTriangular extractUpperPart() const;
+	virtual MatrixLowerTriangular extractLowerPart() const;
+	virtual MatrixUpperTriangular extractUpperPart() const;
 	virtual MatrixSquare getInverse();
 	virtual bool isPositiveDefinite();
 };

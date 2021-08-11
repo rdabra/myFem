@@ -27,7 +27,7 @@
     <ClInclude Include="MatrixSquare.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MatrixTriangular.h">
+    <ClInclude Include="AbstractMatrixTriangular.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Messages.h">
@@ -42,13 +42,19 @@
     <ClInclude Include="utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AbstractMatrixSymSkewSym.h">
+    <ClInclude Include="AbstractMatrixSymmetry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MatrixSymmetric.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MatrixSkewSymmetric.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixLowerTriangular.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixUpperTriangular.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -65,7 +71,7 @@
     <ClCompile Include="MatrixSquare.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MatrixTriangular.cpp">
+    <ClCompile Include="AbstractMatrixTriangular.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Vector.cpp">
@@ -74,13 +80,19 @@
     <ClCompile Include="MatrixDiagonal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AbstractMatrixSymSkewSym.cpp">
+    <ClCompile Include="AbstractMatrixSymmetry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MatrixSymmetric.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MatrixSkewSymmetric.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MatrixLowerTriangular.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MatrixUpperTriangular.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

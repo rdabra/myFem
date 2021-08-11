@@ -45,8 +45,8 @@ public:
 	double determinant() override;
 	bool isStrictLUDecomposable() override;
 	bool isInvertible() override;
-	MatrixTriangular extractLowerPart() const override;
-	MatrixTriangular extractUpperPart() const override;
+	MatrixLowerTriangular extractLowerPart() const override;
+	MatrixUpperTriangular extractUpperPart() const override;
 	MatrixSquare getInverse() override;
 	bool isPositiveDefinite() override;
 };

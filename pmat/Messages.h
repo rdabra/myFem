@@ -10,6 +10,7 @@ namespace messages {
 	constexpr const char* MATRIX_SINGULAR{ "Matrix is singular" };
 	constexpr const char* ELEM_SWAPPED{ "Elements cannot be swapped" };
 	constexpr const char* MATRIX_NOT_LU{ "Matrix not LU decomposable" };
+	constexpr const char* MATRIX_NOT_TRANSP{ "Elements cannot be transposed" };
 
 
 }

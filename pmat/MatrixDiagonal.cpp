@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "MatrixDiagonal.h"
+#include "MatrixLowerTriangular.h" // In order to define the class completely
+#include "MatrixUpperTriangular.h" // In order to define the class completely
 #include "MatrixSymmetric.h" // In order to define the class completely
 #include "MatrixSkewSymmetric.h" // In order to define the class completely
 
@@ -27,7 +29,7 @@ void MatrixDiagonal::decomposeToSas()
 		this->createSas();
 		for (unsigned i = 0; i < this->getSize(); ++i) {
 			_matsSAS.matS->setValue(.5000000000 * (*this)(i, i), i, i);
-			_matsSAS.matAS->setValue((*_matsSAS.matS)(i,i), i, i);
+			_matsSAS.matAS->setValue((*_matsSAS.matS)(i, i), i, i);
 		}
 		_calcSas = true;
 	}
@@ -228,7 +230,7 @@ void MatrixDiagonal::fillRandomly(const double& min, const double& max)
 
 double MatrixDiagonal::determinant()
 {
-	double resp = 1.0000000000;
+	double resp = putils::ONE;
 
 	for (unsigned i = 0; i < this->getSize(); i++)
 		resp *= (*this)(i, i);
@@ -249,18 +251,18 @@ bool MatrixDiagonal::isInvertible()
 	return this->isStrictLUDecomposable();
 }
 
-MatrixTriangular MatrixDiagonal::extractLowerPart() const
+MatrixLowerTriangular MatrixDiagonal::extractLowerPart() const
 {
-	MatrixTriangular resp(this->getSize(), true);
+	MatrixLowerTriangular resp(this->getSize());
 	for (unsigned i = 0; i < this->getSize(); i++)
 		resp.setValue((*this)(i, i), i, i);
 
 	return resp;
 }
 
-MatrixTriangular MatrixDiagonal::extractUpperPart() const
+MatrixUpperTriangular MatrixDiagonal::extractUpperPart() const
 {
-	MatrixTriangular resp(this->getSize(), false);
+	MatrixUpperTriangular resp(this->getSize());
 	for (unsigned i = 0; i < this->getSize(); i++)
 		resp.setValue((*this)(i, i), i, i);
 
