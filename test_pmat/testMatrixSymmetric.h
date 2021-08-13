@@ -2,8 +2,8 @@
 
 #include "pch.h"
 
-#include "AbstractMatrixSymSkewSym.h"
-#include "AbstractMatrixSymSkewSym.cpp"
+#include "MatrixSymmetric.h"
+
 
 TEST(MatrixSymmetric, TestEqualityOperator) {
 	MatrixSymmetric z(4);

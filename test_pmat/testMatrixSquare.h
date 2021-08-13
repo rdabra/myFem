@@ -3,7 +3,10 @@
 #include "pch.h"
 
 #include "MatrixSquare.h"
-#include "MatrixSquare.cpp"
+#include "MatrixLowerTriangular.h" // In order to define the class completely
+#include "MatrixUpperTriangular.h" // In order to define the class completely
+#include "MatrixSymmetric.h" // In order to define the class completely
+#include "MatrixSkewSymmetric.h" // In order to define the class completely
 
 
 TEST(TestMatrixSquare, TestTrace) {
@@ -376,8 +379,8 @@ TEST(TestMatrixSquare, TestMisc) {
 	A.setValue(1.0, 3, 2);
 	A.setValue(1.0, 3, 3);
 	
-	AbstractMatrixTriangular ALower(4,true);
-	AbstractMatrixTriangular AUpper(4, false);
+	MatrixLowerTriangular ALower(4);
+	MatrixUpperTriangular AUpper(4);
 
 	ALower.setValue(1.0, 0, 0);
 

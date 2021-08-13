@@ -13,7 +13,6 @@ protected:
 		return (i * (i + 1)) / 2 + j;
 	}
 
-
 public:
 	MatrixLowerTriangular() = default;
 	explicit MatrixLowerTriangular(const unsigned& size);
@@ -25,6 +24,7 @@ public:
 	void setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex) override;
 	double operator()(const unsigned& rowIndex, const unsigned& columnIndex) const override;
 	bool operator==(const MatrixLowerTriangular& matrix) const;
+	bool operator==(const MatrixSquare& matrix) const { return MatrixSquare::operator==(matrix); }
 	MatrixLowerTriangular& operator=(const MatrixLowerTriangular& matrix);
 	MatrixLowerTriangular& operator=(MatrixLowerTriangular&& matrix) noexcept;
 	double dotProduct(const Matrix& matrix) const override;
@@ -36,6 +36,9 @@ public:
 	void times(const Vector& vector, Vector& resp) const override;
 	virtual void times(const double& scalar, MatrixLowerTriangular& resp) const;
 	void multiplyBy(const double& scalar) override;
+	MatrixLowerTriangular operator*(const double& scalar) const;
+	Vector operator*(const Vector& vector) const override { return MatrixSquare::operator*(vector); }
+	MatrixSquare operator*(const MatrixSquare& matrix) const override { return MatrixSquare::operator*(matrix); }
 	MatrixUpperTriangular getTranspose() const;
 	void swapRowElements(const unsigned& rowIndexA, const unsigned& rowIndexB, const unsigned& startColumn,
 		const unsigned& endColumn) override;

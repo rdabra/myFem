@@ -10,7 +10,7 @@ void AbstractMatrixTriangular::setValue(const double& value, const unsigned& row
 }
 
 
-MatrixSquare AbstractMatrixTriangular::asMatrixSquare() const
+MatrixSquare AbstractMatrixTriangular::toMatrixSquare() const
 {
 	MatrixSquare resp(this->getSize());
 	for (unsigned i = 0; i < this->getSize(); ++i) {

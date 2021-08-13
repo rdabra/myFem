@@ -1,7 +1,8 @@
+#pragma once
 #include "pch.h"
 
 #include "Matrix.h"
-#include "Matrix.cpp"
+
 
 TEST(TestMatrix, TestEqualityOperator) {
 	Matrix z(4, 3);

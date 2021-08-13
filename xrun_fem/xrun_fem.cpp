@@ -4,43 +4,11 @@
 #include <iostream>
 #include <vector>
 #include "MatrixSquare.h"
-#include "AbstractMatrixSymAntiSym.h"
+#include "AbstractMatrixSymSkewSym.h"
 
 
 int main()
 {
-
-	MatrixSquare z(2);
-	z.setValue(1.0, 0, 0);
-	z.setValue(3.0, 0, 1);
-	z.setValue(2.0, 1, 0);
-	z.setValue(4.0, 1, 1);
-
-	D_SAS matSas = z.getSAS();
-
-
-	for (unsigned i = 0; i < matSas.matS->getSize(); ++i) {
-		for (unsigned j = 0; j < matSas.matS->getSize(); ++j)
-			std::cout << (*matSas.matS)(i, j) << " ";
-		std::cout << "\n";
-	}
-
-	std::cout << "\n";
-	
-	for (unsigned i = 0; i < matSas.matS->getSize(); ++i) {
-		for (unsigned j = 0; j < matSas.matS->getSize(); ++j)
-			std::cout << (*matSas.matAS)(i, j) << " ";
-		std::cout << "\n";
-	}
-
-	std::cout << "\n";
-	
-	MatrixSquare x((*matSas.matAS) + (*matSas.matS));
-	for (unsigned i = 0; i < matSas.matS->getSize(); ++i) {
-		for (unsigned j = 0; j < matSas.matS->getSize(); ++j)
-			std::cout << x(i, j) << " ";
-		std::cout << "\n";
-	}
 
 
 }

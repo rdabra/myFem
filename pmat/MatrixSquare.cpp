@@ -6,6 +6,7 @@
 #include "MatrixSkewSymmetric.h" // In order to define the class completely
 
 
+
 void MatrixSquare::swapRowsBellow(MatrixSquare& matU, const unsigned& idxPivot)
 {
 	unsigned idxMax = idxPivot;

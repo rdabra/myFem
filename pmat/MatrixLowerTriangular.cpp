@@ -203,6 +203,14 @@ void MatrixLowerTriangular::multiplyBy(const double& scalar)
 			this->setValue((*this)(i, j) * scalar, i, j);
 }
 
+MatrixLowerTriangular MatrixLowerTriangular::operator*(const double& scalar) const
+{
+	MatrixLowerTriangular resp(this->getSize());
+	this->times(scalar, resp);
+
+	return resp;
+}
+
 MatrixUpperTriangular MatrixLowerTriangular::getTranspose() const
 {
 	MatrixUpperTriangular resp(this->getSize());

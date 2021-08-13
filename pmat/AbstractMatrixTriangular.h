@@ -18,8 +18,7 @@ public:
 	void reset(const unsigned& size) override = 0;
 	void setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex) override;
 	double operator()(const unsigned& rowIndex, const unsigned& columnIndex) const override = 0;
-	bool operator==(const MatrixSquare& matrix) const { return MatrixSquare::operator==(matrix); }
-	MatrixSquare asMatrixSquare() const;
+	MatrixSquare toMatrixSquare() const;
 	double dotProduct(const Matrix& matrix) const override = 0;
 	void subtractBy(const Matrix& matrix) override { Matrix::subtractBy(matrix); }
 	void times(const MatrixSquare& matrix, MatrixSquare& resp) const override = 0;

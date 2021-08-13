@@ -1,10 +1,11 @@
 #include "pch.h"
 
-#include "MatrixTriangular.h"
-#include "MatrixTriangular.cpp"
+#include "MatrixLowerTriangular.h"
+#include "MatrixUpperTriangular.h"
+
 
 TEST(MatrixTriangular, TestEqualityOperator) {
-	AbstractMatrixTriangular z(4, true);
+	MatrixLowerTriangular z(4);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -16,7 +17,7 @@ TEST(MatrixTriangular, TestEqualityOperator) {
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
-	AbstractMatrixTriangular v(4, true);
+	MatrixLowerTriangular v(4);
 	v.setValue(1.0, 0, 0);
 	v.setValue(4.0, 1, 0);
 	v.setValue(5.0, 1, 1);
@@ -32,7 +33,7 @@ TEST(MatrixTriangular, TestEqualityOperator) {
 }
 
 TEST(MatrixTriangular, TestDotProduct) {
-	AbstractMatrixTriangular z(4, false);
+	MatrixUpperTriangular z(4);
 	z.setValue(1.0, 3, 3);
 	z.setValue(4.0, 2, 2);
 	z.setValue(5.0, 2, 3);
@@ -44,7 +45,7 @@ TEST(MatrixTriangular, TestDotProduct) {
 	z.setValue(12.0, 0, 2);
 	z.setValue(13.0, 0, 3);
 
-	AbstractMatrixTriangular v(4, false);
+	MatrixUpperTriangular v(4);
 	v.setValue(1.5, 3, 3);
 	v.setValue(4.5, 2, 2);
 	v.setValue(5.5, 2, 3);
@@ -58,11 +59,9 @@ TEST(MatrixTriangular, TestDotProduct) {
 
 	double resp = z.dotProduct(v);
 
-	AbstractMatrixTriangular z1(z);
-	AbstractMatrixTriangular v1(v);
+	MatrixLowerTriangular z1(z.getTranspose());
+	MatrixLowerTriangular v1(v.getTranspose());
 
-	z1.transpose();
-	v1.transpose();
 	double resp1 = z1.dotProduct(v1);
 
 
@@ -73,7 +72,7 @@ TEST(MatrixTriangular, TestDotProduct) {
 }
 
 TEST(MatrixTriangular, TestPlus) {
-	AbstractMatrixTriangular z(4, true);
+	MatrixLowerTriangular z(4);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -85,7 +84,7 @@ TEST(MatrixTriangular, TestPlus) {
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
-	AbstractMatrixTriangular v(4, false);
+	MatrixUpperTriangular v(4);
 	v.setValue(10.5, 0, 0);
 	v.setValue(11.5, 0, 1);
 	v.setValue(12.5, 0, 2);
@@ -118,7 +117,7 @@ TEST(MatrixTriangular, TestPlus) {
 	resp.setValue(12.0, 3, 2);
 	resp.setValue(25.5, 3, 3);
 
-	AbstractMatrixTriangular resp2(4, true);
+	MatrixLowerTriangular resp2(4);
 	resp2.setValue(2.0, 0, 0);
 	resp2.setValue(8.0, 1, 0);
 	resp2.setValue(10.0, 1, 1);
@@ -130,7 +129,7 @@ TEST(MatrixTriangular, TestPlus) {
 	resp2.setValue(24.0, 3, 2);
 	resp2.setValue(26.0, 3, 3);
 
-	AbstractMatrixTriangular resp3(4, true);
+	MatrixLowerTriangular resp3(4);
 	resp3.setValue(2.0, 0, 0);
 	resp3.setValue(8.0, 1, 0);
 	resp3.setValue(10.0, 1, 1);
@@ -142,7 +141,7 @@ TEST(MatrixTriangular, TestPlus) {
 	resp3.setValue(24.0, 3, 2);
 	resp3.setValue(26.0, 3, 3);
 
-	AbstractMatrixTriangular resp4(4, false);
+	MatrixUpperTriangular resp4(4);
 	resp4.setValue(21, 0, 0);
 	resp4.setValue(23, 0, 1);
 	resp4.setValue(25, 0, 2);
@@ -158,24 +157,24 @@ TEST(MatrixTriangular, TestPlus) {
 	MatrixSquare x1(4);
 	z.plus(v, x1);
 	MatrixSquare x2(z + v);
-	AbstractMatrixTriangular z1(z);
+	MatrixLowerTriangular z1(z);
 	MatrixSquare z2(z + z);
 	MatrixSquare v2(v + v);
 	z.addBy(z);
 
-	AbstractMatrixTriangular v1(v);
+	MatrixUpperTriangular v1(v);
 	MatrixSquare resp1(resp);
-	z1.transpose();
-	v1.transpose();
+	MatrixUpperTriangular zz1(z1.getTranspose());
+	MatrixLowerTriangular vv1(v1.getTranspose());
+
 	resp1.transpose();
 	v.addBy(v);
-
 
 
 	EXPECT_TRUE(resp == x1);
 	EXPECT_TRUE(resp == x2);
 	EXPECT_TRUE(resp2 == z);
-	EXPECT_TRUE(resp1 == z1 + v1);
+	EXPECT_TRUE(resp1 == zz1 + vv1);
 	EXPECT_TRUE(resp3 == z2);
 	EXPECT_TRUE(resp4 == v2);
 	EXPECT_TRUE(resp4 == v);
@@ -183,7 +182,7 @@ TEST(MatrixTriangular, TestPlus) {
 }
 
 TEST(MatrixTriangular, TestMinus) {
-	AbstractMatrixTriangular z(4, true);
+	MatrixLowerTriangular z(4);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -195,7 +194,7 @@ TEST(MatrixTriangular, TestMinus) {
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
-	AbstractMatrixTriangular v(4, false);
+	MatrixUpperTriangular v(4);
 	v.setValue(10.5, 0, 0);
 	v.setValue(11.5, 0, 1);
 	v.setValue(12.5, 0, 2);
@@ -231,7 +230,7 @@ TEST(MatrixTriangular, TestMinus) {
 	resp.setValue(12.0, 3, 2);
 	resp.setValue(0.5, 3, 3);
 
-	AbstractMatrixTriangular resp2(4, true);
+	MatrixLowerTriangular resp2(4);
 	resp2.setValue(0.0, 0, 0);
 	resp2.setValue(0.0, 1, 0);
 	resp2.setValue(0.0, 1, 1);
@@ -243,7 +242,7 @@ TEST(MatrixTriangular, TestMinus) {
 	resp2.setValue(0.0, 3, 2);
 	resp2.setValue(0.0, 3, 3);
 
-	AbstractMatrixTriangular resp3(4, false);
+	MatrixUpperTriangular resp3(4);
 	resp3.setValue(0.0, 0, 0);
 	resp3.setValue(0.0, 0, 1);
 	resp3.setValue(0.0, 0, 2);
@@ -256,8 +255,8 @@ TEST(MatrixTriangular, TestMinus) {
 	resp3.setValue(0.0, 3, 3);
 
 
-	AbstractMatrixTriangular zz(z);
-	AbstractMatrixTriangular vv(v);
+	MatrixLowerTriangular zz(z);
+	MatrixUpperTriangular vv(v);
 
 	MatrixSquare x1(4);
 	z.minus(v, x1);
@@ -269,10 +268,9 @@ TEST(MatrixTriangular, TestMinus) {
 	MatrixSquare x4(4);
 	v.minus(v, x3);
 
-	v.transpose();
-	v.minus(v, x4);
+	MatrixLowerTriangular vvv( v.getTranspose());
+	vvv.minus(vvv, x4);
 
-	v.transpose();
 	MatrixSquare x5(4);
 	v.minus(v, x5);
 
@@ -293,7 +291,7 @@ TEST(MatrixTriangular, TestMinus) {
 }
 
 TEST(MatrixTriangular, TestTimes) {
-	AbstractMatrixTriangular z(4, true);
+	MatrixLowerTriangular z(4);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -305,7 +303,7 @@ TEST(MatrixTriangular, TestTimes) {
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
-	AbstractMatrixTriangular v(4, false);
+	MatrixUpperTriangular v(4);
 	v.setValue(1.5, 3, 3);
 	v.setValue(4.5, 2, 2);
 	v.setValue(5.5, 2, 3);
@@ -344,7 +342,7 @@ TEST(MatrixTriangular, TestTimes) {
 	resp.setValue(272.5, 3, 2);
 	resp.setValue(325.0, 3, 3);
 
-	AbstractMatrixTriangular resp2(4, true);
+	MatrixLowerTriangular resp2(4);
 	resp2.setValue(2.0, 0, 0);
 	resp2.setValue(8.0, 1, 0);
 	resp2.setValue(10.0, 1, 1);
@@ -390,7 +388,7 @@ TEST(MatrixTriangular, TestTimes) {
 	respVecUp.setValue(35.5, 2);
 	respVecUp.setValue(6.0, 3);
 
-	AbstractMatrixTriangular resp6(4, false);
+	MatrixUpperTriangular resp6(4);
 	resp6.setValue(3., 3, 3);
 	resp6.setValue(9., 2, 2);
 	resp6.setValue(11., 2, 3);
@@ -413,12 +411,12 @@ TEST(MatrixTriangular, TestTimes) {
 	MatrixSquare x2(z * v);
 	MatrixSquare x5(v * z);
 
-	AbstractMatrixTriangular x3(4, true);
+	MatrixLowerTriangular x3(4);
 	z.times(2.0, x3);
-	AbstractMatrixTriangular x4(z * 2.0);
+	MatrixLowerTriangular x4(z * 2.0);
 	z.multiplyBy(2.0);
 
-	AbstractMatrixTriangular x6(v * 2.0);
+	MatrixUpperTriangular x6(v * 2.0);
 	v.multiplyBy(2.0);
 
 	EXPECT_TRUE(resp == x1);
@@ -436,7 +434,7 @@ TEST(MatrixTriangular, TestTimes) {
 
 TEST(MatrixTriangular, TestFrobenius)
 {
-	AbstractMatrixTriangular z(4, true);
+	MatrixLowerTriangular z(4);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -450,7 +448,7 @@ TEST(MatrixTriangular, TestFrobenius)
 
 	double frobZ{ sqrt(z.dotProduct(z)) };
 
-	AbstractMatrixTriangular v(4, false);
+	MatrixUpperTriangular v(4);
 	v.setValue(1.0, 3, 3);
 	v.setValue(4.0, 2, 2);
 	v.setValue(5.0, 2, 3);
@@ -472,7 +470,7 @@ TEST(MatrixTriangular, TestFrobenius)
 
 TEST(MatrixTriangular, TestDeterminant)
 {
-	AbstractMatrixTriangular z(4, true);
+	MatrixLowerTriangular z(4);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -489,7 +487,7 @@ TEST(MatrixTriangular, TestDeterminant)
 
 TEST(MatrixTriangular, TestTranspose)
 {
-	AbstractMatrixTriangular z(4, true);
+	MatrixLowerTriangular z(4);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -501,7 +499,7 @@ TEST(MatrixTriangular, TestTranspose)
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
-	AbstractMatrixTriangular zt(4, false);
+	MatrixUpperTriangular zt(4);
 	zt.setValue(1.0, 0, 0);
 	zt.setValue(4.0, 0, 1);
 	zt.setValue(5.0, 1, 1);
@@ -513,14 +511,14 @@ TEST(MatrixTriangular, TestTranspose)
 	zt.setValue(12.0, 2, 3);
 	zt.setValue(13.0, 3, 3);
 
-	z.transpose();
+	MatrixUpperTriangular zz (z.getTranspose());
 
-	EXPECT_TRUE(z == zt);
+	EXPECT_TRUE(zz == zt);
 }
 
 TEST(MatrixTriangular, TestMisc)
 {
-	AbstractMatrixTriangular z(4, true);
+	MatrixLowerTriangular z(4);
 	z.setValue(1.0, 0, 0);
 	z.setValue(4.0, 1, 0);
 	z.setValue(5.0, 1, 1);
@@ -532,7 +530,7 @@ TEST(MatrixTriangular, TestMisc)
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
-	AbstractMatrixTriangular resp1(4, true);
+	MatrixLowerTriangular resp1(4);
 	resp1.setValue(1.0, 0, 0);
 	resp1.setValue(4.0, 1, 0);
 	resp1.setValue(5.0, 1, 1);
@@ -544,7 +542,7 @@ TEST(MatrixTriangular, TestMisc)
 	resp1.setValue(9.0, 3, 2);
 	resp1.setValue(13.0, 3, 3);
 
-	AbstractMatrixTriangular resp2(4, true);
+	MatrixLowerTriangular resp2(4);
 	resp2.setValue(1.0, 0, 0);
 	resp2.setValue(4.0, 1, 0);
 	resp2.setValue(5.0, 1, 1);
@@ -557,38 +555,37 @@ TEST(MatrixTriangular, TestMisc)
 	resp2.setValue(13.0, 3, 3);
 
 
-	AbstractMatrixTriangular zz(z);
+	MatrixLowerTriangular zz(z);
 
-	AbstractMatrixTriangular zzz(z);
+	MatrixLowerTriangular zzz(z);
 	zzz.swapRowElements(2, 3, 0, 2);
 
-	AbstractMatrixTriangular zzzz(z);
+	MatrixLowerTriangular zzzz(z);
 	zzzz.swapColumnElements(1, 2, 2, 3);
 
-	AbstractMatrixTriangular a(z);
-	a.transpose();
+	MatrixUpperTriangular a(z.getTranspose());
 
-	AbstractMatrixTriangular b(a);
+	MatrixUpperTriangular b(a);
 
-	AbstractMatrixTriangular t(z);
+	MatrixLowerTriangular t(z);
 
-	AbstractMatrixTriangular c(std::move(t));
+	MatrixLowerTriangular c(std::move(t));
 
-	AbstractMatrixTriangular d;
+	MatrixUpperTriangular d;
 	d = a;
-	AbstractMatrixTriangular e;
+	MatrixLowerTriangular e;
 	e = z;
 
-	AbstractMatrixTriangular t1(a);
+	MatrixUpperTriangular t1(a);
 
-	AbstractMatrixTriangular f;
+	MatrixUpperTriangular f;
 	f = std::move(t1);
 
 
-	AbstractMatrixTriangular ee(5, true);
+	MatrixLowerTriangular ee(5);
 	ee.fillRandomly(-1.0, 2.0);
 
-	AbstractMatrixTriangular eee(5, false);
+	MatrixUpperTriangular eee(5);
 	eee.fillRandomly(-1.0, 2.0);
 
 

@@ -15,7 +15,7 @@ MatrixUpperTriangular::MatrixUpperTriangular(const MatrixUpperTriangular& matrix
 	_matrix.resize(matrix.getVectorSize());
 
 	for (unsigned i = 0; i < this->getSize(); i++)
-		for (unsigned j = 0; j <= i; j++)
+		for (unsigned j = i; j < this->getSize(); j++)
 			this->AbstractMatrixTriangular::setValue(matrix(i, j), i, j);
 }
 
@@ -158,7 +158,7 @@ void MatrixUpperTriangular::subtractBy(const MatrixUpperTriangular& matrix)
 	this->validateOperands(matrix);
 
 	for (unsigned i = 0; i < this->getSize(); i++)
-		for (unsigned j = 0; j <= i; j++)
+		for (unsigned j = i; j < this->getSize(); j++)
 			this->setValue((*this)(i, j) - matrix(i, j), i, j);
 }
 
@@ -203,6 +203,14 @@ void MatrixUpperTriangular::multiplyBy(const double& scalar)
 	for (unsigned i = 0; i < this->getSize(); i++)
 		for (unsigned j = i; j < this->getSize(); j++)
 			this->setValue((*this)(i, j) * scalar, i, j);
+}
+
+MatrixUpperTriangular MatrixUpperTriangular::operator*(const double& scalar) const
+{
+	MatrixUpperTriangular resp(this->getSize());
+	this->times(scalar, resp);
+
+	return resp;
 }
 
 MatrixLowerTriangular MatrixUpperTriangular::getTranspose() const
