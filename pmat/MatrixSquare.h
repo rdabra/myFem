@@ -43,7 +43,7 @@ protected:
 	bool _createSas{ false };
 	void swapRowsBellow(MatrixSquare& matU, const unsigned& idxPivot);
 	void nullifyElementBellow(MatrixSquare& matU, const unsigned& idxPivot) const;
-	void findInverseByBackSubstitution(AbstractMatrixTriangular* matrix, AbstractMatrixTriangular* resp) const;
+	void findInverseByBackSubstitution(const AbstractMatrixTriangular* matrix, AbstractMatrixTriangular* resp) const;
 	void createLu();
 	void destroyLu();
 	void createSas();

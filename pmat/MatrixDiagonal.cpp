@@ -28,7 +28,7 @@ void MatrixDiagonal::decomposeToSas()
 	if (!_calcSas) {
 		this->createSas();
 		for (unsigned i = 0; i < this->getSize(); ++i) {
-			_matsSAS.matS->setValue(.5000000000 * (*this)(i, i), i, i);
+			_matsSAS.matS->setValue(putils::HALF * (*this)(i, i), i, i);
 			_matsSAS.matAS->setValue((*_matsSAS.matS)(i, i), i, i);
 		}
 		_calcSas = true;
@@ -219,10 +219,7 @@ void MatrixDiagonal::fillRandomly(const double& min, const double& max)
 	std::uniform_real_distribution<double> dist(min, max);
 
 	//Mersenne Twister: Good quality random number generator
-	std::mt19937 rng;
-
-	//Initialize with non-deterministic seeds
-	rng.seed(std::random_device{}());
+	std::mt19937 rng(std::random_device{}());
 
 	for (unsigned i = 0; i < this->getRowSize(); i++)
 		this->setValue(dist(rng), i, i);

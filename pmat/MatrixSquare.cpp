@@ -204,7 +204,7 @@ void MatrixSquare::decomposeToSas()
 }
 
 
-void MatrixSquare::findInverseByBackSubstitution(AbstractMatrixTriangular* matrix, AbstractMatrixTriangular* resp) const
+void MatrixSquare::findInverseByBackSubstitution(const AbstractMatrixTriangular* matrix, AbstractMatrixTriangular* resp) const
 {
 	std::vector<unsigned> ids(matrix->getSize());
 
