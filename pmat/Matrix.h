@@ -41,11 +41,11 @@ public:
 	virtual double dotProduct(const Matrix& matrix) const;
 	void plus(const Matrix& matrix, Matrix& resp) const;
 	Matrix operator+(const Matrix& matrix) const;
-	virtual void addBy(const Matrix& matrix);
+	void addBy(const Matrix& matrix);
 	void minus(const Matrix& matrix, Matrix& resp) const;
 	Matrix operator-(const Matrix& matrix) const;
-	virtual void subtractBy(const Matrix& matrix);
-	virtual void times(const Matrix& matrix, Matrix& resp) const;
+	void subtractBy(const Matrix& matrix);
+	void times(const Matrix& matrix, Matrix& resp) const;
 	virtual Matrix operator*(const Matrix& matrix) const;
 	virtual void times(const Vector& vector, Vector& resp) const;
 	virtual Vector operator*(const Vector& vector) const;

@@ -33,10 +33,8 @@ public:
 	void minus(const MatrixDiagonal& matrix, MatrixDiagonal& resp) const;
 	void times(const MatrixDiagonal& matrix, MatrixDiagonal& resp) const;
 	void times(const MatrixSquare& matrix, MatrixSquare& resp) const override { MatrixSquare::times(matrix, resp); };
-	void times(const Matrix& matrix, Matrix& resp) const override { MatrixSquare::times(matrix, resp); }
 	void times(const Vector& vector, Vector& resp) const override;
 	void times(const double& scalar, MatrixDiagonal& resp) const;
-	void times(const double& scalar, MatrixSquare& resp) const override { MatrixSquare::times(scalar, resp); }
 	void times(const double& scalar, Matrix& resp) const  override { MatrixSquare::times(scalar, resp); }
 	void multiplyBy(const double& scalar) override;
 	double frobeniusNorm() const override;

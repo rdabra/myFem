@@ -20,12 +20,8 @@ public:
 	double operator()(const unsigned& rowIndex, const unsigned& columnIndex) const override = 0;
 	MatrixSquare toMatrixSquare() const;
 	double dotProduct(const Matrix& matrix) const override = 0;
-	void subtractBy(const Matrix& matrix) override { Matrix::subtractBy(matrix); }
 	void times(const MatrixSquare& matrix, MatrixSquare& resp) const override = 0;
-	void times(const Matrix& matrix, Matrix& resp) const override { MatrixSquare::times(matrix, resp); }
 	void times(const Vector& vector, Vector& resp) const override = 0;
-	void times(const double& scalar, MatrixSquare& resp) const override { MatrixSquare::times(scalar, resp); }
-	void times(const double& scalar, Matrix& resp) const override { MatrixSquare::times(scalar, resp); }
 	double frobeniusNorm() const override;
 	void transpose() override
 	{
