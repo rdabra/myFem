@@ -2,6 +2,50 @@
 #include "MatrixSymmetric.h"
 
 
+void MatrixSymmetric::createL()
+{
+	if (!_createL) {
+		_choleskyFactor = new MatrixLowerTriangular(this->getSize());
+		_createL = true;
+		_calcL = false;
+	}
+}
+
+void MatrixSymmetric::destroyL()
+{
+	if (_createL) {
+		delete _choleskyFactor;
+		_createL = false;
+		_calcL = false;
+	}
+}
+
+void MatrixSymmetric::decomposeToCholesky()
+{
+	if (!_calcL) {
+		this->createL();
+		for (unsigned i = 0; i < this->getSize(); ++i) {
+			double diag = (*this)(i, i);
+			for (unsigned k = 0; k < i; ++k)
+				diag -= (*_choleskyFactor)(i, k) * (*_choleskyFactor)(i, k);
+			if (putils::areEqual(diag, putils::ZERO) || diag < putils::ZERO) {
+				this->destroyL();
+				throw std::logic_error(messages::MATRIX_NOT_L);
+			}
+			_choleskyFactor->setValue(std::sqrt(diag), i, i);
+			for (unsigned j = i + 1; j < this->getSize(); ++j) {
+				double aux = (*this)(i, j);
+				for (unsigned k = 0; k < i; ++k)
+					aux -= (*_choleskyFactor)(i, k) * (*_choleskyFactor)(j, k);
+				_choleskyFactor->setValue(aux / (*_choleskyFactor)(i, i), j, i);
+			}
+		}
+
+
+		_calcL = true;
+	}
+}
+
 MatrixSymmetric::MatrixSymmetric(const unsigned& size)
 {
 	_rowSize = size;
@@ -16,12 +60,31 @@ MatrixSymmetric::MatrixSymmetric(const MatrixSymmetric& matrix)
 	_matTri = matrix._matTri;
 }
 
+MatrixSymmetric::MatrixSymmetric(const MatrixLowerTriangular& matrix)
+{
+	_rowSize = matrix.getSize();
+	_columnSize = matrix.getSize();
+	_matTri = matrix;
+}
+
 MatrixSymmetric::MatrixSymmetric(MatrixSymmetric&& matrix) noexcept
 {
-	_rowSize = matrix._rowSize;
-	_columnSize = matrix._columnSize;
+	_rowSize = matrix.getSize();
+	_columnSize = matrix.getSize();
 	_matTri = std::move(matrix._matTri);
 	matrix.~MatrixSymmetric();
+}
+
+MatrixSymmetric::MatrixSymmetric(MatrixLowerTriangular&& matrix) noexcept
+{
+	_rowSize = matrix.getSize();
+	_columnSize = matrix.getSize();
+	_matTri = std::move(matrix);
+}
+
+MatrixSymmetric::~MatrixSymmetric()
+{
+	this->destroyL();
 }
 
 double MatrixSymmetric::operator()(const unsigned& rowIndex, const unsigned& columnIndex) const
@@ -33,6 +96,7 @@ double MatrixSymmetric::operator()(const unsigned& rowIndex, const unsigned& col
 MatrixSymmetric& MatrixSymmetric::operator=(const MatrixSymmetric& matrix)
 {
 	if (!(this == &matrix)) {
+		this->destroyL();
 		_rowSize = matrix.getSize();
 		_columnSize = matrix.getSize();
 		_matTri = matrix._matTri;
@@ -43,18 +107,17 @@ MatrixSymmetric& MatrixSymmetric::operator=(const MatrixSymmetric& matrix)
 
 MatrixSymmetric& MatrixSymmetric::operator=(MatrixSymmetric&& matrix) noexcept
 {
+	this->destroyL();
 	_rowSize = matrix.getSize();
 	_columnSize = matrix.getSize();
 	_matTri = std::move(matrix._matTri);
-
-	matrix.~MatrixSymmetric();
 
 	return (*this);
 }
 
 MatrixSymmetric MatrixSymmetric::operator+(const MatrixSymmetric& matrix) const
 {
-	MatrixSymmetric resp(this->getRowSize());
+	MatrixSymmetric resp(this->getSize());
 	this->plus(matrix, resp);
 
 	return resp;
@@ -62,7 +125,7 @@ MatrixSymmetric MatrixSymmetric::operator+(const MatrixSymmetric& matrix) const
 
 MatrixSymmetric MatrixSymmetric::operator-(const MatrixSymmetric& matrix) const
 {
-	MatrixSymmetric resp(this->getRowSize());
+	MatrixSymmetric resp(this->getSize());
 	this->minus(matrix, resp);
 
 	return resp;
@@ -77,4 +140,49 @@ MatrixSymmetric MatrixSymmetric::operator*(const double& scalar) const
 			resp.setValue((*this)(i, j) * scalar, i, j);
 
 	return resp;
+}
+
+MatrixLowerTriangular& MatrixSymmetric::getCholeskyFactor()
+{
+	this->createL();
+	this->decomposeToCholesky();
+
+	return (*_choleskyFactor);
+}
+
+double MatrixSymmetric::determinant()
+{
+	if (this->isPositiveDefinite()) {
+		const double resp = _choleskyFactor->determinant();
+		return resp * resp;
+	}
+	return AbstractMatrixSymmetry::determinant();
+}
+
+MatrixSymmetric MatrixSymmetric::getInverseAsSymmetric()
+{
+	MatrixSymmetric resp(this->getInverse().extractLowerPart());
+	return resp;
+}
+
+MatrixSquare MatrixSymmetric::getInverse()
+{
+	if (this->isPositiveDefinite()) {
+		MatrixSquare x2{ _choleskyFactor->getInverse() };
+		MatrixSquare x1{ _choleskyFactor->getTranspose().getInverse() };
+		return x1 * x2;
+	}
+	return AbstractMatrixSymmetry::getInverse();
+}
+
+// According to Golub & Van Loan, "Matrix Computations", ISBN  9789380250755, p. 164.
+bool MatrixSymmetric::isPositiveDefinite()
+{
+	try {
+		this->decomposeToCholesky();
+		return true;
+	}
+	catch (...) {
+		return false;
+	}
 }

@@ -18,7 +18,7 @@ public:
 	void reset(const unsigned& size) override = 0;
 	void setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex) override;
 	double operator()(const unsigned& rowIndex, const unsigned& columnIndex) const override = 0;
-	MatrixSquare toMatrixSquare() const;
+	MatrixSquare toMatrixSquare() const override;
 	double dotProduct(const Matrix& matrix) const override = 0;
 	void times(const MatrixSquare& matrix, MatrixSquare& resp) const override = 0;
 	void times(const Vector& vector, Vector& resp) const override = 0;

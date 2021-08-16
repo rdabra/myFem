@@ -59,6 +59,7 @@ public:
 	MatrixSquare(MatrixSquare&& matrix) noexcept : Matrix(std::move(matrix)) {}
 	~MatrixSquare() override;
 	virtual void reset(const unsigned& size) { Matrix::reset(size,size); }
+	virtual MatrixSquare toMatrixSquare() const;
 	MatrixSquare& operator=(const MatrixSquare& matrix);
 	MatrixSquare& operator=(MatrixSquare&& matrix) noexcept;
 	MatrixSquare operator+(const MatrixSquare& matrix) const;
@@ -69,7 +70,7 @@ public:
 	MatrixSquare operator*(const double& scalar) const;
 	void times(const Vector& vector, Vector& resp) const override { Matrix::times(vector, resp); }
 	Vector operator*(const Vector& vector) const override { return Matrix::operator*(vector); }
-	const unsigned& getSize() const { return this->getRowSize(); }
+	const unsigned& getSize() const { return Matrix::getRowSize(); }
 	void setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex) override;
 	virtual double trace() const;
 	virtual double determinant();

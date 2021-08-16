@@ -290,6 +290,64 @@
 
 	}
 
+
+	TEST(TestMatrixSymmetric, TestPositiveDefinite) {
+		MatrixSymmetric z(4);
+		z.setValue(1.0, 0, 0);
+		z.setValue(-1.0, 1, 0);
+		z.setValue(4.0, 1, 1);
+		z.setValue(2.0, 2, 0);
+		z.setValue(-1.0, 2, 1);
+		z.setValue(6.0, 2, 2);
+		z.setValue(0.0, 3, 0);
+		z.setValue(1.0, 3, 1);
+		z.setValue(-2.0, 3, 2);
+		z.setValue(4.0, 3, 3);
+
+		MatrixLowerTriangular chol(z.getCholeskyFactor());
+		MatrixUpperTriangular cholt(chol.getTranspose());
+
+		EXPECT_TRUE(z.isPositiveDefinite());
+		EXPECT_TRUE((chol * cholt) == z);
+
+	}
+
+
+	TEST(TestMatrixSymmetric, TestInverse) {
+
+		MatrixSymmetric z(4);
+		z.setValue(1.0, 0, 0);
+		z.setValue(-1.0, 1, 0);
+		z.setValue(4.0, 1, 1);
+		z.setValue(2.0, 2, 0);
+		z.setValue(-1.0, 2, 1);
+		z.setValue(6.0, 2, 2);
+		z.setValue(0.0, 3, 0);
+		z.setValue(1.0, 3, 1);
+		z.setValue(-2.0, 3, 2);
+		z.setValue(4.0, 3, 3);
+
+		MatrixSymmetric zinv(4);
+		zinv.setValue(37.0, 0, 0);
+		zinv.setValue(8.0, 1, 0);
+		zinv.setValue(2.0, 1, 1);
+		zinv.setValue(-14.0, 2, 0);
+		zinv.setValue(-3.0, 2, 1);
+		zinv.setValue(5.5, 2, 2);
+		zinv.setValue(-9.0, 3, 0);
+		zinv.setValue(-2.0, 3, 1);
+		zinv.setValue(3.5, 3, 2);
+		zinv.setValue(2.5, 3, 3);
+
+
+		MatrixSymmetric zz(z.getInverseAsSymmetric());
+
+		EXPECT_TRUE( zz == zinv);
+
+	}
+
+
+
 	TEST(TestMatrixSymmetric, TestDeterminant)
 	{
 		MatrixSymmetric z(4);
@@ -303,6 +361,8 @@
 		z.setValue(11.0, 3, 1);
 		z.setValue(12.0, 3, 2);
 		z.setValue(13.0, 3, 3);
+
+
 
 		EXPECT_TRUE(putils::areEqual(z.determinant(), -116.0));
 	}

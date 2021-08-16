@@ -8,6 +8,17 @@ void AbstractMatrixSymmetry::setValue(const double& value, const unsigned& rowIn
 	_matTri.setValue(value, rowIndex, columnIndex);
 }
 
+MatrixSquare AbstractMatrixSymmetry::toMatrixSquare() const
+{
+	MatrixSquare resp(this->getSize());
+	for (unsigned i = 0; i < this->getSize(); ++i) {
+		for (unsigned j = 0; j < this->getSize(); ++j)
+			resp.setValue((*this)(i, j), i, j);
+	}
+
+	return resp;
+}
+
 void AbstractMatrixSymmetry::reset(const unsigned& size)
 {
 	_rowSize = size;

@@ -75,6 +75,7 @@ Matrix& Matrix::operator=(Matrix&& matrix) noexcept
 	_columnSize = matrix.getColumnSize();
 	_matrix = std::move(matrix._matrix);
 
+	matrix.~Matrix();
 	return (*this);
 }
 

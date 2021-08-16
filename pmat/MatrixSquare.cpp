@@ -46,6 +46,8 @@ void MatrixSquare::createLu()
 	_matsPLU.matU = new MatrixUpperTriangular(this->getSize());
 	_matsPLU.matL = new MatrixLowerTriangular(this->getSize());
 	_changeSignForDet = false;
+	_calcLu = false;
+	_calcStrictLu = false;
 
 	for (unsigned j = 0; j < this->getSize(); j++) {
 		_matsPLU.matL->setValue(putils::ONE, j, j);
@@ -62,6 +64,8 @@ void MatrixSquare::destroyLu()
 		delete _matsPLU.matP;
 		delete _matsPLU.matU;
 		_createLu = false;
+		_calcStrictLu = false;
+		_calcLu = false;
 	}
 }
 
@@ -71,6 +75,7 @@ void MatrixSquare::createSas()
 
 	_matsSAS.matS = new MatrixSymmetric(this->getSize());
 	_matsSAS.matAS = new MatrixSkewSymmetric(this->getSize());
+	_calcSas = false;
 
 	_createSas = true;
 }
@@ -81,6 +86,7 @@ void MatrixSquare::destroySas()
 		delete _matsSAS.matS;
 		delete _matsSAS.matAS;
 		_createSas = false;
+		_calcSas = false;
 	}
 }
 
@@ -91,14 +97,26 @@ MatrixSquare::~MatrixSquare()
 	this->destroySas();
 }
 
+MatrixSquare MatrixSquare::toMatrixSquare() const
+{
+	return (*this);
+}
+
 MatrixSquare& MatrixSquare::operator=(const MatrixSquare& matrix)
 {
-	if (!(this == &matrix)) Matrix::operator=(matrix);
+	if (!(this == &matrix)) {
+		this->destroyLu();
+		this->destroySas();
+		Matrix::operator=(matrix);
+	}
+
 	return (*this);
 }
 
 MatrixSquare& MatrixSquare::operator=(MatrixSquare&& matrix) noexcept
 {
+	this->destroyLu();
+	this->destroySas();
 	Matrix::operator=(std::move(matrix));
 	return (*this);
 }
@@ -156,7 +174,7 @@ void MatrixSquare::decomposeToPlu()
 {
 	if (!_calcLu) {
 		this->createLu();
-		MatrixSquare matU(*this);
+		MatrixSquare matU(this->toMatrixSquare());
 		for (unsigned idxPivot = 0; idxPivot < matU.getSize() - 1; idxPivot++) {
 			this->swapRowsBellow(matU, idxPivot);
 			if (!putils::areEqual(matU(idxPivot, idxPivot), putils::ZERO))
@@ -261,6 +279,8 @@ bool MatrixSquare::isStrictLUDecomposable()
 
 bool MatrixSquare::isInvertible()
 {
+	this->decomposeToPlu();
+
 	return !putils::areEqual(this->determinant(), putils::ZERO);
 }
 
@@ -285,6 +305,7 @@ MatrixUpperTriangular MatrixSquare::extractUpperPart() const
 MatrixSquare MatrixSquare::getInverse()
 {
 	this->decomposeToPlu();
+
 	if (!this->isInvertible()) throw std::out_of_range(messages::MATRIX_SINGULAR);
 
 	MatrixUpperTriangular invU(this->getSize());

@@ -2,6 +2,9 @@
 #include "MatrixSquare.h"
 #include "MatrixLowerTriangular.h"
 
+/**
+ * @todo implementar siplificação da demcomposicao PLU
+*/
 class AbstractMatrixSymmetry :
 	public MatrixSquare
 {
@@ -14,6 +17,7 @@ protected:
 public:
 	double operator()(const unsigned& rowIndex, const unsigned& columnIndex) const override = 0;
 	void setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex) override;
+	MatrixSquare toMatrixSquare() const override;
 	void reset(const unsigned& size) override;
 	bool operator==(AbstractMatrixSymmetry& matrix) const;
 	void plus(const AbstractMatrixSymmetry& matrix, AbstractMatrixSymmetry& resp) const;
