@@ -3,13 +3,13 @@
 #include "MatrixLowerTriangular.h"
 
 /**
- * @todo implementar siplificação da demcomposicao PLU
+ * @todo Implement simplification of PLU decomposition
 */
 class AbstractMatrixSymmetry :
 	public MatrixSquare
 {
 private:
-	std::vector<double> _matrix; // Changing visibility in order to prevent inheritance
+	std::vector<double> _matrix; // Changing visibility to prevent inheritance
 
 protected:
 	MatrixLowerTriangular _matTri;

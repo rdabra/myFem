@@ -220,22 +220,22 @@ MatrixUpperTriangular MatrixLowerTriangular::getTranspose() const
 	return resp;
 }
 
-void MatrixLowerTriangular::swapRowElements(const unsigned& rowIndexA, const unsigned& rowIndexB,
+void MatrixLowerTriangular::partialSwapRows(const unsigned& rowIndexA, const unsigned& rowIndexB,
                                             const unsigned& startColumn, const unsigned& endColumn)
 {
 	if (endColumn > rowIndexA || endColumn > rowIndexB)
 		throw std::out_of_range(messages::INDEX_OUT);
 
-	AbstractMatrixTriangular::swapRowElements(rowIndexA, rowIndexB, startColumn, endColumn);
+	AbstractMatrixTriangular::partialSwapRows(rowIndexA, rowIndexB, startColumn, endColumn);
 }
 
-void MatrixLowerTriangular::swapColumnElements(const unsigned& columnIndexA, const unsigned& columnIndexB,
+void MatrixLowerTriangular::partialSwapColumns(const unsigned& columnIndexA, const unsigned& columnIndexB,
                                                const unsigned& startRow, const unsigned& endRow)
 {
 	if (columnIndexA > startRow || columnIndexB > startRow)
 		throw std::out_of_range(messages::INDEX_OUT);
 
-	AbstractMatrixTriangular::swapColumnElements(columnIndexA, columnIndexB, startRow, endRow);
+	AbstractMatrixTriangular::partialSwapColumns(columnIndexA, columnIndexB, startRow, endRow);
 }
 
 void MatrixLowerTriangular::fillRandomly(const double& min, const double& max)
@@ -249,4 +249,16 @@ void MatrixLowerTriangular::fillRandomly(const double& min, const double& max)
 	for (unsigned i = 0; i < this->getSize(); i++)
 		for (unsigned j = 0; j <= i; j++)
 			this->setValue(dist(rng), i, j);
+}
+
+MatrixSquare MatrixLowerTriangular::getInverse()
+{
+	return this->getInverseAsLowerTriangular().toMatrixSquare();
+}
+
+MatrixLowerTriangular MatrixLowerTriangular::getInverseAsLowerTriangular()
+{
+	MatrixLowerTriangular resp(this->getSize());
+	this->findInverseByBackSubstitution(this, &resp);
+	return resp;
 }

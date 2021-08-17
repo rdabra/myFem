@@ -3,12 +3,41 @@
 
 #include <iostream>
 #include <vector>
-#include "MatrixSquare.h"
-#include "AbstractMatrixSymSkewSym.h"
+#include "MatrixLowerTriangular.h"
 
+
+class Foo
+{
+private:
+	double i {1.0};
+
+public:
+
+	int getInt()
+	{
+		return 0;
+	}
+
+	Foo multiplyBy(double scalar) const
+	{
+		return (*this) * scalar;
+	}
+
+	Foo operator*(double scalar) const
+	{
+
+		Foo resp;
+		resp.i = i * scalar;
+		return resp;
+	}
+};
 
 int main()
 {
+
+	Foo x, y;
+
+	x * 2.0 = y;
 
 
 }

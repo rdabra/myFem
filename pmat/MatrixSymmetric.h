@@ -3,9 +3,6 @@
 #include "AbstractMatrixSymmetry.h"
 #include "MatrixLowerTriangular.h"
 
-/**
- * @TODO Em MatrixSymmetric implementar Cholesky
-*/
 class MatrixSymmetric :
 	public AbstractMatrixSymmetry
 {

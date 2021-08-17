@@ -40,11 +40,13 @@ public:
 	Vector operator*(const Vector& vector) const override { return MatrixSquare::operator*(vector); }
 	MatrixSquare operator*(const MatrixSquare& matrix) const override { return MatrixSquare::operator*(matrix); }
 	MatrixUpperTriangular getTranspose() const;
-	void swapRowElements(const unsigned& rowIndexA, const unsigned& rowIndexB, const unsigned& startColumn,
+	void partialSwapRows(const unsigned& rowIndexA, const unsigned& rowIndexB, const unsigned& startColumn,
 		const unsigned& endColumn) override;
-	void swapColumnElements(const unsigned& columnIndexA, const unsigned& columnIndexB,
+	void partialSwapColumns(const unsigned& columnIndexA, const unsigned& columnIndexB,
 		const unsigned& startRow, const unsigned& endRow) override;
 	void fillRandomly(const double& min, const double& max) override;
+	MatrixSquare getInverse() override;
+	virtual MatrixLowerTriangular getInverseAsLowerTriangular();
 
 };
 

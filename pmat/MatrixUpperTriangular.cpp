@@ -213,6 +213,7 @@ MatrixUpperTriangular MatrixUpperTriangular::operator*(const double& scalar) con
 	return resp;
 }
 
+
 MatrixLowerTriangular MatrixUpperTriangular::getTranspose() const
 {
 	MatrixLowerTriangular resp(this->getSize());
@@ -223,22 +224,22 @@ MatrixLowerTriangular MatrixUpperTriangular::getTranspose() const
 	return resp;
 }
 
-void MatrixUpperTriangular::swapRowElements(const unsigned& rowIndexA, const unsigned& rowIndexB,
+void MatrixUpperTriangular::partialSwapRows(const unsigned& rowIndexA, const unsigned& rowIndexB,
                                             const unsigned& startColumn, const unsigned& endColumn)
 {
 	if (startColumn < rowIndexA || startColumn < rowIndexB)
 		throw std::out_of_range(messages::INDEX_OUT);
 
-	AbstractMatrixTriangular::swapRowElements(rowIndexA, rowIndexB, startColumn, endColumn);
+	AbstractMatrixTriangular::partialSwapRows(rowIndexA, rowIndexB, startColumn, endColumn);
 }
 
-void MatrixUpperTriangular::swapColumnElements(const unsigned& columnIndexA, const unsigned& columnIndexB,
+void MatrixUpperTriangular::partialSwapColumns(const unsigned& columnIndexA, const unsigned& columnIndexB,
                                                const unsigned& startRow, const unsigned& endRow)
 {
 	if (endRow > columnIndexA || endRow > columnIndexB)
 		throw std::out_of_range(messages::INDEX_OUT);
 
-	AbstractMatrixTriangular::swapColumnElements(columnIndexA, columnIndexB, startRow, endRow);
+	AbstractMatrixTriangular::partialSwapColumns(columnIndexA, columnIndexB, startRow, endRow);
 }
 
 void MatrixUpperTriangular::fillRandomly(const double& min, const double& max)
@@ -252,4 +253,16 @@ void MatrixUpperTriangular::fillRandomly(const double& min, const double& max)
 	for (unsigned i = 0; i < this->getSize(); i++)
 		for (unsigned j = i; j < this->getSize(); j++)
 			this->setValue(dist(rng), i, j);
+}
+
+MatrixSquare MatrixUpperTriangular::getInverse()
+{
+	return this->getInverseAsUpperTriangular().toMatrixSquare();
+}
+
+MatrixUpperTriangular MatrixUpperTriangular::getInverseAsUpperTriangular()
+{
+	MatrixUpperTriangular resp(this->getSize());
+	this->findInverseByBackSubstitution(this, &resp);
+	return resp;
 }

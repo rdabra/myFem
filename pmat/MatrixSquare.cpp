@@ -6,7 +6,6 @@
 #include "MatrixSkewSymmetric.h" // In order to define the class completely
 
 
-
 void MatrixSquare::swapRowsBellow(MatrixSquare& matU, const unsigned& idxPivot)
 {
 	unsigned idxMax = idxPivot;
@@ -21,7 +20,7 @@ void MatrixSquare::swapRowsBellow(MatrixSquare& matU, const unsigned& idxPivot)
 		matU.swapRows(idxMax, idxPivot);
 		_matsPLU.matP->swapRows(idxMax, idxPivot);
 		if (idxPivot > 0)
-			_matsPLU.matL->swapRowElements(idxMax, idxPivot, 0, idxPivot - 1);
+			_matsPLU.matL->partialSwapRows(idxMax, idxPivot, 0, idxPivot - 1);
 		_matsPLU.swappedRows.emplace_back(idxMax, idxPivot);
 		_changeSignForDet = !_changeSignForDet;
 	}
@@ -222,7 +221,8 @@ void MatrixSquare::decomposeToSas()
 }
 
 
-void MatrixSquare::findInverseByBackSubstitution(const AbstractMatrixTriangular* matrix, AbstractMatrixTriangular* resp) const
+void MatrixSquare::findInverseByBackSubstitution(const AbstractMatrixTriangular* matrix,
+                                                 AbstractMatrixTriangular* resp) const
 {
 	std::vector<unsigned> ids(matrix->getSize());
 
@@ -235,8 +235,9 @@ void MatrixSquare::findInverseByBackSubstitution(const AbstractMatrixTriangular*
 		resp->setValue(putils::ONE / (*matrix)(ids[idxPivot], ids[idxPivot]), ids[idxPivot], ids[idxPivot]);
 		for (unsigned i = idxPivot + 1; i < matrix->getSize(); i++) {
 			double num{putils::ZERO};
-			for (unsigned j = idxPivot; j < i; j++)
+			for (unsigned j = idxPivot; j < i; j++) {
 				num -= (*matrix)(ids[i], ids[j]) * (*resp)(ids[j], ids[idxPivot]);
+			}
 			resp->setValue(num / (*matrix)(ids[i], ids[i]), ids[i], ids[idxPivot]);
 		}
 	}
@@ -281,7 +282,11 @@ bool MatrixSquare::isInvertible()
 {
 	this->decomposeToPlu();
 
-	return !putils::areEqual(this->determinant(), putils::ZERO);
+	for (unsigned i = 0; i < this->getSize(); i++)
+		if (putils::areEqual((*_matsPLU.matU)(i, i), putils::ZERO))
+			return false;
+
+	return true;
 }
 
 MatrixLowerTriangular MatrixSquare::extractLowerPart() const
@@ -316,8 +321,11 @@ MatrixSquare MatrixSquare::getInverse()
 
 	MatrixSquare resp(invU * invL);
 
-	for (auto& swappedRow : _matsPLU.swappedRows)
+	// Recovering adequate positions by swapping columns in reverse order
+	for (unsigned i = 1; i <= _matsPLU.swappedRows.size(); ++i) {
+		auto& swappedRow = _matsPLU.swappedRows[_matsPLU.swappedRows.size() - i];
 		resp.swapColumns(swappedRow.first, swappedRow.second);
+	}
 
 	return resp;
 }

@@ -45,13 +45,13 @@ MatrixSquare AbstractMatrixTriangular::getSwappedByRows(const unsigned& rowIndex
 	return resp;
 }
 
-void AbstractMatrixTriangular::swapRowElements(const unsigned& rowIndexA, const unsigned& rowIndexB,
+void AbstractMatrixTriangular::partialSwapRows(const unsigned& rowIndexA, const unsigned& rowIndexB,
                                                const unsigned& startColumn, const unsigned& endColumn)
 {
 	if (startColumn > endColumn)
 		throw std::out_of_range(messages::INDEX_OUT);
 
-	Matrix::swapRowElements(rowIndexA, rowIndexB, startColumn, endColumn);
+	Matrix::partialSwapRows(rowIndexA, rowIndexB, startColumn, endColumn);
 }
 
 MatrixSquare AbstractMatrixTriangular::getSwappedByColumns(const unsigned& columnIndexA,
@@ -72,13 +72,13 @@ MatrixSquare AbstractMatrixTriangular::getSwappedByColumns(const unsigned& colum
 	return resp;
 }
 
-void AbstractMatrixTriangular::swapColumnElements(const unsigned& columnIndexA, const unsigned& columnIndexB,
+void AbstractMatrixTriangular::partialSwapColumns(const unsigned& columnIndexA, const unsigned& columnIndexB,
                                                   const unsigned& startRow, const unsigned& endRow)
 {
 	if (startRow > endRow)
 		throw std::out_of_range(messages::INDEX_OUT);
 
-	Matrix::swapColumnElements(columnIndexA, columnIndexB, startRow, endRow);
+	Matrix::partialSwapColumns(columnIndexA, columnIndexB, startRow, endRow);
 }
 
 
@@ -91,3 +91,13 @@ double AbstractMatrixTriangular::determinant()
 
 	return resp;
 }
+
+bool AbstractMatrixTriangular::isInvertible()
+{
+	for (unsigned i = 0; i < this->getSize(); i++)
+		if (putils::areEqual((*this)(i, i), putils::ZERO))
+			return false;
+
+	return true;
+}
+

@@ -2,6 +2,11 @@
 
 #include "Matrix.h"
 
+/**
+ * @brief Constructs the object by specifying dimensions
+ * @param rowSize    Row size 
+ * @param columnSize Column size
+*/
 Matrix::Matrix(const unsigned& rowSize, const unsigned& columnSize)
 {
 	_rowSize = rowSize;
@@ -30,6 +35,11 @@ Matrix::Matrix(Matrix&& matrix) noexcept
 	matrix.~Matrix();
 }
 
+/**
+ * @brief Resets the object to initial settings           
+ * @param rowSize    Row size
+ * @param columnSize Column size
+*/
 void Matrix::reset(const unsigned& rowSize, const unsigned& columnSize)
 {
 	_matrix.clear();
@@ -38,12 +48,26 @@ void Matrix::reset(const unsigned& rowSize, const unsigned& columnSize)
 	_matrix.resize(this->Matrix::getVectorSize());
 }
 
+/**
+ * @brief Returns an element value
+ * @param rowIndex    Row index
+ * @param columnIndex Column index
+ * @return Element value
+ * @exception std::logic_error Parameters out of bounds
+*/
 double Matrix::operator()(const unsigned& rowIndex, const unsigned& columnIndex) const
 {
 	this->validateIndex(rowIndex, columnIndex);
 	return _matrix[this->getVectorIndex(rowIndex, columnIndex)];
 }
 
+/**
+ * @brief Sets a value for an element
+ * @param value       Value to be set
+ * @param rowIndex    Row index
+ * @param columnIndex Column index
+ * @exception std::logic_error Parameters out of bounds
+*/
 void Matrix::setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex)
 {
 	this->validateIndex(rowIndex, columnIndex);
@@ -81,7 +105,7 @@ Matrix& Matrix::operator=(Matrix&& matrix) noexcept
 
 bool Matrix::operator==(const Matrix& matrix) const
 {
-	bool test{this->getRowSize() == matrix.getRowSize() && this->getColumnSize() == matrix.getColumnSize()};
+	const bool test{this->getRowSize() == matrix.getRowSize() && this->getColumnSize() == matrix.getColumnSize()};
 
 	if (test) {
 		for (unsigned i = 0; i < this->getRowSize(); i++)
@@ -94,6 +118,16 @@ bool Matrix::operator==(const Matrix& matrix) const
 	return true;
 }
 
+/**
+ * @brief Calculates the dot product of this matrix with the parameter
+ * @param matrix The right operand
+ * @details The dot product of \f$ A\f$ and \f$ B\f$ is 
+ *  \f[
+ *		A:B = \sum_{i,j}A_{ij}B_{ij}	
+ *  \f]
+ * @return The result of the dot product
+ * @exception std::logic_error Operands are not compatible 
+*/
 double Matrix::dotProduct(const Matrix& matrix) const
 {
 	this->validateOperands(matrix);
@@ -106,6 +140,12 @@ double Matrix::dotProduct(const Matrix& matrix) const
 	return resp;
 }
 
+/**
+ * @brief Calculates the sum of this matrix with the first parameter
+ * @param matrix The right operand
+ * @param resp  The result of the sum
+ * @exception std::logic_error Parameters are not compatible
+*/
 void Matrix::plus(const Matrix& matrix, Matrix& resp) const
 {
 	this->validateOperands(matrix);
@@ -116,6 +156,13 @@ void Matrix::plus(const Matrix& matrix, Matrix& resp) const
 			resp.setValue((*this)(i, j) + matrix(i, j), i, j);
 }
 
+
+/**
+ * @brief Calculates the sum of this matrix with the parameter
+ * @param matrix The right operand
+ * @return The result of the sum
+ * @exception std::logic_error Parameters are not compatible
+*/
 Matrix Matrix::operator+(const Matrix& matrix) const
 {
 	Matrix resp(this->getRowSize(), this->getColumnSize());
@@ -124,6 +171,11 @@ Matrix Matrix::operator+(const Matrix& matrix) const
 	return resp;
 }
 
+/**
+ * @brief Sums the parameter to this matrix 
+ * @param matrix Parameter summed to this matrix
+ * @exception std::logic_error Parameter is not compatible
+*/
 void Matrix::addBy(const Matrix& matrix)
 {
 	this->validateOperands(matrix);
@@ -133,6 +185,12 @@ void Matrix::addBy(const Matrix& matrix)
 			this->setValue((*this)(i, j) + matrix(i, j), i, j);
 }
 
+/**
+ * @brief Calculates the subtraction between this matrix and the first parameter
+ * @param matrix The right operand
+ * @param resp  The result of the subtraction
+ * @exception std::logic_error Parameters are not compatible
+*/
 void Matrix::minus(const Matrix& matrix, Matrix& resp) const
 {
 	this->validateOperands(matrix);
@@ -143,6 +201,12 @@ void Matrix::minus(const Matrix& matrix, Matrix& resp) const
 			resp.setValue((*this)(i, j) - matrix(i, j), i, j);
 }
 
+/**
+ * @brief Calculates the subtraction between this matrix and the parameter
+ * @param matrix The right operand
+ * @return The result of the subtraction
+ * @exception std::logic_error Parameters are not compatible
+*/
 Matrix Matrix::operator-(const Matrix& matrix) const
 {
 	Matrix resp(this->getRowSize(), this->getColumnSize());
@@ -152,6 +216,11 @@ Matrix Matrix::operator-(const Matrix& matrix) const
 	return resp;
 }
 
+/**
+ * @brief Subtracts the parameter from this matrix
+ * @param matrix Parameter that subtracts this matrix
+ * @exception std::logic_error Parameter is not compatible
+*/
 void Matrix::subtractBy(const Matrix& matrix)
 {
 	this->validateOperands(matrix);
@@ -161,6 +230,13 @@ void Matrix::subtractBy(const Matrix& matrix)
 			this->setValue((*this)(i, j) - matrix(i, j), i, j);
 }
 
+
+/**
+ * @brief Calculates the multiplication of this matrix and the first parameter
+ * @param matrix The right operand
+ * @param resp  The result of the multiplication
+ * @exception std::logic_error Parameters are not compatible
+*/
 void Matrix::times(const Matrix& matrix, Matrix& resp) const
 {
 	this->validateOperandMult(matrix);
@@ -175,6 +251,13 @@ void Matrix::times(const Matrix& matrix, Matrix& resp) const
 		}
 }
 
+
+/**
+ * @brief Calculates the multiplication of this matrix and the parameter
+ * @param matrix The right operand
+ * @return The result of the multiplication
+ * @exception std::logic_error Parameters are not compatible
+*/
 Matrix Matrix::operator*(const Matrix& matrix) const
 {
 	Matrix resp(this->getRowSize(), matrix.getColumnSize());
@@ -183,6 +266,12 @@ Matrix Matrix::operator*(const Matrix& matrix) const
 	return resp;
 }
 
+/**
+ * @brief Calculates the multiplication of this matrix and the first parameter
+ * @param vector The right operand
+ * @param resp  The result of the multiplication
+ * @exception std::logic_error Parameters are not compatible
+*/
 void Matrix::times(const Vector& vector, Vector& resp) const
 {
 	this->validateVectorMult(vector);
@@ -196,6 +285,12 @@ void Matrix::times(const Vector& vector, Vector& resp) const
 	}
 }
 
+/**
+ * @brief Calculates the multiplication of this matrix and the parameter
+ * @param vector The right operand
+ * @return The result of the multiplication
+ * @exception std::logic_error Parameters are not compatible
+*/
 Vector Matrix::operator*(const Vector& vector) const
 {
 	Vector resp(this->getRowSize());
@@ -204,6 +299,12 @@ Vector Matrix::operator*(const Vector& vector) const
 	return resp;
 }
 
+/**
+ * @brief Calculates the multiplication of this matrix and the first parameter
+ * @param scalar The right operand
+ * @param resp  The result of the multiplication
+ * @exception std::logic_error Parameters are not compatible
+*/
 void Matrix::times(const double& scalar, Matrix& resp) const
 {
 	for (unsigned i = 0; i < this->getRowSize(); i++)
@@ -211,6 +312,11 @@ void Matrix::times(const double& scalar, Matrix& resp) const
 			resp.setValue((*this)(i, j) * scalar, i, j);
 }
 
+/**
+ * @brief Calculates the multiplication of this matrix and the parameter
+ * @param scalar The right operand
+ * @return The result of the multiplication
+*/
 Matrix Matrix::operator*(const double& scalar) const
 {
 	Matrix resp(this->getRowSize(), this->getColumnSize());
@@ -219,6 +325,11 @@ Matrix Matrix::operator*(const double& scalar) const
 	return resp;
 }
 
+/**
+ * @brief Multiplies this matrix by the parameter
+ * @param scalar Parameter that multiplies this matrix
+ * @exception std::logic_error Parameter is not compatible
+*/
 void Matrix::multiplyBy(const double& scalar)
 {
 	for (unsigned i = 0; i < this->getRowSize(); i++)
@@ -226,6 +337,12 @@ void Matrix::multiplyBy(const double& scalar)
 			this->setValue((*this)(i, j) * scalar, i, j);
 }
 
+/**
+ * @brief Multiplies a specific row by a scalar
+ * @param rowIndex Index of the row to be multiplied
+ * @param scalar Parameter that multiplies the row
+ * @exception std::logic_error Index out of bounds
+*/
 void Matrix::multiplyRowBy(const unsigned& rowIndex, const double& scalar)
 {
 	this->validateIndex(rowIndex, 0);
@@ -234,6 +351,13 @@ void Matrix::multiplyRowBy(const unsigned& rowIndex, const double& scalar)
 		this->setValue((*this)(rowIndex, j) * scalar, rowIndex, j);
 }
 
+
+/**
+ * @brief Multiplies a specific column by a scalar
+ * @param columnIndex Index of the column to be multiplied
+ * @param scalar Parameter that multiplies the column
+ * @exception std::logic_error Index out of bounds
+*/
 void Matrix::multiplyColumnBy(const unsigned& columnIndex, const double& scalar)
 {
 	this->validateIndex(0, columnIndex);
@@ -242,7 +366,15 @@ void Matrix::multiplyColumnBy(const unsigned& columnIndex, const double& scalar)
 		this->setValue((*this)(i, columnIndex) * scalar, i, columnIndex);
 }
 
-void Matrix::swapRowElements(const unsigned& rowIndexA, const unsigned& rowIndexB,
+/**
+ * @brief Swaps corresponding elements of two rows of this matrix from an initial column index to a final column index
+ * @param rowIndexA A row index
+ * @param rowIndexB Another row index
+ * @param startColumn Initial column index 
+ * @param endColumn Final column index
+ * @exception std::logic_error Index out of bounds
+*/
+void Matrix::partialSwapRows(const unsigned& rowIndexA, const unsigned& rowIndexB,
                              const unsigned& startColumn, const unsigned& endColumn)
 {
 	this->validateIndex(rowIndexA, 0);
@@ -256,12 +388,26 @@ void Matrix::swapRowElements(const unsigned& rowIndexA, const unsigned& rowIndex
 		                                                            _matrix[this->getVectorIndex(rowIndexB, j)]);
 }
 
+/**
+ * @brief Swaps two rows of this matrix
+ * @param rowIndexA A row index
+ * @param rowIndexB Another row index
+ * @exception std::logic_error Index out of bounds
+*/
 inline void Matrix::swapRows(const unsigned& rowIndexA, const unsigned& rowIndexB)
 {
-	this->swapRowElements(rowIndexA, rowIndexB, 0, this->getColumnSize() - 1);
+	this->partialSwapRows(rowIndexA, rowIndexB, 0, this->getColumnSize() - 1);
 }
 
-void Matrix::swapColumnElements(const unsigned& columnIndexA, const unsigned& columnIndexB,
+/**
+ * @brief Swaps corresponding elements of two columns of this matrix from an initial row index to a final row index
+ * @param columnIndexA A column index
+ * @param columnIndexB Another column index
+ * @param startRow Initial column index
+ * @param endRow  Final column index
+ * @exception std::logic_error Index out of bounds
+*/
+void Matrix::partialSwapColumns(const unsigned& columnIndexA, const unsigned& columnIndexB,
                                 const unsigned& startRow, const unsigned& endRow)
 {
 	this->validateIndex(0, columnIndexA);
@@ -274,19 +420,34 @@ void Matrix::swapColumnElements(const unsigned& columnIndexA, const unsigned& co
 }
 
 
+/**
+ * @brief Swaps two columns of this matrix
+ * @param columnIndexA A column index
+ * @param columnIndexB Another column index
+*/
 void Matrix::swapColumns(const unsigned& columnIndexA, const unsigned& columnIndexB)
 {
-	this->swapColumnElements(columnIndexA, columnIndexB, 0, this->getRowSize() - 1);
+	this->partialSwapColumns(columnIndexA, columnIndexB, 0, this->getRowSize() - 1);
 }
 
 
+/**
+ * @brief Transposes this matrix
+*/
 void Matrix::transpose()
 {
 	_isTransposed = !_isTransposed;
 	std::swap(_rowSize, _columnSize);
 }
 
-
+/**
+ * @brief Calculates the Frobenius Norm of this matrix
+ * @details Frobenius Norm of matrix \f$ A\f$ is calculated from the dot product the following way:
+ *  \f[
+ *		\sqrt{A:A}	
+ *  \f]
+ * @return The value of the Frobenius Norm
+*/
 double Matrix::frobeniusNorm() const
 {
 	return sqrt(this->dotProduct((*this)));

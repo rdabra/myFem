@@ -54,10 +54,10 @@ public:
 	virtual void multiplyBy(const double& scalar);
 	virtual void multiplyRowBy(const unsigned& rowIndex, const double& scalar);
 	virtual void multiplyColumnBy(const unsigned& columnIndex, const double& scalar);
-	virtual void swapRowElements(const unsigned& rowIndexA, const unsigned& rowIndexB,
+	virtual void partialSwapRows(const unsigned& rowIndexA, const unsigned& rowIndexB,
 	                             const unsigned& startColumn, const unsigned& endColumn);
 	virtual void swapRows(const unsigned& rowIndexA, const unsigned& rowIndexB);
-	virtual void swapColumnElements(const unsigned& columnIndexA, const unsigned& columnIndexB,
+	virtual void partialSwapColumns(const unsigned& columnIndexA, const unsigned& columnIndexB,
 	                                const unsigned& startRow, const unsigned& endRow);
 	virtual void swapColumns(const unsigned& columnIndexA, const unsigned& columnIndexB);
 	virtual void transpose();

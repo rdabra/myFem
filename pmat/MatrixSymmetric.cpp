@@ -168,9 +168,7 @@ MatrixSymmetric MatrixSymmetric::getInverseAsSymmetric()
 MatrixSquare MatrixSymmetric::getInverse()
 {
 	if (this->isPositiveDefinite()) {
-		MatrixSquare x2{ _choleskyFactor->getInverse() };
-		MatrixSquare x1{ _choleskyFactor->getTranspose().getInverse() };
-		return x1 * x2;
+		return _choleskyFactor->getTranspose().getInverse() * _choleskyFactor->getInverse();
 	}
 	return AbstractMatrixSymmetry::getInverse();
 }
