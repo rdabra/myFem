@@ -20,6 +20,9 @@ void MatrixSymmetric::destroyL()
 	}
 }
 
+/**
+ * @brief Performs the Cholesky decomposition of this matrix
+*/
 void MatrixSymmetric::decomposeToCholesky()
 {
 	if (!_calcL) {
@@ -28,7 +31,7 @@ void MatrixSymmetric::decomposeToCholesky()
 			double diag = (*this)(i, i);
 			for (unsigned k = 0; k < i; ++k)
 				diag -= (*_choleskyFactor)(i, k) * (*_choleskyFactor)(i, k);
-			if (putils::areEqual(diag, putils::ZERO) || diag < putils::ZERO) {
+			if (putils::isZero(diag) || diag < putils::ZERO) {
 				this->destroyL();
 				throw std::logic_error(messages::MATRIX_NOT_L);
 			}

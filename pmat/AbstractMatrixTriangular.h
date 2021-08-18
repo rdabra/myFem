@@ -2,7 +2,6 @@
 
 #include "MatrixSquare.h"
 
-
 class AbstractMatrixTriangular : public MatrixSquare
 {
 private:
@@ -22,7 +21,6 @@ public:
 	double dotProduct(const Matrix& matrix) const override = 0;
 	void times(const MatrixSquare& matrix, MatrixSquare& resp) const override = 0;
 	void times(const Vector& vector, Vector& resp) const override = 0;
-	double frobeniusNorm() const override;
 	void transpose() override
 	{
 		throw std::logic_error(messages::MATRIX_NOT_TRANSP);

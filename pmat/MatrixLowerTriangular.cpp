@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "MatrixLowerTriangular.h"
 
+
 MatrixLowerTriangular::MatrixLowerTriangular(const unsigned& size)
 {
 	_rowSize = size;
@@ -211,6 +212,9 @@ MatrixLowerTriangular MatrixLowerTriangular::operator*(const double& scalar) con
 	return resp;
 }
 
+/**
+ * @return The transposed matrix of this matrix
+*/
 MatrixUpperTriangular MatrixLowerTriangular::getTranspose() const
 {
 	MatrixUpperTriangular resp(this->getSize());
@@ -261,4 +265,12 @@ MatrixLowerTriangular MatrixLowerTriangular::getInverseAsLowerTriangular()
 	MatrixLowerTriangular resp(this->getSize());
 	this->findInverseByBackSubstitution(this, &resp);
 	return resp;
+}
+
+void MatrixLowerTriangular::copyElementsFrom(const MatrixLowerTriangular& matrix)
+{
+	this->validateOperands(matrix);
+	for (unsigned i = 0; i < this->getSize(); i++)
+		for (unsigned j = 0; j <=i ; j++)
+			this->setValue(matrix(i, j), i, j);
 }

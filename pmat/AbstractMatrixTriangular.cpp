@@ -2,6 +2,14 @@
 #include "AbstractMatrixTriangular.h"
 
 
+/**
+ * @brief Sets a value for an element
+ * @details Indexes of constant zero elements are not allowed to be set
+ * @param value Value to be set
+ * @param rowIndex Row index
+ * @param columnIndex Column index
+ * @exception std::logic_error Indexes out of bounds 
+*/
 void AbstractMatrixTriangular::setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex)
 {
 	validateIndex(rowIndex, columnIndex);
@@ -10,6 +18,10 @@ void AbstractMatrixTriangular::setValue(const double& value, const unsigned& row
 }
 
 
+/**
+ * @brief Creates a copy of this matrix as a square matrix
+ * @return A copy of this matrix as a square matrix
+*/
 MatrixSquare AbstractMatrixTriangular::toMatrixSquare() const
 {
 	MatrixSquare resp(this->getSize());
@@ -19,12 +31,6 @@ MatrixSquare AbstractMatrixTriangular::toMatrixSquare() const
 	}
 
 	return resp;
-}
-
-
-double AbstractMatrixTriangular::frobeniusNorm() const
-{
-	return sqrt(this->dotProduct((*this)));
 }
 
 
@@ -95,7 +101,7 @@ double AbstractMatrixTriangular::determinant()
 bool AbstractMatrixTriangular::isInvertible()
 {
 	for (unsigned i = 0; i < this->getSize(); i++)
-		if (putils::areEqual((*this)(i, i), putils::ZERO))
+		if (putils::isZero((*this)(i, i)))
 			return false;
 
 	return true;

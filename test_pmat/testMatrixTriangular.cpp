@@ -469,6 +469,31 @@ TEST(TestMatrixTriangular, TestFrobenius)
 
 }
 
+
+TEST(TestMatrixTriangular, TestLUDecomp)
+{
+
+	MatrixUpperTriangular v(4);
+	v.setValue(1.0, 3, 3);
+	v.setValue(4.0, 2, 2);
+	v.setValue(5.0, 2, 3);
+	v.setValue(7.0, 1, 1);
+	v.setValue(8.0, 1, 2);
+	v.setValue(9.0, 1, 3);
+	v.setValue(10.0, 0, 0);
+	v.setValue(11.0, 0, 1);
+	v.setValue(12.0, 0, 2);
+	v.setValue(13.0, 0, 3);
+
+	MatrixLowerTriangular l((*v.getPLU().matL));
+	MatrixUpperTriangular u((*v.getPLU().matU));
+
+	EXPECT_TRUE(l*u==v);
+
+}
+
+
+
 TEST(TestMatrixTriangular, TestDeterminant)
 {
 	MatrixLowerTriangular z(4);

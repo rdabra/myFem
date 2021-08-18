@@ -13,6 +13,7 @@ protected:
 		return (i * (i + 1)) / 2 + j;
 	}
 
+
 public:
 	MatrixLowerTriangular() = default;
 	explicit MatrixLowerTriangular(const unsigned& size);
@@ -47,6 +48,7 @@ public:
 	void fillRandomly(const double& min, const double& max) override;
 	MatrixSquare getInverse() override;
 	virtual MatrixLowerTriangular getInverseAsLowerTriangular();
+	void copyElementsFrom(const MatrixLowerTriangular& matrix);
 
 };
 

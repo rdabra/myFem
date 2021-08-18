@@ -28,7 +28,7 @@ void MatrixDiagonal::decomposeToSas()
 	if (!_calcSas) {
 		this->createSas();
 		for (unsigned i = 0; i < this->getSize(); ++i) {
-			_matsSAS.matS->setValue(putils::HALF * (*this)(i, i), i, i);
+			_matsSAS.matS->setValue(putils::ONE_HALF * (*this)(i, i), i, i);
 			_matsSAS.matAS->setValue((*_matsSAS.matS)(i, i), i, i);
 		}
 		_calcSas = true;
@@ -52,6 +52,14 @@ MatrixDiagonal::MatrixDiagonal(const MatrixDiagonal& matrix)
 		this->MatrixDiagonal::setValue(matrix(i, i), i, i);
 }
 
+/**
+ * @brief Sets a value for an element
+ * @details Indexes of constant zero elements are not allowed to be set
+ * @param value Value to be set
+ * @param rowIndex Row index
+ * @param columnIndex Column index
+ * @exception std::logic_error Indexes out of bounds
+*/
 void MatrixDiagonal::setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex)
 {
 	validateIndex(rowIndex, columnIndex);
@@ -284,4 +292,11 @@ bool MatrixDiagonal::isPositiveDefinite()
 		if ((*this)(i, i) < putils::ZERO) return false;
 
 	return true;
+}
+
+void MatrixDiagonal::copyElementsFrom(const MatrixDiagonal& matrix)
+{
+	this->validateOperands(matrix);
+	for (unsigned i = 0; i < this->getSize(); i++)
+			this->setValue(matrix(i, i), i, i);
 }

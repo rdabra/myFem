@@ -47,4 +47,5 @@ public:
 	MatrixUpperTriangular extractUpperPart() const override;
 	MatrixSquare getInverse() override;
 	bool isPositiveDefinite() override;
+	void copyElementsFrom(const MatrixDiagonal& matrix);
 };

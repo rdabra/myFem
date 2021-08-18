@@ -53,7 +53,7 @@ void Matrix::reset(const unsigned& rowSize, const unsigned& columnSize)
  * @param rowIndex    Row index
  * @param columnIndex Column index
  * @return Element value
- * @exception std::logic_error Parameters out of bounds
+ * @exception std::logic_error Indexes out of bounds
 */
 double Matrix::operator()(const unsigned& rowIndex, const unsigned& columnIndex) const
 {
@@ -66,7 +66,7 @@ double Matrix::operator()(const unsigned& rowIndex, const unsigned& columnIndex)
  * @param value       Value to be set
  * @param rowIndex    Row index
  * @param columnIndex Column index
- * @exception std::logic_error Parameters out of bounds
+ * @exception std::logic_error Indexes out of bounds
 */
 void Matrix::setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex)
 {
@@ -250,7 +250,6 @@ void Matrix::times(const Matrix& matrix, Matrix& resp) const
 			resp.setValue(aux, i, j);
 		}
 }
-
 
 /**
  * @brief Calculates the multiplication of this matrix and the parameter
@@ -453,6 +452,11 @@ double Matrix::frobeniusNorm() const
 	return sqrt(this->dotProduct((*this)));
 }
 
+/**
+ * @brief Fills this matrix with random values
+ * @param min Lower limit 
+ * @param max Upper limit
+*/
 void Matrix::fillRandomly(const double& min, const double& max)
 {
 	//Type of random number distribution
@@ -466,12 +470,26 @@ void Matrix::fillRandomly(const double& min, const double& max)
 			this->setValue(dist(rng), i, j);
 }
 
+/**
+ * @brief Copy the elements from the parameter to this matrix
+ * @param matrix Matrix whose elements are copied from
+ * @exception std::logic_error Parameter is not compatible
+*/
+void Matrix::copyElementsFrom(const Matrix& matrix)
+{
+	this->validateOperands(matrix);
+	for (unsigned i = 0; i < this->getRowSize(); i++)
+		for (unsigned j = 0; j < this->getColumnSize(); j++)
+			this->setValue(matrix(i,j), i, j);
+
+}
+
 
 void Matrix::validateOperands(const Matrix& matrix) const
 {
 	if (this->getRowSize() != matrix.getRowSize() || this->getColumnSize() != matrix.getColumnSize())
 		throw
-			std::logic_error(messages::OPERANDS_EQUAL);
+			std::logic_error(messages::NONCOMPT_ARG);
 }
 
 void Matrix::validateResponse(Matrix& resp) const

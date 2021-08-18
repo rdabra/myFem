@@ -1,6 +1,15 @@
 #include "pch.h"
 #include "MatrixUpperTriangular.h"
 
+void MatrixUpperTriangular::decomposeToPlu()
+{
+	if (!_calcLu) {
+		this->createLu();
+		_matsPLU.matU->copyElementsFrom(*this);
+		_calcLu = true;
+	}
+}
+
 MatrixUpperTriangular::MatrixUpperTriangular(const unsigned& size)
 {
 	_rowSize = size;
@@ -213,7 +222,9 @@ MatrixUpperTriangular MatrixUpperTriangular::operator*(const double& scalar) con
 	return resp;
 }
 
-
+/**
+ * @return The transposed matrix of this matrix
+*/
 MatrixLowerTriangular MatrixUpperTriangular::getTranspose() const
 {
 	MatrixLowerTriangular resp(this->getSize());
@@ -260,9 +271,20 @@ MatrixSquare MatrixUpperTriangular::getInverse()
 	return this->getInverseAsUpperTriangular().toMatrixSquare();
 }
 
+/**
+ * @return The inverse matrix of this matrix as upper triangular
+*/
 MatrixUpperTriangular MatrixUpperTriangular::getInverseAsUpperTriangular()
 {
 	MatrixUpperTriangular resp(this->getSize());
 	this->findInverseByBackSubstitution(this, &resp);
 	return resp;
+}
+
+void MatrixUpperTriangular::copyElementsFrom(const MatrixUpperTriangular& matrix)
+{
+	this->validateOperands(matrix);
+	for (unsigned i = 0; i < this->getSize(); i++)
+		for (unsigned j = i; j < this->getSize(); j++)
+			this->setValue(matrix(i, j), i, j);
 }

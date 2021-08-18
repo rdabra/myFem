@@ -10,6 +10,8 @@ protected:
 	{
 		return (j * (j + 1)) / 2 + i;
 	}
+	virtual void decomposeToPlu() override;
+	virtual void decomposeToStrictLu() override { this->decomposeToPlu(); }
 
 
 public:
@@ -46,6 +48,7 @@ public:
 	void fillRandomly(const double& min, const double& max) override;
 	virtual MatrixSquare getInverse() override;
 	virtual MatrixUpperTriangular getInverseAsUpperTriangular();
+	void copyElementsFrom(const MatrixUpperTriangular& matrix);
 
 };
 

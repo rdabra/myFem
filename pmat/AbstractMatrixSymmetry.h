@@ -3,7 +3,7 @@
 #include "MatrixLowerTriangular.h"
 
 /**
- * @todo Implement simplification of PLU decomposition
+ * 
 */
 class AbstractMatrixSymmetry :
 	public MatrixSquare
@@ -19,7 +19,7 @@ public:
 	void setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex) override;
 	MatrixSquare toMatrixSquare() const override;
 	void reset(const unsigned& size) override;
-	bool operator==(AbstractMatrixSymmetry& matrix) const;
+	bool operator==(const AbstractMatrixSymmetry& matrix) const;
 	void plus(const AbstractMatrixSymmetry& matrix, AbstractMatrixSymmetry& resp) const;
 	virtual void addBy(const AbstractMatrixSymmetry& matrix);
 	void minus(const AbstractMatrixSymmetry& matrix, AbstractMatrixSymmetry& resp) const;
@@ -30,6 +30,8 @@ public:
 	double dotProduct(const Matrix& matrix) const override { return Matrix::dotProduct(matrix); }
 	double frobeniusNorm() const override;
 	void transpose() override = 0;
+	void copyElementsFrom(const AbstractMatrixSymmetry& matrix);
+
 
 };
 

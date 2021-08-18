@@ -33,8 +33,8 @@ public:
 	void reset(const unsigned& rowSize, const unsigned& columnSize);
 	virtual double operator()(const unsigned& rowIndex, const unsigned& columnIndex) const;
 	virtual void setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex);
-	virtual const unsigned& getRowSize(void) const { return _rowSize; }
-	virtual const unsigned& getColumnSize(void) const { return _columnSize; }
+	const unsigned& getRowSize(void) const { return _rowSize; }
+	const unsigned& getColumnSize(void) const { return _columnSize; }
 	Matrix& operator=(const Matrix& matrix);
 	Matrix& operator=(Matrix&& matrix) noexcept;
 	virtual bool operator==(const Matrix& matrix) const;
@@ -63,4 +63,5 @@ public:
 	virtual void transpose();
 	virtual double frobeniusNorm() const;
 	virtual void fillRandomly(const double& min, const double& max);
+	void copyElementsFrom(const Matrix& matrix);
 };

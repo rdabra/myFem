@@ -2,12 +2,23 @@
 #include "AbstractMatrixSymmetry.h"
 
 
-
+/**
+ * @brief Sets a value for an element of this matrix
+ * @details Only lower triangular indices are allowed to be set
+ * @param value Value to be set
+ * @param rowIndex Row index
+ * @param columnIndex Column index
+ * @exception std::logic_error Indices out of bounds
+*/
 void AbstractMatrixSymmetry::setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex)
 {
 	_matTri.setValue(value, rowIndex, columnIndex);
 }
 
+/**
+ * @brief Creates a copy of this matrix as a square matrix
+ * @return A copy of this matrix as a square matrix
+*/
 MatrixSquare AbstractMatrixSymmetry::toMatrixSquare() const
 {
 	MatrixSquare resp(this->getSize());
@@ -26,7 +37,7 @@ void AbstractMatrixSymmetry::reset(const unsigned& size)
 	_matTri.reset(size);
 }
 
-bool AbstractMatrixSymmetry::operator==(AbstractMatrixSymmetry& matrix) const
+bool AbstractMatrixSymmetry::operator==(const AbstractMatrixSymmetry& matrix) const
 {
 	return _matTri == matrix._matTri;
 }
@@ -84,4 +95,9 @@ void AbstractMatrixSymmetry::multiplyBy(const double& scalar)
 double AbstractMatrixSymmetry::frobeniusNorm() const
 {
 	return std::sqrt(this->dotProduct((*this)));
+}
+
+void AbstractMatrixSymmetry::copyElementsFrom(const AbstractMatrixSymmetry& matrix)
+{
+	_matTri.copyElementsFrom(matrix._matTri);
 }

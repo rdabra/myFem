@@ -6,6 +6,11 @@
 #include "MatrixSkewSymmetric.h" // In order to define the class completely
 
 
+/**
+ * @brief Performs the partial pivoting process on upper matrix U
+ * @param matU Matrix on which row swaps will be performed
+ * @param idxPivot Specifies the pivot bellow which row swaps are performed
+*/
 void MatrixSquare::swapRowsBellow(MatrixSquare& matU, const unsigned& idxPivot)
 {
 	unsigned idxMax = idxPivot;
@@ -26,6 +31,11 @@ void MatrixSquare::swapRowsBellow(MatrixSquare& matU, const unsigned& idxPivot)
 	}
 }
 
+/**
+ * @brief Performs the nullification of elements bellow the pivot
+ * @param matU Matrix on which the nullification if performed
+ * @param idxPivot Specifies the pivot bellow which nullification is performed
+*/
 void MatrixSquare::nullifyElementBellow(MatrixSquare& matU, const unsigned& idxPivot) const
 {
 	for (unsigned i = idxPivot + 1; i < matU.getSize(); i++) {
@@ -160,6 +170,14 @@ void MatrixSquare::setValue(const double& value, const unsigned& rowIndex, const
 	_calcSas = false;
 }
 
+/**
+ * @brief Calculates the trace of this matrix
+ * @details Trace of \f$ A\f$ is calculated according to 
+ *  \f[
+ *		tr(A)=\sum_i A_{ii}
+ *  \f]
+ * @return The value of the trace
+*/
 double MatrixSquare::trace() const
 {
 	double resp = putils::ZERO;
@@ -169,6 +187,9 @@ double MatrixSquare::trace() const
 }
 
 
+/**
+ * @brief Performs the PLU decomposition
+*/
 void MatrixSquare::decomposeToPlu()
 {
 	if (!_calcLu) {
@@ -176,7 +197,7 @@ void MatrixSquare::decomposeToPlu()
 		MatrixSquare matU(this->toMatrixSquare());
 		for (unsigned idxPivot = 0; idxPivot < matU.getSize() - 1; idxPivot++) {
 			this->swapRowsBellow(matU, idxPivot);
-			if (!putils::areEqual(matU(idxPivot, idxPivot), putils::ZERO))
+			if (!putils::isZero(matU(idxPivot, idxPivot)))
 				this->nullifyElementBellow(matU, idxPivot);
 		}
 
@@ -188,13 +209,16 @@ void MatrixSquare::decomposeToPlu()
 }
 
 
+/**
+ * @brief Performs the LU decomposition
+*/
 void MatrixSquare::decomposeToStrictLu()
 {
 	if (!_calcStrictLu) {
 		this->createLu();
 		MatrixSquare matU(*this);
 		for (unsigned idxPivot = 0; idxPivot < matU.getSize() - 1; idxPivot++) {
-			if (putils::areEqual(matU(idxPivot, idxPivot), putils::ZERO)) {
+			if (putils::isZero(matU(idxPivot, idxPivot))) {
 				this->destroyLu();
 				throw std::logic_error(messages::MATRIX_NOT_LU);
 			}
@@ -207,20 +231,28 @@ void MatrixSquare::decomposeToStrictLu()
 	}
 }
 
+/**
+ * @brief Performs the symmetric-skew symmetric decomposition
+*/
 void MatrixSquare::decomposeToSas()
 {
 	if (!_calcSas) {
 		this->createSas();
 		for (unsigned i = 0; i < this->getSize(); ++i)
 			for (unsigned j = 0; j <= i; ++j) {
-				_matsSAS.matS->setValue(putils::HALF * ((*this)(i, j) + (*this)(j, i)), i, j);
-				_matsSAS.matAS->setValue(putils::HALF * ((*this)(i, j) - (*this)(j, i)), i, j);
+				_matsSAS.matS->setValue(putils::ONE_HALF * ((*this)(i, j) + (*this)(j, i)), i, j);
+				_matsSAS.matAS->setValue(putils::ONE_HALF * ((*this)(i, j) - (*this)(j, i)), i, j);
 			}
 		_calcSas = true;
 	}
 }
 
 
+/**
+ * @brief Calculates the inverse of a triangular matrix
+ * @param matrix Matrix whose inverse is calculated
+ * @param resp The inverse of the first parameter
+*/
 void MatrixSquare::findInverseByBackSubstitution(const AbstractMatrixTriangular* matrix,
                                                  AbstractMatrixTriangular* resp) const
 {
@@ -243,6 +275,12 @@ void MatrixSquare::findInverseByBackSubstitution(const AbstractMatrixTriangular*
 	}
 }
 
+/**
+ * @brief Performs the PLU decomposition of this matrix
+ * @details For every square matrix \f$ A\f$, it is possible to obtain \f$ PA = LU\f$, where \f$P\f$ is a permutation matrix,
+ * \f$L\f$ is unit lower triangular and \f$U\f$ is upper triangular.
+ * @return The results of the PLU decomposition process
+*/
 const D_PLU& MatrixSquare::getPLU()
 {
 	this->decomposeToPlu();
@@ -251,6 +289,13 @@ const D_PLU& MatrixSquare::getPLU()
 	return _matsPLU;
 }
 
+/**
+ * @brief Performs the LU decomposition of this matrix, if possible.
+ * @details For some square matrices \f$ A\f$, it is possible to obtain \f$ A = LU\f$, where
+ * \f$L\f$ is unit lower triangular and \f$U\f$ is upper triangular,
+ * @return The results of the LU decomposition
+ * @exception std::logic_error This matrix is not LU decomposable
+ */
 const D_PLU& MatrixSquare::getStrictLU()
 {
 	this->decomposeToStrictLu();
@@ -259,6 +304,12 @@ const D_PLU& MatrixSquare::getStrictLU()
 	return _matsPLU;
 }
 
+/**
+ * @brief Performs the symmetric-skew symmetric additive decomposition of this matrix
+ * @details For every square matrix \f$ A\f$, it is possible to obtain \f$ A = A_S+A_A\f$, where \f$A_S=(A+A^T)/2\f$ is a symmetric matrix and
+ * \f$A_A=(A-A^T)/2\f$ a skew symmetric matrix
+ * @return Results of the symmetric-skew symmetric decomposition
+*/
 const D_SAS& MatrixSquare::getSAS()
 {
 	this->decomposeToSas();
@@ -267,6 +318,12 @@ const D_SAS& MatrixSquare::getSAS()
 	return _matsSAS;
 }
 
+
+/**
+ * @brief Informs if this matrix is LU decomposable
+ * @see MatrixSquare::getStrictLU
+ * @return True if this matrix is LU decomposable
+*/
 bool MatrixSquare::isStrictLUDecomposable()
 {
 	try {
@@ -278,17 +335,25 @@ bool MatrixSquare::isStrictLUDecomposable()
 	}
 }
 
+/**
+ * @brief Informs if this matrix is invertible
+ * @return True if this is matrix is invertible
+*/
 bool MatrixSquare::isInvertible()
 {
 	this->decomposeToPlu();
 
 	for (unsigned i = 0; i < this->getSize(); i++)
-		if (putils::areEqual((*_matsPLU.matU)(i, i), putils::ZERO))
+		if (putils::isZero((*_matsPLU.matU)(i, i)))
 			return false;
 
 	return true;
 }
 
+/**
+ * @brief Extracts the lower part of this matrix
+ * @return The lower part of this matrix as a triangular matrix
+*/
 MatrixLowerTriangular MatrixSquare::extractLowerPart() const
 {
 	MatrixLowerTriangular resp(this->getSize());
@@ -298,6 +363,10 @@ MatrixLowerTriangular MatrixSquare::extractLowerPart() const
 	return resp;
 }
 
+/**
+ * @brief Extracts the upper part of this matrix
+ * @return The upper part of this matrix as a triangular matrix
+*/
 MatrixUpperTriangular MatrixSquare::extractUpperPart() const
 {
 	MatrixUpperTriangular resp(this->getSize());
@@ -307,11 +376,16 @@ MatrixUpperTriangular MatrixSquare::extractUpperPart() const
 	return resp;
 }
 
+/**
+ * @brief Performs the inverse of this matrix, if possible
+ * @return The inverse of this matrix
+ * @exception std::logic_error This matrix is singular
+*/
 MatrixSquare MatrixSquare::getInverse()
 {
 	this->decomposeToPlu();
 
-	if (!this->isInvertible()) throw std::out_of_range(messages::MATRIX_SINGULAR);
+	if (!this->isInvertible()) throw std::logic_error(messages::MATRIX_SINGULAR);
 
 	MatrixUpperTriangular invU(this->getSize());
 	this->findInverseByBackSubstitution(_matsPLU.matU, &invU);
@@ -321,7 +395,9 @@ MatrixSquare MatrixSquare::getInverse()
 
 	MatrixSquare resp(invU * invL);
 
-	// Recovering adequate positions by swapping columns in reverse order
+	/**
+	 * Recovering adequate positions by swapping columns in reverse order of the swapped rows
+	 */
 	for (unsigned i = 1; i <= _matsPLU.swappedRows.size(); ++i) {
 		auto& swappedRow = _matsPLU.swappedRows[_matsPLU.swappedRows.size() - i];
 		resp.swapColumns(swappedRow.first, swappedRow.second);
@@ -330,18 +406,29 @@ MatrixSquare MatrixSquare::getInverse()
 	return resp;
 }
 
-// According to Golub & Van Loan, "Matrix Computations", ISBN  9789380250755, p. 161.
+/**
+ * @brief Informs if this matrix is positive definite
+ * @details Considering the PLU decomposition, a matrix is considered to be positive definite if every diagonal element of U is positive
+ * @see MatrixSquare::getPLU
+ * @see "Matrix Computations", Golub & Van Loan, ISBN  9789380250755, p. 161.
+ * @return True if this matrix is positive definite
+*/
 bool MatrixSquare::isPositiveDefinite()
 {
 	if (this->isStrictLUDecomposable()) {
 		for (unsigned i = 0; i < this->getSize(); i++)
-			if ((*_matsPLU.matU)(i, i) < 0) return false;
+			if ((*_matsPLU.matU)(i, i) <= 0) return false;
 		return true;
 	}
 
 	return false;
 }
 
+/**
+ * @brief Calculates de determinant of this matrix
+ * @details Determinant is calculated by previously performing a PLU decomposition
+ * @return The determinant of this matrix
+*/
 double MatrixSquare::determinant()
 {
 	this->decomposeToPlu();
