@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractArray.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MatrixLowerTriangular.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AbstractArray.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MatrixLowerTriangular.cpp" />
     <ClCompile Include="MatrixSkewSymmetric.cpp" />

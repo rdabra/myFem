@@ -246,7 +246,7 @@ double MatrixDiagonal::determinant()
 bool MatrixDiagonal::isStrictLUDecomposable()
 {
 	for (unsigned i = 0; i < this->getSize(); i++)
-		if (putils::areEqual((*this)(i, i), putils::ZERO)) return false;
+		if (putils::isZero((*this)(i, i))) return false;
 
 	return true;
 }
@@ -281,7 +281,7 @@ MatrixSquare MatrixDiagonal::getInverse()
 	MatrixSquare resp(this->getSize());
 
 	for (unsigned i = 0; i < this->getSize(); i++)
-		resp.setValue(1.0000000000 / (*this)(i, i), i, i);
+		resp.setValue(putils::ONE / (*this)(i, i), i, i);
 
 	return resp;
 }

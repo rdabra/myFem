@@ -1,14 +1,15 @@
 #pragma once
 #include <random>
 #include <vector>
+#include "AbstractArray.h"
 #include "Vector.h"
 
-class Matrix 
+class Matrix : public AbstractArray
 {
 protected:
-	bool _isTransposed{false};
+	bool _isTransposed{ false };
 	std::vector<double> _matrix;
-	unsigned _rowSize{0}, _columnSize{0};
+	unsigned _rowSize{ 0 }, _columnSize{ 0 };
 
 	virtual unsigned getVectorIndex(const unsigned& i, const unsigned& j) const
 	{
@@ -30,6 +31,8 @@ public:
 	Matrix(const Matrix& matrix);
 	Matrix(Matrix&& matrix) noexcept;
 	virtual ~Matrix() = default;
+	unsigned getArrayDimension() const override { return 2; }
+	unsigned getNumberOfElements() const override { return _rowSize * _columnSize; }
 	void reset(const unsigned& rowSize, const unsigned& columnSize);
 	virtual double operator()(const unsigned& rowIndex, const unsigned& columnIndex) const;
 	virtual void setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex);
@@ -55,13 +58,15 @@ public:
 	virtual void multiplyRowBy(const unsigned& rowIndex, const double& scalar);
 	virtual void multiplyColumnBy(const unsigned& columnIndex, const double& scalar);
 	virtual void partialSwapRows(const unsigned& rowIndexA, const unsigned& rowIndexB,
-	                             const unsigned& startColumn, const unsigned& endColumn);
+		const unsigned& startColumn, const unsigned& endColumn);
 	virtual void swapRows(const unsigned& rowIndexA, const unsigned& rowIndexB);
 	virtual void partialSwapColumns(const unsigned& columnIndexA, const unsigned& columnIndexB,
-	                                const unsigned& startRow, const unsigned& endRow);
+		const unsigned& startRow, const unsigned& endRow);
 	virtual void swapColumns(const unsigned& columnIndexA, const unsigned& columnIndexB);
 	virtual void transpose();
 	virtual double frobeniusNorm() const;
 	virtual void fillRandomly(const double& min, const double& max);
+	Vector getRow(const unsigned& index) const;
+	Vector getColumn(const unsigned& index) const;
 	void copyElementsFrom(const Matrix& matrix);
 };

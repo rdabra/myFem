@@ -57,6 +57,9 @@
     <ClInclude Include="MatrixUpperTriangular.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AbstractArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pmat.cpp">
@@ -93,6 +96,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MatrixUpperTriangular.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

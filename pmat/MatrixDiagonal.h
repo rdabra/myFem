@@ -1,6 +1,9 @@
 #pragma once
 #include "MatrixSquare.h"
 
+/**
+ * @todo Oitimizar multiplicacao por vetor 
+*/
 class MatrixDiagonal final :
 	public MatrixSquare
 {
@@ -20,7 +23,7 @@ public:
 	MatrixDiagonal& operator=(const MatrixDiagonal& matrix);
 	MatrixDiagonal& operator=(MatrixDiagonal&& matrix) noexcept;
 	bool operator==(MatrixDiagonal& matrix) const;
-	bool operator==(MatrixSquare& matrix) const { return MatrixSquare::operator==(matrix); }
+	bool operator==(const MatrixSquare& matrix) const { return MatrixSquare::operator==(matrix); }
 	MatrixSquare asMatrixSquare() const;
 	MatrixDiagonal operator+(const MatrixDiagonal& matrix) const;
 	MatrixDiagonal operator-(const MatrixDiagonal& matrix) const;
@@ -32,7 +35,7 @@ public:
 	virtual void addBy(const MatrixDiagonal& matrix);
 	void minus(const MatrixDiagonal& matrix, MatrixDiagonal& resp) const;
 	void times(const MatrixDiagonal& matrix, MatrixDiagonal& resp) const;
-	void times(const MatrixSquare& matrix, MatrixSquare& resp) const override { MatrixSquare::times(matrix, resp); };
+	void times(const MatrixSquare& matrix, MatrixSquare& resp) const override { MatrixSquare::times(matrix, resp); }
 	void times(const Vector& vector, Vector& resp) const override;
 	void times(const double& scalar, MatrixDiagonal& resp) const;
 	void times(const double& scalar, Matrix& resp) const  override { MatrixSquare::times(scalar, resp); }

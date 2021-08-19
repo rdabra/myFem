@@ -12,6 +12,8 @@ namespace messages {
 	constexpr const char* MATRIX_NOT_LU{ "Matrix not LU decomposable" };
 	constexpr const char* MATRIX_NOT_TRANSP{ "Elements cannot be transposed" };
 	constexpr const char* MATRIX_NOT_L{ "Matrix not Cholesky decomposable" };
+	constexpr const char* MATRIX_NOT_RC{ "Matrix is neither row nor column" };
+
 
 
 }

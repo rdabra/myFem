@@ -2,6 +2,9 @@
 
 #include "MatrixSquare.h"
 
+/**
+ * @todo Otimizar multiplicacao por vetor 
+*/
 class AbstractMatrixTriangular : public MatrixSquare
 {
 private:

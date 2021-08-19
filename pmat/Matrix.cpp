@@ -20,8 +20,8 @@ Matrix::Matrix(const Matrix& matrix)
 	_columnSize = matrix.getColumnSize();
 	_matrix.resize(matrix.getVectorSize());
 
-	for (unsigned i = 0; i < this->Matrix::getRowSize(); i++)
-		for (unsigned j = 0; j < this->Matrix::getColumnSize(); j++)
+	for (unsigned i = 0; i < this->getRowSize(); i++)
+		for (unsigned j = 0; j < this->getColumnSize(); j++)
 			this->Matrix::setValue(matrix(i, j), i, j);
 }
 
@@ -121,7 +121,7 @@ bool Matrix::operator==(const Matrix& matrix) const
 /**
  * @brief Calculates the dot product of this matrix with the parameter
  * @param matrix The right operand
- * @details The dot product of \f$ A\f$ and \f$ B\f$ is 
+ * @details The dot product of matrices \f$ A\f$ and \f$ B\f$ is 
  *  \f[
  *		A:B = \sum_{i,j}A_{ij}B_{ij}	
  *  \f]
@@ -234,7 +234,7 @@ void Matrix::subtractBy(const Matrix& matrix)
 /**
  * @brief Calculates the multiplication of this matrix and the first parameter
  * @param matrix The right operand
- * @param resp  The result of the multiplication
+ * @param resp  The multiplication result
  * @exception std::logic_error Parameters are not compatible
 */
 void Matrix::times(const Matrix& matrix, Matrix& resp) const
@@ -254,7 +254,7 @@ void Matrix::times(const Matrix& matrix, Matrix& resp) const
 /**
  * @brief Calculates the multiplication of this matrix and the parameter
  * @param matrix The right operand
- * @return The result of the multiplication
+ * @return The multiplication result
  * @exception std::logic_error Parameters are not compatible
 */
 Matrix Matrix::operator*(const Matrix& matrix) const
@@ -267,8 +267,12 @@ Matrix Matrix::operator*(const Matrix& matrix) const
 
 /**
  * @brief Calculates the multiplication of this matrix and the first parameter
+ * @details Given a matrix \f$ A\f$ and a vector \f$v\f$, the elements of \f$A.v\f$ are
+ * \f[
+ *	(A.v)_{ij} = \sum_{j}A_{ij}v_{j}
+ * \f]
  * @param vector The right operand
- * @param resp  The result of the multiplication
+ * @param resp  The multiplication result
  * @exception std::logic_error Parameters are not compatible
 */
 void Matrix::times(const Vector& vector, Vector& resp) const
@@ -286,6 +290,10 @@ void Matrix::times(const Vector& vector, Vector& resp) const
 
 /**
  * @brief Calculates the multiplication of this matrix and the parameter
+ * @details Given a matrix \f$ A\f$ and a vector \f$v\f$, the elements of \f$A.v\f$ are
+ * \f[
+ *	(A.v)_{ij} = \sum_{j}A_{ij}v_{j}
+ * \f]
  * @param vector The right operand
  * @return The result of the multiplication
  * @exception std::logic_error Parameters are not compatible
@@ -327,7 +335,6 @@ Matrix Matrix::operator*(const double& scalar) const
 /**
  * @brief Multiplies this matrix by the parameter
  * @param scalar Parameter that multiplies this matrix
- * @exception std::logic_error Parameter is not compatible
 */
 void Matrix::multiplyBy(const double& scalar)
 {
@@ -471,7 +478,38 @@ void Matrix::fillRandomly(const double& min, const double& max)
 }
 
 /**
- * @brief Copy the elements from the parameter to this matrix
+ * @brief Gets a row from this matrix
+ * @param index Row index
+ * @return A row of this matrix as a vector
+*/
+Vector Matrix::getRow(const unsigned& index) const
+{
+	if (index >= this->getRowSize()) throw std::logic_error(messages::INDEX_OUT);
+
+	Vector resp(this->getColumnSize());
+	for (unsigned j = 0; j < this->getColumnSize(); j++)
+		resp.setValue((*this)(index, j), j);
+	return resp;
+}
+
+/**
+ * @brief Gets a column from this matrix
+ * @param index Column index
+ * @return A column of this matrix as a vector
+*/
+Vector Matrix::getColumn(const unsigned& index) const
+{
+	if (index >= this->getColumnSize()) throw std::logic_error(messages::INDEX_OUT);
+
+	Vector resp(this->getRowSize());
+	for (unsigned i = 0; i < this->getRowSize(); i++)
+		resp.setValue((*this)(i, index), i);
+	return resp;
+}
+
+
+/**
+ * @brief Copies the elements from the parameter to this matrix
  * @param matrix Matrix whose elements are copied from
  * @exception std::logic_error Parameter is not compatible
 */
@@ -480,8 +518,7 @@ void Matrix::copyElementsFrom(const Matrix& matrix)
 	this->validateOperands(matrix);
 	for (unsigned i = 0; i < this->getRowSize(); i++)
 		for (unsigned j = 0; j < this->getColumnSize(); j++)
-			this->setValue(matrix(i,j), i, j);
-
+			this->setValue(matrix(i, j), i, j);
 }
 
 
