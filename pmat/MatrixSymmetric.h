@@ -3,6 +3,9 @@
 #include "AbstractMatrixSymmetry.h"
 #include "MatrixLowerTriangular.h"
 
+/**
+ * @todo Documentar essa classe
+ */
 class MatrixSymmetric :
 	public AbstractMatrixSymmetry
 {
@@ -37,7 +40,9 @@ public:
 	MatrixLowerTriangular& getCholeskyFactor();
 	double determinant() override;
 	MatrixSymmetric getInverseAsSymmetric();
+	bool isInvertible() override;
 	MatrixSquare getInverse() override;
+	Vector linearSolve(const Vector& rhs) override;
 	bool isPositiveDefinite() override;
 
 };

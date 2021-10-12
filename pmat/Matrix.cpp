@@ -522,6 +522,7 @@ void Matrix::copyElementsFrom(const Matrix& matrix)
 }
 
 
+
 void Matrix::validateOperands(const Matrix& matrix) const
 {
 	if (this->getRowSize() != matrix.getRowSize() || this->getColumnSize() != matrix.getColumnSize())

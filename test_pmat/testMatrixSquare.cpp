@@ -481,3 +481,79 @@
 
 	}
 
+
+	TEST(TestMatrixSquare, TestIsOrthogonal) {
+		MatrixSquare A(4);
+
+		A.setValue(1.0, 0, 0);
+		A.setValue(1.0, 0, 1);
+		A.setValue(1.0, 0, 2);
+		A.setValue(1.0, 0, 3);
+
+		A.setValue(1.0, 1, 0);
+		A.setValue(-1.0, 1, 1);
+		A.setValue(1.0, 1, 2);
+		A.setValue(-1.0, 1, 3);
+
+		A.setValue(1.0, 2, 0);
+		A.setValue(1.0, 2, 1);
+		A.setValue(-1.0, 2, 2);
+		A.setValue(-1.0, 2, 3);
+
+		A.setValue(1.0, 3, 0);
+		A.setValue(-1.0, 3, 1);
+		A.setValue(-1.0, 3, 2);
+		A.setValue(1.0, 3, 3);
+
+		MatrixSquare B(A * 0.5);
+
+		EXPECT_TRUE(B.isOrthogonal());
+
+	}
+
+
+	TEST(TestMatrixSquare, TestLinearSolve) {
+		MatrixSquare A(4);
+
+		A.setValue(1.0, 0, 0);
+		A.setValue(2.0, 0, 1);
+		A.setValue(3.0, 0, 2);
+		A.setValue(4.0, 0, 3);
+
+		A.setValue(1.0, 1, 0);
+		A.setValue(3.0, 1, 1);
+		A.setValue(2.0, 1, 2);
+		A.setValue(5.0, 1, 3);
+
+		A.setValue(2.0, 2, 0);
+		A.setValue(1.0, 2, 1);
+		A.setValue(6.0, 2, 2);
+		A.setValue(3.0, 2, 3);
+
+		A.setValue(3.0, 3, 0);
+		A.setValue(2.0, 3, 1);
+		A.setValue(1.0, 3, 2);
+		A.setValue(1.0, 3, 3);
+
+		Vector b(4);
+
+		b.setValue(1.0, 0);
+		b.setValue(2.0, 1);
+		b.setValue(3.0, 2);
+		b.setValue(1.0, 3);
+
+		const Vector x(A.linearSolve(b));
+
+		Vector resp(4);
+
+		resp.setValue(-13.0, 0);
+		resp.setValue(23.0, 1);
+		resp.setValue(8.0, 2);
+		resp.setValue(-14.0, 3);
+
+
+		EXPECT_TRUE(x == resp);
+
+	}
+
+

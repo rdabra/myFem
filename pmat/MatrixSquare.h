@@ -30,6 +30,11 @@ struct D_SAS
 };
 
 
+/**
+ * @todo Implementar decomposição QR e obter o rank
+ * @todo Implementar Singular Value Decompostion
+ * @todo Implementar solucao de sistema linear recebendo e retornando um vetor usando LU
+*/
 class MatrixSquare : public Matrix
 {
 protected:
@@ -44,6 +49,7 @@ protected:
 	void swapRowsBellow(MatrixSquare& matU, const unsigned& idxPivot);
 	void nullifyElementBellow(MatrixSquare& matU, const unsigned& idxPivot) const;
 	void findInverseByBackSubstitution(const AbstractMatrixTriangular* matrix, AbstractMatrixTriangular* resp) const;
+	Vector findSolutionByBackSubstitution(const AbstractMatrixTriangular& matrix, const Vector& rhs) const;
 	void createLu();
 	void destroyLu();
 	void createSas();
@@ -82,5 +88,7 @@ public:
 	virtual MatrixLowerTriangular extractLowerPart() const;
 	virtual MatrixUpperTriangular extractUpperPart() const;
 	virtual MatrixSquare getInverse();
+	virtual Vector linearSolve(const Vector& rhs);
 	virtual bool isPositiveDefinite();
+	virtual bool isOrthogonal();
 };

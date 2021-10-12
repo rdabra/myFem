@@ -183,7 +183,7 @@ void MatrixLowerTriangular::times(const Vector& vector, Vector& resp) const
 	this->validateVectorRespMult(resp);
 
 	for (unsigned i = 0; i < this->getSize(); i++) {
-		double aux = 0.0;
+		double aux = putils::ZERO;
 		for (unsigned k = 0; k <= i; k++)
 			aux += (*this)(i, k) * vector(k);
 		resp.setValue(aux, i);

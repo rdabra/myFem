@@ -248,6 +248,10 @@ void MatrixSquare::decomposeToSas()
 }
 
 
+// implementar findSolutionByBackSubstituition(matrix,vetor) const (testar se é inversivel
+// para ver se tem solucao). 
+
+
 /**
  * @brief Calculates the inverse of a triangular matrix
  * @param matrix Matrix whose inverse is calculated
@@ -267,12 +271,33 @@ void MatrixSquare::findInverseByBackSubstitution(const AbstractMatrixTriangular*
 		resp->setValue(putils::ONE / (*matrix)(ids[idxPivot], ids[idxPivot]), ids[idxPivot], ids[idxPivot]);
 		for (unsigned i = idxPivot + 1; i < matrix->getSize(); i++) {
 			double num{putils::ZERO};
-			for (unsigned j = idxPivot; j < i; j++) {
+			for (unsigned j = idxPivot; j < i; j++)
 				num -= (*matrix)(ids[i], ids[j]) * (*resp)(ids[j], ids[idxPivot]);
-			}
 			resp->setValue(num / (*matrix)(ids[i], ids[i]), ids[i], ids[idxPivot]);
 		}
 	}
+}
+
+Vector MatrixSquare::findSolutionByBackSubstitution(const AbstractMatrixTriangular& matrix, const Vector& rhs) const
+{
+	Vector resp(rhs.getSize());
+
+	std::vector<unsigned> ids(matrix.getSize());
+
+	if (matrix.isLower())
+		for (unsigned k = 0; k < matrix.getSize(); k++) ids[k] = k;
+	else
+		for (unsigned k = 0; k < matrix.getSize(); k++) ids[k] = matrix.getSize() - k - 1;
+
+	resp.setValue(rhs(ids[0]) / matrix(ids[0], ids[0]), ids[0]);
+	for (unsigned i = 1; i < matrix.getSize(); i++) {
+		double num{rhs(ids[i])};
+		for (unsigned j = 0; j < i; j++)
+			num -= matrix(ids[i], ids[j]) * resp(ids[j]);
+		resp.setValue(num / matrix(ids[i], ids[i]), ids[i]);
+	}
+
+	return resp;
 }
 
 /**
@@ -383,8 +408,6 @@ MatrixUpperTriangular MatrixSquare::extractUpperPart() const
 */
 MatrixSquare MatrixSquare::getInverse()
 {
-	this->decomposeToPlu();
-
 	if (!this->isInvertible()) throw std::logic_error(messages::MATRIX_SINGULAR);
 
 	MatrixUpperTriangular invU(this->getSize());
@@ -407,6 +430,32 @@ MatrixSquare MatrixSquare::getInverse()
 }
 
 /**
+ * @brief Finds the solution of the linear system where this matrix is on the left-hand side 
+ * @param rhs Right-hand side of the linear system
+ * @return The solution of the linear system
+ * @exception std::logic_error This matrix is singular
+ * @exception std::logic_error Right-hand side not compatible
+*/
+Vector MatrixSquare::linearSolve(const Vector& rhs)
+{
+	if (rhs.getSize() != this->getSize())
+		throw
+			std::logic_error(messages::RHS_NOT_COMP);
+
+	if (!this->isInvertible()) throw std::logic_error(messages::MATRIX_SINGULAR);
+
+	Vector aux(rhs);
+
+	for (auto& swappedRow : _matsPLU.swappedRows)
+		aux.swapElements(swappedRow.first, swappedRow.second);
+
+	const Vector resp1(this->findSolutionByBackSubstitution(*_matsPLU.matL, aux));
+
+
+	return this->findSolutionByBackSubstitution(*_matsPLU.matU, resp1);
+}
+
+/**
  * @brief Informs if this matrix is positive definite
  * @details Considering the PLU decomposition, a matrix is considered to be positive definite if every diagonal element of U is positive
  * @see MatrixSquare::getPLU
@@ -421,6 +470,23 @@ bool MatrixSquare::isPositiveDefinite()
 		return true;
 	}
 
+	return false;
+}
+
+/**
+ * @brief Informs if this matrix is orthogonal
+ * @details A matrix is orthogonal if its inverse equals its transpose
+ * @return True if this matrix is orthogonal
+*/
+bool MatrixSquare::isOrthogonal()
+{
+	if (this->isInvertible()) {
+		const MatrixSquare inv(this->getInverse());
+		for (unsigned i = 0; i < this->getSize(); ++i)
+			for (unsigned j = 0; j < this->getSize(); ++j)
+				if (!putils::areEqual(inv(i, j), (*this)(j, i))) return false;
+		return true;
+	}
 	return false;
 }
 

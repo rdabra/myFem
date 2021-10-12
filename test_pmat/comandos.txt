@@ -1,0 +1,20 @@
+
+
+											RESHARPER
+
+ - Shortcuts
+Resharper Goto Declaration: CTRL+Z,CTRL+N
+Resharper Clean Up code: CTRL+Z,CTRL+C
+
+ - Alterar shortcuts: Options, Environments, Keyboard 
+
+ - Baixar: ir no rutracker e procurar o ReSharper
+
+
+-----------------------------------------------------------------------
+
+											DOXYGEN
+
+ - Editar e gerenciar o arquivo Doxyfile por meio do doxyWizard (doxygen gui front end)
+
+ - Abrir um arquivo já criado para ser utilizado como modelo 

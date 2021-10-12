@@ -145,6 +145,15 @@ MatrixSymmetric MatrixSymmetric::operator*(const double& scalar) const
 	return resp;
 }
 
+/**
+ * @brief Informs the Cholesky factor of this matrix
+ * @details Cholesky Factor of positive-define matrix \f$ A\f$ is a lower-triangular matrix \f$ L\f$ where
+ *  \f[
+ *		A=LL^T
+ *  \f]
+ *	@return Cholesky Factor
+ *	@exception std::logic_error This matrix not Cholesky decomposable
+ */
 MatrixLowerTriangular& MatrixSymmetric::getCholeskyFactor()
 {
 	this->createL();
@@ -168,12 +177,53 @@ MatrixSymmetric MatrixSymmetric::getInverseAsSymmetric()
 	return resp;
 }
 
+bool MatrixSymmetric::isInvertible()
+{
+	if (this->isPositiveDefinite())
+		for (unsigned i = 0; i < this->getSize(); i++)
+			if (putils::isZero((*_choleskyFactor)(i, i)))
+				return false;
+
+	return AbstractMatrixSymmetry::isInvertible();
+}
+
+/**
+ * @brief 
+ * @return 
+*/
 MatrixSquare MatrixSymmetric::getInverse()
 {
 	if (this->isPositiveDefinite()) {
 		return _choleskyFactor->getTranspose().getInverse() * _choleskyFactor->getInverse();
 	}
 	return AbstractMatrixSymmetry::getInverse();
+}
+
+/**
+ * @todo Testar esta funcao
+ * @brief 
+ * @param rhs 
+ * @return 
+*/
+Vector MatrixSymmetric::linearSolve(const Vector& rhs)
+{
+	if (rhs.getSize() != this->getSize())
+		throw
+			std::logic_error(messages::RHS_NOT_COMP);
+
+
+	if (this->isPositiveDefinite()) {
+
+		if (!this->isInvertible()) throw std::logic_error(messages::MATRIX_SINGULAR);
+
+		const Vector resp1(this->findSolutionByBackSubstitution(*_choleskyFactor, rhs));
+
+		return this->findSolutionByBackSubstitution(_choleskyFactor->getTranspose(), resp1);
+
+	}
+
+
+	return AbstractMatrixSymmetry::linearSolve(rhs);
 }
 
 // According to Golub & Van Loan, "Matrix Computations", ISBN  9789380250755, p. 164.
