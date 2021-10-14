@@ -3,7 +3,7 @@
 #include "MatrixSquare.h"
 
 /**
- * @todo Otimizar multiplicacao por vetor 
+ * @todo Implementar solução de sistema linear (modificar as demais soluções)
 */
 class AbstractMatrixTriangular : public MatrixSquare
 {

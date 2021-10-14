@@ -455,3 +455,37 @@
 		EXPECT_TRUE(v == resp1);
 
 	}
+
+	TEST(TestMatrixSymmetric, TestLinearSolve) {
+		MatrixSymmetric z(4);
+		z.setValue(1.0, 0, 0);
+		z.setValue(-1.0, 1, 0);
+		z.setValue(4.0, 1, 1);
+		z.setValue(2.0, 2, 0);
+		z.setValue(-1.0, 2, 1);
+		z.setValue(6.0, 2, 2);
+		z.setValue(0.0, 3, 0);
+		z.setValue(1.0, 3, 1);
+		z.setValue(-2.0, 3, 2);
+		z.setValue(4.0, 3, 3);
+
+		Vector b(4);
+
+		b.setValue(1.0, 0);
+		b.setValue(3.0, 1);
+		b.setValue(2.0, 2);
+		b.setValue(1.0, 3);
+
+		const Vector x(z.linearSolve(b));
+
+		Vector resp(4);
+
+		resp.setValue(24.0, 0);
+		resp.setValue(6.0, 1);
+		resp.setValue(-8.5, 2);
+		resp.setValue(-5.5, 3);
+
+
+		EXPECT_TRUE(x == resp);
+
+	}

@@ -152,7 +152,7 @@ MatrixSymmetric MatrixSymmetric::operator*(const double& scalar) const
  *		A=LL^T
  *  \f]
  *	@return Cholesky Factor
- *	@exception std::logic_error This matrix not Cholesky decomposable
+ *	@exception std::logic_error This matrix is not Cholesky decomposable
  */
 MatrixLowerTriangular& MatrixSymmetric::getCholeskyFactor()
 {
@@ -187,10 +187,6 @@ bool MatrixSymmetric::isInvertible()
 	return AbstractMatrixSymmetry::isInvertible();
 }
 
-/**
- * @brief 
- * @return 
-*/
 MatrixSquare MatrixSymmetric::getInverse()
 {
 	if (this->isPositiveDefinite()) {
@@ -199,12 +195,6 @@ MatrixSquare MatrixSymmetric::getInverse()
 	return AbstractMatrixSymmetry::getInverse();
 }
 
-/**
- * @todo Testar esta funcao
- * @brief 
- * @param rhs 
- * @return 
-*/
 Vector MatrixSymmetric::linearSolve(const Vector& rhs)
 {
 	if (rhs.getSize() != this->getSize())
@@ -222,11 +212,17 @@ Vector MatrixSymmetric::linearSolve(const Vector& rhs)
 
 	}
 
-
+	   
 	return AbstractMatrixSymmetry::linearSolve(rhs);
 }
 
-// According to Golub & Van Loan, "Matrix Computations", ISBN  9789380250755, p. 164.
+/**
+ * @brief Informs if this matrix is positive definite
+ * @details A symmetric matrix is considered to be positive definite if it is Cholesky decomposable
+ * @see MatrixSymmetric::getCholeskyFactor
+ * @see "Matrix Computations", Golub & Van Loan, ISBN  9789380250755, p. 164.
+ * @return True if this matrix is positive definite
+*/
 bool MatrixSymmetric::isPositiveDefinite()
 {
 	try {

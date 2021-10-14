@@ -248,10 +248,6 @@ void MatrixSquare::decomposeToSas()
 }
 
 
-// implementar findSolutionByBackSubstituition(matrix,vetor) const (testar se é inversivel
-// para ver se tem solucao). 
-
-
 /**
  * @brief Calculates the inverse of a triangular matrix
  * @param matrix Matrix whose inverse is calculated
@@ -278,6 +274,12 @@ void MatrixSquare::findInverseByBackSubstitution(const AbstractMatrixTriangular*
 	}
 }
 
+/**
+ * @brief Calculates the solution of a linear system where the matrix is triangular
+ * @param matrix Triangular matrix on the left-hand side
+ * @param rhs Righ-hand side vector
+ * @return Solution of the linear system
+*/
 Vector MatrixSquare::findSolutionByBackSubstitution(const AbstractMatrixTriangular& matrix, const Vector& rhs) const
 {
 	Vector resp(rhs.getSize());
@@ -362,7 +364,7 @@ bool MatrixSquare::isStrictLUDecomposable()
 
 /**
  * @brief Informs if this matrix is invertible
- * @return True if this is matrix is invertible
+ * @return True if this matrix is invertible
 */
 bool MatrixSquare::isInvertible()
 {
