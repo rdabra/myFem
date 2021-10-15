@@ -2,9 +2,6 @@
 
 #include "MatrixSquare.h"
 
-/**
- * @todo Implementar solução de sistema linear (modificar as demais soluções)
-*/
 class AbstractMatrixTriangular : public MatrixSquare
 {
 private:
@@ -46,6 +43,7 @@ public:
 	double determinant() override;
 	virtual bool isInvertible() override;
 	virtual MatrixSquare getInverse() override = 0;
+	Vector linearSolve(const Vector& rhs) override;
 };
 
 

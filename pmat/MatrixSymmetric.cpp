@@ -206,9 +206,9 @@ Vector MatrixSymmetric::linearSolve(const Vector& rhs)
 
 		if (!this->isInvertible()) throw std::logic_error(messages::MATRIX_SINGULAR);
 
-		const Vector resp1(this->findSolutionByBackSubstitution(*_choleskyFactor, rhs));
+		const Vector resp1(_choleskyFactor->linearSolve(rhs));
 
-		return this->findSolutionByBackSubstitution(_choleskyFactor->getTranspose(), resp1);
+		return _choleskyFactor->getTranspose().linearSolve(resp1);
 
 	}
 

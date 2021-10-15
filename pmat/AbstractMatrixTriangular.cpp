@@ -107,3 +107,13 @@ bool AbstractMatrixTriangular::isInvertible()
 	return true;
 }
 
+Vector AbstractMatrixTriangular::linearSolve(const Vector& rhs)
+{
+	if (rhs.getSize() != this->getSize())
+		throw
+			std::logic_error(messages::RHS_NOT_COMP);
+
+	if (!this->isInvertible()) throw std::logic_error(messages::MATRIX_SINGULAR);
+
+	return this->findSolutionByBackSubstitution(*this, rhs);
+}

@@ -451,10 +451,9 @@ Vector MatrixSquare::linearSolve(const Vector& rhs)
 	for (auto& swappedRow : _matsPLU.swappedRows)
 		aux.swapElements(swappedRow.first, swappedRow.second);
 
-	const Vector resp1(this->findSolutionByBackSubstitution(*_matsPLU.matL, aux));
+	const Vector resp1(_matsPLU.matL->linearSolve(aux));
 
-
-	return this->findSolutionByBackSubstitution(*_matsPLU.matU, resp1);
+	return _matsPLU.matU->linearSolve(resp1);
 }
 
 /**
@@ -490,6 +489,28 @@ bool MatrixSquare::isOrthogonal()
 		return true;
 	}
 	return false;
+}
+
+unsigned MatrixSquare::rank()
+{
+
+	unsigned resp{this->getSize()};
+
+	if (_calcLu) {
+		for (unsigned i = this->getSize(); i-- > 0;) {
+			unsigned j{ i };
+			for (; j < this->getSize(); ++j)
+				if (!putils::isZero((*_matsPLU.matU)(i, j)))
+					break;
+			if (j == this->getSize()) resp--;
+		}
+		return resp; //Quando implementar decomposição QR, remover essa linha
+	}
+	else {
+		//Implementar decomposição QR (no processo dessa decomposicao, o rank é um dos resultados)
+	}
+
+	return resp;
 }
 
 /**

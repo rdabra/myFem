@@ -33,7 +33,6 @@ struct D_SAS
 /**
  * @todo Implementar decomposição QR e obter o rank
  * @todo Implementar Singular Value Decompostion
- * @todo Implementar solucao de sistema linear recebendo e retornando um vetor usando LU
 */
 class MatrixSquare : public Matrix
 {
@@ -91,4 +90,5 @@ public:
 	virtual Vector linearSolve(const Vector& rhs);
 	virtual bool isPositiveDefinite();
 	virtual bool isOrthogonal();
+	virtual unsigned rank();
 };
