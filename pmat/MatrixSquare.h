@@ -15,6 +15,8 @@ class MatrixSymmetric;
 
 class MatrixSkewSymmetric;
 
+enum class SubMatrixPos {lower,upper};
+
 struct D_PLU
 {
 	MatrixSquare* matP{ nullptr };
@@ -29,33 +31,48 @@ struct D_SAS
 	MatrixSkewSymmetric* matAS{ nullptr };
 };
 
+struct D_QR
+{
+	MatrixSquare* matQ{ nullptr };
+	MatrixUpperTriangular* matR{ nullptr };
+	unsigned rank {0};
+};
+
 
 /**
  * @todo Implementar decomposição QR e obter o rank
  * @todo Implementar Singular Value Decompostion
+ * @todo Implementer Multiplciacao por submatrix e documentar 
 */
 class MatrixSquare : public Matrix
 {
 protected:
 	D_PLU _matsPLU;
 	D_SAS _matsSAS;
+	D_QR  _matsQR;
 	bool _changeSignForDet{ false };
 	bool _calcLu{ false };
 	bool _calcStrictLu{ false };
 	bool _calcSas{ false };
+	bool _calcQR {false};
 	bool _createLu{ false };
 	bool _createSas{ false };
+	bool _createQR{ false };
 	void swapRowsBellow(MatrixSquare& matU, const unsigned& idxPivot);
 	void nullifyElementBellow(MatrixSquare& matU, const unsigned& idxPivot) const;
 	void findInverseByBackSubstitution(const AbstractMatrixTriangular* matrix, AbstractMatrixTriangular* resp) const;
 	Vector findSolutionByBackSubstitution(const AbstractMatrixTriangular& matrix, const Vector& rhs) const;
+	MatrixSquare calculateHouseholderSubMatrix(const MatrixSquare& partialR, const unsigned idxPivot) const;
 	void createLu();
 	void destroyLu();
 	void createSas();
 	void destroySas();
+	void createQR();
+	void destroyQR();
 	virtual void decomposeToPlu();
 	virtual void decomposeToStrictLu();
 	virtual void decomposeToSas();
+	virtual void decomposeToQR();
 
 public:
 	MatrixSquare() = default;
@@ -72,6 +89,7 @@ public:
 	virtual void times(const MatrixSquare& matrix, MatrixSquare& resp) const { Matrix::times(matrix, resp); }
 	void times(const double& scalar, Matrix& resp) const override { Matrix::times(scalar, resp); }
 	virtual MatrixSquare operator*(const MatrixSquare& matrix) const;
+	virtual MatrixSquare multiplyByGreaterMatrix(const MatrixSquare& matrix, SubMatrixPos pos);
 	MatrixSquare operator*(const double& scalar) const;
 	void times(const Vector& vector, Vector& resp) const override { Matrix::times(vector, resp); }
 	Vector operator*(const Vector& vector) const override { return Matrix::operator*(vector); }
@@ -82,6 +100,7 @@ public:
 	virtual const D_PLU& getPLU();
 	virtual const D_PLU& getStrictLU();
 	virtual const D_SAS& getSAS();
+//	virtual const D_QR& getQR();
 	virtual bool isStrictLUDecomposable();
 	virtual bool isInvertible();
 	virtual MatrixLowerTriangular extractLowerPart() const;
@@ -90,5 +109,5 @@ public:
 	virtual Vector linearSolve(const Vector& rhs);
 	virtual bool isPositiveDefinite();
 	virtual bool isOrthogonal();
-	virtual unsigned rank();
+	unsigned rank() const;
 };

@@ -99,6 +99,27 @@ void MatrixSquare::destroySas()
 	}
 }
 
+void MatrixSquare::createQR()
+{
+	this->destroyQR();
+
+	_matsQR.matQ = new MatrixSquare(this->getSize());
+	_matsQR.matR = new MatrixUpperTriangular(this->getSize());
+	_calcQR = false;
+
+	_createQR = true;
+}
+
+void MatrixSquare::destroyQR()
+{
+	if (_createQR) {
+		delete _matsQR.matQ;
+		delete _matsQR.matR;
+		_createQR = false;
+		_calcQR = false;
+	}
+}
+
 
 MatrixSquare::~MatrixSquare()
 {
@@ -150,6 +171,40 @@ MatrixSquare MatrixSquare::operator*(const MatrixSquare& matrix) const
 {
 	MatrixSquare resp(matrix.getSize());
 	this->times(matrix, resp);
+
+	return resp;
+}
+
+/**
+ * @brief Calculates the multiplication of this matrix and the first parameter, that has a greater size.
+ * @details Given matrices \f$ A\f$ with size \f$ n\f$ and \f$ B\f$ with size \f$ m>n\f$, this function performs \f$A'.B\f$ 
+ * of size \f$ m\f$ where \f$ A' = [A \quad 0; \quad 0 \quad 1] \f$ or  \f$ A' = [1 \quad 0; \quad 0 \quad A] \f$.
+ * @param matrix The right operand
+ * @param pos Position of this matrix on the matrix \f$A'\f$ (see details above)
+ * @return The product of \f$A'\f$ and the parameter (see details above)
+ * @exception std::logic_error Parameters are not compatible
+*/
+MatrixSquare MatrixSquare::multiplyByGreaterMatrix(const MatrixSquare& matrix, SubMatrixPos pos)
+{
+	if (matrix.getSize() <= this->getSize()) throw std::logic_error(messages::NONCOMPT_ARG);
+
+	MatrixSquare resp(matrix.getSize());
+
+	const unsigned dif{matrix.getSize() - this->getSize()};
+	const unsigned limInf{pos == SubMatrixPos::lower ? dif : 0};
+	const unsigned limSup{pos == SubMatrixPos::lower ? matrix.getSize() : dif};
+
+	for (unsigned i = 0; i < matrix.getSize(); ++i)
+		for (unsigned j = 0; j < matrix.getSize(); ++j) {
+			if (i < limInf || i >= limSup)
+				resp.setValue(matrix(i, j), i, j);
+			else {
+				double aux{putils::ZERO};
+				for (unsigned k = limInf; k < limSup; ++k)
+					aux += (*this)(i - limInf, k - limInf) * matrix(k, j);
+				resp.setValue(aux, i, j);
+			}
+		}
 
 	return resp;
 }
@@ -247,6 +302,16 @@ void MatrixSquare::decomposeToSas()
 	}
 }
 
+void MatrixSquare::decomposeToQR()
+{
+	if (!_calcQR) {
+		this->createQR();
+
+
+		_calcQR = true;
+	}
+}
+
 
 /**
  * @brief Calculates the inverse of a triangular matrix
@@ -298,6 +363,37 @@ Vector MatrixSquare::findSolutionByBackSubstitution(const AbstractMatrixTriangul
 			num -= matrix(ids[i], ids[j]) * resp(ids[j]);
 		resp.setValue(num / matrix(ids[i], ids[i]), ids[i]);
 	}
+
+	return resp;
+}
+
+// https://en.wikipedia.org/wiki/QR_decomposition
+MatrixSquare MatrixSquare::calculateHouseholderSubMatrix(const MatrixSquare& partialR,
+                                                         const unsigned idxPivot) const
+{
+	Vector u(this->getSize() - idxPivot);
+	double alpha{putils::ZERO};
+	for (unsigned j = idxPivot; j < this->getSize(); ++j) {
+		alpha += partialR(idxPivot, j) * partialR(idxPivot, j);
+		u.setValue(partialR(idxPivot, j), j - idxPivot);
+	}
+	alpha = -putils::ONE * putils::sgnOf(partialR(idxPivot, idxPivot)) * sqrt(alpha);
+	u.setValue(u(0) - alpha, 0);
+
+	const double squareNormU = u.dotProduct(u);
+	MatrixSquare resp(u.getSize());
+	for (unsigned i = 0; i < resp.getSize(); ++i) {
+		if (putils::isZero(squareNormU))
+			resp.setValue(putils::ONE, i, i);
+		else
+			for (unsigned j = 0; j < resp.getSize(); ++j) {
+				if (i == j)
+					resp.setValue(putils::ONE - putils::TWO * u(i) * u(j) / squareNormU, i, j);
+				else
+					resp.setValue(-putils::TWO * u(i) * u(j) / squareNormU, i, j);
+			}
+	}
+
 
 	return resp;
 }
@@ -491,24 +587,20 @@ bool MatrixSquare::isOrthogonal()
 	return false;
 }
 
-unsigned MatrixSquare::rank()
+unsigned MatrixSquare::rank() const
 {
-
 	unsigned resp{this->getSize()};
 
 	if (_calcLu) {
 		for (unsigned i = this->getSize(); i-- > 0;) {
-			unsigned j{ i };
+			unsigned j{i};
 			for (; j < this->getSize(); ++j)
 				if (!putils::isZero((*_matsPLU.matU)(i, j)))
 					break;
 			if (j == this->getSize()) resp--;
 		}
 		return resp; //Quando implementar decomposição QR, remover essa linha
-	}
-	else {
-		//Implementar decomposição QR (no processo dessa decomposicao, o rank é um dos resultados)
-	}
+	} //Implementar decomposição QR (no processo dessa decomposicao, o rank é um dos resultados)
 
 	return resp;
 }

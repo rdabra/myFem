@@ -557,3 +557,84 @@
 	}
 
 
+	TEST(TestMatrixSquare, TestMultiplySubSuperMatrices) {
+		MatrixSquare A(5);
+
+		A.setValue(1.0, 0, 0);
+		A.setValue(2.0, 0, 1);
+		A.setValue(3.0, 0, 2);
+		A.setValue(4.0, 0, 3);
+		A.setValue(5.0, 0, 4);
+
+		A.setValue(2.0, 1, 0);
+		A.setValue(1.0, 1, 1);
+		A.setValue(-1.0, 1, 2);
+		A.setValue(3.0, 1, 3);
+		A.setValue(4.0, 1, 4);
+
+		A.setValue(1.0, 2, 0);
+		A.setValue(1.0, 2, 1);
+		A.setValue(2.0, 2, 2);
+		A.setValue(3.0, 2, 3);
+		A.setValue(3.0, 2, 4);
+
+		A.setValue(4.0, 3, 0);
+		A.setValue(5.0, 3, 1);
+		A.setValue(6.0, 3, 2);
+		A.setValue(7.0, 3, 3);
+		A.setValue(2.0, 3, 4);
+
+		A.setValue(7.0, 4, 0);
+		A.setValue(8.0, 4, 1);
+		A.setValue(9.0, 4, 2);
+		A.setValue(3.0, 4, 3);
+		A.setValue(1.0, 4, 4);
+
+		MatrixSquare B(2);
+
+		B.setValue(2.0, 0, 0);
+		B.setValue(3.0, 0, 1);
+		B.setValue(-1.0, 1, 0);
+		B.setValue(4.0, 1, 1);
+
+
+
+		MatrixSquare resp(5);
+
+		resp.setValue(1.0, 0, 0);
+		resp.setValue(2.0, 0, 1);
+		resp.setValue(3.0, 0, 2);
+		resp.setValue(4.0, 0, 3);
+		resp.setValue(5.0, 0, 4);
+		
+		resp.setValue(2.0, 1, 0);
+		resp.setValue(1.0, 1, 1);
+		resp.setValue(-1.0, 1, 2);
+		resp.setValue(3.0, 1, 3);
+		resp.setValue(4.0, 1, 4);
+		
+		resp.setValue(1.0, 2, 0);
+		resp.setValue(1.0, 2, 1);
+		resp.setValue(2.0, 2, 2);
+		resp.setValue(3.0, 2, 3);
+		resp.setValue(3.0, 2, 4);
+		
+		resp.setValue(29.0, 3, 0);
+		resp.setValue(34.0, 3, 1);
+		resp.setValue(39.0, 3, 2);
+		resp.setValue(23.0, 3, 3);
+		resp.setValue(7.0, 3, 4);
+		
+		resp.setValue(24.0, 4, 0);
+		resp.setValue(27.0, 4, 1);
+		resp.setValue(30.0, 4, 2);
+		resp.setValue(5.0, 4, 3);
+		resp.setValue(2.0, 4, 4);
+
+
+		EXPECT_TRUE(B.multiplyByGreaterMatrix(A,SubMatrixPos::lower) == resp);
+
+	}
+
+
+

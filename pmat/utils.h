@@ -9,6 +9,8 @@ namespace putils
 
 	static double ONE = 1.0000000000;
 
+	static double TWO = 2.0000000000;
+
 	static double MINUS_ONE = -1.0000000000;
 
 	static double ONE_HALF = 0.5000000000;
@@ -17,13 +19,19 @@ namespace putils
 	static inline const double& max(const double& a, const double& b) { return a > b ? a : b; };
 	static inline double abs(const double& a) { return a > ZERO ? a : -a; };
 
-	static inline bool areEqual(const double& a, const double& b) {
+	static inline bool areEqual(const double& a, const double& b)
+	{
 		const double m = max(abs(a), abs(b));
-		return  (m == 0.0 ? 0.0 : abs(a - b) / m) < DIF_TOLERANCE;
+		return (m == 0.0 ? 0.0 : abs(a - b) / m) < DIF_TOLERANCE;
 	}
 
-	static inline bool isZero(const double& a) {
-		return  putils::areEqual(a, putils::ZERO);
+	static inline bool isZero(const double& a)
+	{
+		return areEqual(a, ZERO);
 	}
 
+	static inline double sgnOf(const double& a)
+	{
+		return a < 0 ? -ONE : ONE;
+	}
 }
