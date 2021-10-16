@@ -192,7 +192,7 @@ MatrixSquare MatrixSquare::multiplyByGreaterMatrix(const MatrixSquare& matrix, S
 
 	const unsigned dif{matrix.getSize() - this->getSize()};
 	const unsigned limInf{pos == SubMatrixPos::lower ? dif : 0};
-	const unsigned limSup{pos == SubMatrixPos::lower ? matrix.getSize() : dif};
+	const unsigned limSup{pos == SubMatrixPos::lower ? matrix.getSize() : this->getSize()};
 
 	for (unsigned i = 0; i < matrix.getSize(); ++i)
 		for (unsigned j = 0; j < matrix.getSize(); ++j) {

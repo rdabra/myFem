@@ -631,8 +631,41 @@
 		resp.setValue(5.0, 4, 3);
 		resp.setValue(2.0, 4, 4);
 
+		MatrixSquare resp2(5);
+
+		resp2.setValue(8.0, 0, 0);
+		resp2.setValue(7.0, 0, 1);
+		resp2.setValue(3.0, 0, 2);
+		resp2.setValue(17.0, 0, 3);
+		resp2.setValue(22.0, 0, 4);
+			
+		resp2.setValue(7.0, 1, 0);
+		resp2.setValue(2.0, 1, 1);
+		resp2.setValue(-7.0, 1, 2);
+		resp2.setValue(8.0, 1, 3);
+		resp2.setValue(11.0, 1, 4);
+			
+		resp2.setValue(1.0, 2, 0);
+		resp2.setValue(1.0, 2, 1);
+		resp2.setValue(2.0, 2, 2);
+		resp2.setValue(3.0, 2, 3);
+		resp2.setValue(3.0, 2, 4);
+
+		resp2.setValue(4.0, 3, 0);
+		resp2.setValue(5.0, 3, 1);
+		resp2.setValue(6.0, 3, 2);
+		resp2.setValue(7.0, 3, 3);
+		resp2.setValue(2.0, 3, 4);
+
+		resp2.setValue(7.0, 4, 0);
+		resp2.setValue(8.0, 4, 1);
+		resp2.setValue(9.0, 4, 2);
+		resp2.setValue(3.0, 4, 3);
+		resp2.setValue(1.0, 4, 4);
+
 
 		EXPECT_TRUE(B.multiplyByGreaterMatrix(A,SubMatrixPos::lower) == resp);
+		EXPECT_TRUE(B.multiplyByGreaterMatrix(A, SubMatrixPos::upper) == resp2);
 
 	}
 
