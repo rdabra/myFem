@@ -89,7 +89,7 @@ public:
 	virtual void times(const MatrixSquare& matrix, MatrixSquare& resp) const { Matrix::times(matrix, resp); }
 	void times(const double& scalar, Matrix& resp) const override { Matrix::times(scalar, resp); }
 	virtual MatrixSquare operator*(const MatrixSquare& matrix) const;
-	virtual MatrixSquare multiplyByGreaterMatrix(const MatrixSquare& matrix, SubMatrixPos pos);
+	virtual MatrixSquare multiplyByBiggerMatrix(const MatrixSquare& matrix, SubMatrixPos pos);
 	MatrixSquare operator*(const double& scalar) const;
 	void times(const Vector& vector, Vector& resp) const override { Matrix::times(vector, resp); }
 	Vector operator*(const Vector& vector) const override { return Matrix::operator*(vector); }
@@ -100,7 +100,7 @@ public:
 	virtual const D_PLU& getPLU();
 	virtual const D_PLU& getStrictLU();
 	virtual const D_SAS& getSAS();
-//	virtual const D_QR& getQR();
+	virtual const D_QR& getQR();
 	virtual bool isStrictLUDecomposable();
 	virtual bool isInvertible();
 	virtual MatrixLowerTriangular extractLowerPart() const;

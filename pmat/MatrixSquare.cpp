@@ -176,17 +176,17 @@ MatrixSquare MatrixSquare::operator*(const MatrixSquare& matrix) const
 }
 
 /**
- * @brief Calculates the multiplication of this matrix and the first parameter, that has a greater size.
+ * @brief Calculates the multiplication of this matrix and the first parameter.
  * @details Given matrices \f$ A\f$ with size \f$ n\f$ and \f$ B\f$ with size \f$ m>n\f$, this function performs \f$A'.B\f$ 
  * of size \f$ m\f$ where \f$ A' = [A \quad 0; \quad 0 \quad 1] \f$ or  \f$ A' = [1 \quad 0; \quad 0 \quad A] \f$.
- * @param matrix The right operand
+ * @param matrix The right operand, which must not be smaller
  * @param pos Position of this matrix on the matrix \f$A'\f$ (see details above)
  * @return The product of \f$A'\f$ and the parameter (see details above)
  * @exception std::logic_error Parameters are not compatible
 */
-MatrixSquare MatrixSquare::multiplyByGreaterMatrix(const MatrixSquare& matrix, SubMatrixPos pos)
+MatrixSquare MatrixSquare::multiplyByBiggerMatrix(const MatrixSquare& matrix, SubMatrixPos pos)
 {
-	if (matrix.getSize() <= this->getSize()) throw std::logic_error(messages::NONCOMPT_ARG);
+	if (matrix.getSize() < this->getSize()) throw std::logic_error(messages::NONCOMPT_ARG);
 
 	MatrixSquare resp(matrix.getSize());
 
@@ -304,9 +304,26 @@ void MatrixSquare::decomposeToSas()
 
 void MatrixSquare::decomposeToQR()
 {
+
 	if (!_calcQR) {
 		this->createQR();
 
+		MatrixSquare matQAux(this->calculateHouseholderSubMatrix((*this), 0));
+		MatrixSquare matR(matQAux * (*this));
+
+		for (unsigned idxPivot = 1; idxPivot < this->getSize() - 1; ++idxPivot) {
+			MatrixSquare matHouseholder = this->calculateHouseholderSubMatrix(matR, idxPivot);
+			matQAux = matHouseholder.multiplyByBiggerMatrix(matQAux, SubMatrixPos::lower);
+			matR = matHouseholder.multiplyByBiggerMatrix(matR, SubMatrixPos::lower);
+		}
+
+		for (unsigned i = 0; i < this->getSize(); ++i)
+			for (unsigned j = 0; j < this->getSize(); ++j) {
+				_matsQR.matQ->setValue(matQAux(j, i), i, j);
+				if (j >= i)
+					_matsQR.matR->setValue(matR(i, j), i, j);
+
+			}
 
 		_calcQR = true;
 	}
@@ -371,11 +388,11 @@ Vector MatrixSquare::findSolutionByBackSubstitution(const AbstractMatrixTriangul
 MatrixSquare MatrixSquare::calculateHouseholderSubMatrix(const MatrixSquare& partialR,
                                                          const unsigned idxPivot) const
 {
-	Vector u(this->getSize() - idxPivot);
+	Vector u(partialR.getSize() - idxPivot);
 	double alpha{putils::ZERO};
-	for (unsigned j = idxPivot; j < this->getSize(); ++j) {
-		alpha += partialR(idxPivot, j) * partialR(idxPivot, j);
-		u.setValue(partialR(idxPivot, j), j - idxPivot);
+	for (unsigned i = idxPivot; i < partialR.getSize(); ++i) {
+		alpha += partialR(i, idxPivot) * partialR(i, idxPivot);
+		u.setValue(partialR(i, idxPivot), i - idxPivot);
 	}
 	alpha = -putils::ONE * putils::sgnOf(partialR(idxPivot, idxPivot)) * sqrt(alpha);
 	u.setValue(u(0) - alpha, 0);
@@ -439,6 +456,14 @@ const D_SAS& MatrixSquare::getSAS()
 
 
 	return _matsSAS;
+}
+
+const D_QR& MatrixSquare::getQR()
+{
+	this->decomposeToQR();
+
+
+	return _matsQR;
 }
 
 
