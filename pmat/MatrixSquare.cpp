@@ -31,6 +31,28 @@ void MatrixSquare::swapRowsBellow(MatrixSquare& matU, const unsigned& idxPivot)
 	}
 }
 
+void MatrixSquare::swapPivotColumn(MatrixSquare& partialR, const unsigned& idxPivot)
+{
+	double normMax{putils::ZERO};
+	unsigned jMax{idxPivot};
+
+	for (unsigned j = idxPivot; j < partialR.getSize(); ++j) {
+		double normAux{putils::ZERO};
+		for (unsigned i = 0; i < partialR.getSize(); ++i)
+			normAux += partialR(i, j) * partialR(i, j);
+		if (normAux > normMax) {
+			normMax = normAux;
+			jMax = j;
+		}
+	}
+
+	if (jMax != idxPivot) {
+		partialR.swapColumns(jMax, idxPivot);
+		_matsQR.matP->swapColumns(jMax, idxPivot);
+		_matsQR.swappedColumns.emplace_back(jMax, idxPivot);
+	}
+}
+
 /**
  * @brief Performs the nullification of elements bellow the pivot
  * @param matU Matrix on which the nullification if performed
@@ -75,6 +97,7 @@ void MatrixSquare::destroyLu()
 		_createLu = false;
 		_calcStrictLu = false;
 		_calcLu = false;
+		_matsPLU.swappedRows.clear();
 	}
 }
 
@@ -103,20 +126,26 @@ void MatrixSquare::createQR()
 {
 	this->destroyQR();
 
+	_matsQR.matP = new MatrixSquare(this->getSize());
 	_matsQR.matQ = new MatrixSquare(this->getSize());
 	_matsQR.matR = new MatrixUpperTriangular(this->getSize());
 	_calcQR = false;
-
 	_createQR = true;
+
+	for (unsigned j = 0; j < this->getSize(); j++)
+		_matsPLU.matP->setValue(putils::ONE, j, j);
 }
 
 void MatrixSquare::destroyQR()
 {
 	if (_createQR) {
+		delete _matsQR.matP;
 		delete _matsQR.matQ;
 		delete _matsQR.matR;
 		_createQR = false;
 		_calcQR = false;
+		_matsQR.swappedColumns.clear();
+		_matsQR.rank = 0;
 	}
 }
 
@@ -304,7 +333,6 @@ void MatrixSquare::decomposeToSas()
 
 void MatrixSquare::decomposeToQR()
 {
-
 	if (!_calcQR) {
 		this->createQR();
 
@@ -324,6 +352,37 @@ void MatrixSquare::decomposeToQR()
 					_matsQR.matR->setValue(matR(i, j), i, j);
 
 			}
+
+		_calcQR = true;
+	}
+}
+
+void MatrixSquare::decomposeToQRPivot()
+{
+	if (!_calcQR) {
+		this->createQR();
+
+		MatrixSquare A(*this);
+		this->swapPivotColumn(A, 0);
+		MatrixSquare matQAux(this->calculateHouseholderSubMatrix(A, 0));
+		MatrixSquare matR(matQAux * A);
+
+		for (unsigned idxPivot = 1; idxPivot < this->getSize() - 1; ++idxPivot) {
+			this->swapPivotColumn(matR, idxPivot);
+			MatrixSquare matHouseholder = this->calculateHouseholderSubMatrix(matR, idxPivot);
+			matQAux = matHouseholder.multiplyByBiggerMatrix(matQAux, SubMatrixPos::lower);
+			matR = matHouseholder.multiplyByBiggerMatrix(matR, SubMatrixPos::lower);
+		}
+
+		for (unsigned i = 0; i < this->getSize(); ++i) {
+			if (! putils::isZero(matR(i, i))) _matsQR.rank++;
+			for (unsigned j = 0; j < this->getSize(); ++j) {
+				_matsQR.matQ->setValue(matQAux(j, i), i, j);
+				if (j >= i)
+					_matsQR.matR->setValue(matR(i, j), i, j);
+
+			}
+		}
 
 		_calcQR = true;
 	}
@@ -415,6 +474,7 @@ MatrixSquare MatrixSquare::calculateHouseholderSubMatrix(const MatrixSquare& par
 	return resp;
 }
 
+
 /**
  * @brief Performs the PLU decomposition of this matrix
  * @details For every square matrix \f$ A\f$, it is possible to obtain \f$ PA = LU\f$, where \f$P\f$ is a permutation matrix,
@@ -460,7 +520,7 @@ const D_SAS& MatrixSquare::getSAS()
 
 const D_QR& MatrixSquare::getQR()
 {
-	this->decomposeToQR();
+	this->decomposeToQRPivot();
 
 
 	return _matsQR;

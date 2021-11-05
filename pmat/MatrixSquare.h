@@ -33,8 +33,10 @@ struct D_SAS
 
 struct D_QR
 {
+	MatrixSquare* matP{ nullptr };
 	MatrixSquare* matQ{ nullptr };
 	MatrixUpperTriangular* matR{ nullptr };
+	std::vector<std::pair<unsigned, unsigned>> swappedColumns;
 	unsigned rank {0};
 };
 
@@ -59,6 +61,7 @@ protected:
 	bool _createSas{ false };
 	bool _createQR{ false };
 	void swapRowsBellow(MatrixSquare& matU, const unsigned& idxPivot);
+	void swapPivotColumn(MatrixSquare& partialR, const unsigned& idxPivot);
 	void nullifyElementBellow(MatrixSquare& matU, const unsigned& idxPivot) const;
 	void findInverseByBackSubstitution(const AbstractMatrixTriangular* matrix, AbstractMatrixTriangular* resp) const;
 	Vector findSolutionByBackSubstitution(const AbstractMatrixTriangular& matrix, const Vector& rhs) const;
@@ -73,6 +76,7 @@ protected:
 	virtual void decomposeToStrictLu();
 	virtual void decomposeToSas();
 	virtual void decomposeToQR();
+	virtual void decomposeToQRPivot();
 
 public:
 	MatrixSquare() = default;
