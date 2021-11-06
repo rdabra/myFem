@@ -683,8 +683,27 @@ TEST(TestMatrixSquare, TestDecompQR)
 	A.setValue(24.0, 2, 1);
 	A.setValue(-41.0, 2, 2);
 
-	D_QR qr{A.getQR()};
+	D_PQR qr{A.getPQR()};
+
+	MatrixSquare resp{ (*qr.matQ) * (*qr.matR) };
 
 
-	EXPECT_TRUE(A == (*qr.matQ) * (*qr.matR));
+	MatrixSquare B(3);
+
+	B.setValue(12.0, 0, 0);
+	B.setValue(-51.0, 0, 1);
+	B.setValue(4.0, 0, 2);
+	
+	B.setValue(24.0, 1, 0);
+	B.setValue(-102.0, 1, 1);
+	B.setValue(8.0, 1, 2);
+	
+	B.setValue(-4.0, 2, 0);
+	B.setValue(24.0, 2, 1);
+	B.setValue(-41.0, 2, 2);
+
+
+	EXPECT_TRUE(resp == A * (*qr.matP));
+	EXPECT_TRUE(B.rank() < 3);
+
 }

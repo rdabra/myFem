@@ -122,9 +122,9 @@ void MatrixSquare::destroySas()
 	}
 }
 
-void MatrixSquare::createQR()
+void MatrixSquare::createQr()
 {
-	this->destroyQR();
+	this->destroyQr();
 
 	_matsQR.matP = new MatrixSquare(this->getSize());
 	_matsQR.matQ = new MatrixSquare(this->getSize());
@@ -133,10 +133,10 @@ void MatrixSquare::createQR()
 	_createQR = true;
 
 	for (unsigned j = 0; j < this->getSize(); j++)
-		_matsPLU.matP->setValue(putils::ONE, j, j);
+		_matsQR.matP->setValue(putils::ONE, j, j);
 }
 
-void MatrixSquare::destroyQR()
+void MatrixSquare::destroyQr()
 {
 	if (_createQR) {
 		delete _matsQR.matP;
@@ -331,36 +331,10 @@ void MatrixSquare::decomposeToSas()
 	}
 }
 
-void MatrixSquare::decomposeToQR()
+void MatrixSquare::decomposeToQr()
 {
 	if (!_calcQR) {
-		this->createQR();
-
-		MatrixSquare matQAux(this->calculateHouseholderSubMatrix((*this), 0));
-		MatrixSquare matR(matQAux * (*this));
-
-		for (unsigned idxPivot = 1; idxPivot < this->getSize() - 1; ++idxPivot) {
-			MatrixSquare matHouseholder = this->calculateHouseholderSubMatrix(matR, idxPivot);
-			matQAux = matHouseholder.multiplyByBiggerMatrix(matQAux, SubMatrixPos::lower);
-			matR = matHouseholder.multiplyByBiggerMatrix(matR, SubMatrixPos::lower);
-		}
-
-		for (unsigned i = 0; i < this->getSize(); ++i)
-			for (unsigned j = 0; j < this->getSize(); ++j) {
-				_matsQR.matQ->setValue(matQAux(j, i), i, j);
-				if (j >= i)
-					_matsQR.matR->setValue(matR(i, j), i, j);
-
-			}
-
-		_calcQR = true;
-	}
-}
-
-void MatrixSquare::decomposeToQRPivot()
-{
-	if (!_calcQR) {
-		this->createQR();
+		this->createQr();
 
 		MatrixSquare A(*this);
 		this->swapPivotColumn(A, 0);
@@ -375,7 +349,7 @@ void MatrixSquare::decomposeToQRPivot()
 		}
 
 		for (unsigned i = 0; i < this->getSize(); ++i) {
-			if (! putils::isZero(matR(i, i))) _matsQR.rank++;
+			if (!putils::isZero(matR(i, i))) _matsQR.rank++;
 			for (unsigned j = 0; j < this->getSize(); ++j) {
 				_matsQR.matQ->setValue(matQAux(j, i), i, j);
 				if (j >= i)
@@ -474,6 +448,49 @@ MatrixSquare MatrixSquare::calculateHouseholderSubMatrix(const MatrixSquare& par
 	return resp;
 }
 
+MatrixSquare MatrixSquare::calculateInverseByPlu()
+{
+	MatrixUpperTriangular invU(this->getSize());
+	this->findInverseByBackSubstitution(_matsPLU.matU, &invU);
+
+	MatrixLowerTriangular invL(this->getSize());
+	this->findInverseByBackSubstitution(_matsPLU.matL, &invL);
+
+	MatrixSquare resp(invU * invL);
+
+	/**
+	 * Recovering adequate positions by swapping columns in reverse order of the swapped rows
+	 */
+	for (unsigned i = 1; i <= _matsPLU.swappedRows.size(); ++i) {
+		auto& swappedRow = _matsPLU.swappedRows[_matsPLU.swappedRows.size() - i];
+		resp.swapColumns(swappedRow.first, swappedRow.second);
+	}
+
+	return resp;
+}
+
+MatrixSquare MatrixSquare::calculateInverseByPQR()
+{
+	MatrixUpperTriangular invR(this->getSize());
+	this->findInverseByBackSubstitution(_matsQR.matR, &invR);
+
+	_matsQR.matQ->transpose();
+
+	MatrixSquare resp(invR * (*_matsQR.matQ));
+
+	_matsQR.matQ->transpose();
+
+	/**
+	 * Recovering adequate positions by swapping rows in reverse order of the swapped columns
+	 */
+	for (unsigned i = 1; i <= _matsQR.swappedColumns.size(); ++i) {
+		auto& swappedColumn = _matsQR.swappedColumns[_matsQR.swappedColumns.size() - i];
+		resp.swapRows(swappedColumn.first, swappedColumn.second);
+	}
+
+	return resp;
+}
+
 
 /**
  * @brief Performs the PLU decomposition of this matrix
@@ -518,9 +535,9 @@ const D_SAS& MatrixSquare::getSAS()
 	return _matsSAS;
 }
 
-const D_QR& MatrixSquare::getQR()
+const D_PQR& MatrixSquare::getPQR()
 {
-	this->decomposeToQRPivot();
+	this->decomposeToQr();
 
 
 	return _matsQR;
@@ -549,6 +566,9 @@ bool MatrixSquare::isStrictLUDecomposable()
 */
 bool MatrixSquare::isInvertible()
 {
+	if (_calcQR)
+		return _matsQR.rank == this->getSize();
+
 	this->decomposeToPlu();
 
 	for (unsigned i = 0; i < this->getSize(); i++)
@@ -593,23 +613,10 @@ MatrixSquare MatrixSquare::getInverse()
 {
 	if (!this->isInvertible()) throw std::logic_error(messages::MATRIX_SINGULAR);
 
-	MatrixUpperTriangular invU(this->getSize());
-	this->findInverseByBackSubstitution(_matsPLU.matU, &invU);
+	if (_calcQR)
+		return this->calculateInverseByPQR();
 
-	MatrixLowerTriangular invL(this->getSize());
-	this->findInverseByBackSubstitution(_matsPLU.matL, &invL);
-
-	MatrixSquare resp(invU * invL);
-
-	/**
-	 * Recovering adequate positions by swapping columns in reverse order of the swapped rows
-	 */
-	for (unsigned i = 1; i <= _matsPLU.swappedRows.size(); ++i) {
-		auto& swappedRow = _matsPLU.swappedRows[_matsPLU.swappedRows.size() - i];
-		resp.swapColumns(swappedRow.first, swappedRow.second);
-	}
-
-	return resp;
+	return this->calculateInverseByPlu();
 }
 
 /**
@@ -672,22 +679,9 @@ bool MatrixSquare::isOrthogonal()
 	return false;
 }
 
-unsigned MatrixSquare::rank() const
+unsigned MatrixSquare::rank()
 {
-	unsigned resp{this->getSize()};
-
-	if (_calcLu) {
-		for (unsigned i = this->getSize(); i-- > 0;) {
-			unsigned j{i};
-			for (; j < this->getSize(); ++j)
-				if (!putils::isZero((*_matsPLU.matU)(i, j)))
-					break;
-			if (j == this->getSize()) resp--;
-		}
-		return resp; //Quando implementar decomposição QR, remover essa linha
-	} //Implementar decomposição QR (no processo dessa decomposicao, o rank é um dos resultados)
-
-	return resp;
+	return this->getPQR().rank;
 }
 
 /**

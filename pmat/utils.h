@@ -22,7 +22,7 @@ namespace putils
 	static inline bool areEqual(const double& a, const double& b)
 	{
 		const double m = max(abs(a), abs(b));
-		return (m == 0.0 ? 0.0 : abs(a - b) / m) < DIF_TOLERANCE;
+		return m < DIF_TOLERANCE ? true : (abs(a - b) / m) < DIF_TOLERANCE;
 	}
 
 	static inline bool isZero(const double& a)

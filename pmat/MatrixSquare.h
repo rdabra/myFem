@@ -31,7 +31,7 @@ struct D_SAS
 	MatrixSkewSymmetric* matAS{ nullptr };
 };
 
-struct D_QR
+struct D_PQR
 {
 	MatrixSquare* matP{ nullptr };
 	MatrixSquare* matQ{ nullptr };
@@ -51,7 +51,7 @@ class MatrixSquare : public Matrix
 protected:
 	D_PLU _matsPLU;
 	D_SAS _matsSAS;
-	D_QR  _matsQR;
+	D_PQR  _matsQR;
 	bool _changeSignForDet{ false };
 	bool _calcLu{ false };
 	bool _calcStrictLu{ false };
@@ -66,17 +66,18 @@ protected:
 	void findInverseByBackSubstitution(const AbstractMatrixTriangular* matrix, AbstractMatrixTriangular* resp) const;
 	Vector findSolutionByBackSubstitution(const AbstractMatrixTriangular& matrix, const Vector& rhs) const;
 	MatrixSquare calculateHouseholderSubMatrix(const MatrixSquare& partialR, const unsigned idxPivot) const;
+	MatrixSquare calculateInverseByPlu();
+	MatrixSquare calculateInverseByPQR();
 	void createLu();
 	void destroyLu();
 	void createSas();
 	void destroySas();
-	void createQR();
-	void destroyQR();
+	void createQr();
+	void destroyQr();
 	virtual void decomposeToPlu();
 	virtual void decomposeToStrictLu();
 	virtual void decomposeToSas();
-	virtual void decomposeToQR();
-	virtual void decomposeToQRPivot();
+	virtual void decomposeToQr();
 
 public:
 	MatrixSquare() = default;
@@ -104,7 +105,7 @@ public:
 	virtual const D_PLU& getPLU();
 	virtual const D_PLU& getStrictLU();
 	virtual const D_SAS& getSAS();
-	virtual const D_QR& getQR();
+	virtual const D_PQR& getPQR();
 	virtual bool isStrictLUDecomposable();
 	virtual bool isInvertible();
 	virtual MatrixLowerTriangular extractLowerPart() const;
@@ -113,5 +114,5 @@ public:
 	virtual Vector linearSolve(const Vector& rhs);
 	virtual bool isPositiveDefinite();
 	virtual bool isOrthogonal();
-	unsigned rank() const;
+	unsigned rank();
 };
