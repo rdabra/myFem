@@ -162,13 +162,13 @@ MatrixLowerTriangular& MatrixSymmetric::getCholeskyFactor()
 	return (*_choleskyFactor);
 }
 
-double MatrixSymmetric::determinant()
+double MatrixSymmetric::getDeterminant()
 {
 	if (this->isPositiveDefinite()) {
-		const double resp = _choleskyFactor->determinant();
+		const double resp = _choleskyFactor->getDeterminant();
 		return resp * resp;
 	}
-	return AbstractMatrixSymmetry::determinant();
+	return AbstractMatrixSymmetry::getDeterminant();
 }
 
 MatrixSymmetric MatrixSymmetric::getInverseAsSymmetric()

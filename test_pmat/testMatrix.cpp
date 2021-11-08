@@ -284,7 +284,7 @@ TEST(TestMatrix, TestEqualityOperator) {
 		double frobZ{ sqrt(z.dotProduct(z)) };
 
 
-		EXPECT_TRUE(putils::areEqual(z.frobeniusNorm(), frobZ));
+		EXPECT_TRUE(putils::areEqual(z.getFrobeniusNorm(), frobZ));
 	}
 
 	TEST(TestMatrix, TestTranspose) {

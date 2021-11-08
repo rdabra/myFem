@@ -40,10 +40,10 @@ public:
 	void times(const double& scalar, MatrixDiagonal& resp) const;
 	void times(const double& scalar, Matrix& resp) const  override { MatrixSquare::times(scalar, resp); }
 	void multiplyBy(const double& scalar) override;
-	double frobeniusNorm() const override;
+	double getFrobeniusNorm() const override;
 	void transpose() override {}
 	void fillRandomly(const double& min, const double& max) override;
-	double determinant() override;
+	double getDeterminant() override;
 	bool isStrictLUDecomposable() override;
 	bool isInvertible() override;
 	MatrixLowerTriangular extractLowerPart() const override;

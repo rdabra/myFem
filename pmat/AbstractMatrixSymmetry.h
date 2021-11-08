@@ -28,7 +28,7 @@ public:
 	virtual MatrixSquare operator*(const AbstractMatrixSymmetry& matrix) const { return MatrixSquare::operator*(matrix); }
 	double dotProduct(const AbstractMatrixSymmetry& matrix) const;
 	double dotProduct(const Matrix& matrix) const override { return Matrix::dotProduct(matrix); }
-	double frobeniusNorm() const override;
+	double getFrobeniusNorm() const override;
 	void transpose() override = 0;
 	void copyElementsFrom(const AbstractMatrixSymmetry& matrix);
 

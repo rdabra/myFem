@@ -41,7 +41,7 @@ TEST(TestMatrixSquare, TestTrace)
 	A.setValue(5.0, 4, 3);
 	A.setValue(3.0, 4, 4);
 
-	EXPECT_TRUE(A.trace() == 16.0);
+	EXPECT_TRUE(A.getTrace() == 16.0);
 }
 
 TEST(TestMatrixSquare, TestDeterminant)
@@ -85,8 +85,8 @@ TEST(TestMatrixSquare, TestDeterminant)
 
 	MatrixSquare C(3);
 
-	EXPECT_TRUE(putils::areEqual(A.determinant(), -3.0));
-	EXPECT_TRUE(putils::areEqual(B.determinant(), -6.0));
+	EXPECT_TRUE(putils::areEqual(A.getDeterminant(), -3.0));
+	EXPECT_TRUE(putils::areEqual(B.getDeterminant(), -6.0));
 	EXPECT_TRUE(A.isInvertible());
 	EXPECT_FALSE(C.isInvertible());
 }
@@ -708,7 +708,7 @@ TEST(TestMatrixSquare, TestDecompQR)
 
 
 	EXPECT_TRUE(resp == A * (*qr.matP));
-	EXPECT_TRUE(B.rank() ==2);
+	EXPECT_TRUE(B.getRank() ==2);
 	EXPECT_TRUE(identity == A * invA);
 
 }

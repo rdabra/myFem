@@ -92,7 +92,7 @@ void AbstractMatrixSymmetry::multiplyBy(const double& scalar)
 	_matTri.multiplyBy(scalar);
 }
 
-double AbstractMatrixSymmetry::frobeniusNorm() const
+double AbstractMatrixSymmetry::getFrobeniusNorm() const
 {
 	return std::sqrt(this->dotProduct((*this)));
 }

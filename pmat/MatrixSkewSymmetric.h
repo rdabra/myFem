@@ -1,6 +1,9 @@
 #pragma once
 #include "AbstractMatrixSymmetry.h"
 
+/**
+ * @todo Implementar construtor recebendo MatrixLowerTriangular
+ */
 class MatrixSkewSymmetric :
     public AbstractMatrixSymmetry
 {

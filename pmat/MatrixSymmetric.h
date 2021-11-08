@@ -38,7 +38,7 @@ public:
 	MatrixSymmetric operator*(const double& scalar) const;
 	void transpose() override {}
 	MatrixLowerTriangular& getCholeskyFactor();
-	double determinant() override;
+	double getDeterminant() override;
 	MatrixSymmetric getInverseAsSymmetric();
 	bool isInvertible() override;
 	MatrixSquare getInverse() override;

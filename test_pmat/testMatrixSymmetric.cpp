@@ -286,7 +286,7 @@
 
 
 
-		EXPECT_TRUE(putils::areEqual(z.frobeniusNorm(), 35.55277767));
+		EXPECT_TRUE(putils::areEqual(z.getFrobeniusNorm(), 35.55277767));
 
 	}
 
@@ -374,8 +374,8 @@
 		b.setValue(-2.0, 3, 2);
 		b.setValue(4.0, 3, 3);
 
-		EXPECT_TRUE(putils::areEqual(z.determinant(), -116.0));
-		EXPECT_TRUE(putils::areEqual(b.determinant(), 2.0));
+		EXPECT_TRUE(putils::areEqual(z.getDeterminant(), -116.0));
+		EXPECT_TRUE(putils::areEqual(b.getDeterminant(), 2.0));
 
 	}
 

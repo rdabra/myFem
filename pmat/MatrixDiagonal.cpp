@@ -210,7 +210,7 @@ void MatrixDiagonal::multiplyBy(const double& scalar)
 		this->setValue((*this)(i, i) * scalar, i, i);
 }
 
-double MatrixDiagonal::frobeniusNorm() const
+double MatrixDiagonal::getFrobeniusNorm() const
 {
 	double resp = 0.0;
 
@@ -233,7 +233,7 @@ void MatrixDiagonal::fillRandomly(const double& min, const double& max)
 		this->setValue(dist(rng), i, i);
 }
 
-double MatrixDiagonal::determinant()
+double MatrixDiagonal::getDeterminant()
 {
 	double resp = putils::ONE;
 

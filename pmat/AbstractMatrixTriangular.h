@@ -40,7 +40,7 @@ public:
 	void partialSwapColumns(const unsigned& columnIndexA, const unsigned& columnIndexB,
 		const unsigned& startRow, const unsigned& endRow) override;
 	void fillRandomly(const double& min, const double& max) override = 0;
-	double determinant() override;
+	double getDeterminant() override;
 	virtual bool isInvertible() override;
 	virtual MatrixSquare getInverse() override = 0;
 	Vector linearSolve(const Vector& rhs) override;

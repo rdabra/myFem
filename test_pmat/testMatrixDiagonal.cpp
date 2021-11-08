@@ -17,7 +17,7 @@
 
 		MatrixSquare C(3);
 
-		EXPECT_TRUE(putils::areEqual(A.determinant(), 24.0));
+		EXPECT_TRUE(putils::areEqual(A.getDeterminant(), 24.0));
 		EXPECT_TRUE(A.isInvertible());
 		EXPECT_FALSE(C.isInvertible());
 	}

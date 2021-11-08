@@ -65,7 +65,7 @@ public:
 	                                const unsigned& startRow, const unsigned& endRow);
 	virtual void swapColumns(const unsigned& columnIndexA, const unsigned& columnIndexB);
 	virtual void transpose();
-	virtual double frobeniusNorm() const;
+	virtual double getFrobeniusNorm() const;
 	virtual void fillRandomly(const double& min, const double& max);
 	Vector getRow(const unsigned& index) const;
 	Vector getColumn(const unsigned& index) const;

@@ -454,7 +454,7 @@ void Matrix::transpose()
  *  \f]
  * @return The value of the Frobenius Norm
 */
-double Matrix::frobeniusNorm() const
+double Matrix::getFrobeniusNorm() const
 {
 	return sqrt(this->dotProduct((*this)));
 }

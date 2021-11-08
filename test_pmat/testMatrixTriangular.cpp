@@ -464,8 +464,8 @@ TEST(TestMatrixTriangular, TestFrobenius)
 	double frobV{ sqrt(v.dotProduct(v)) };
 
 
-	EXPECT_TRUE(putils::areEqual(z.frobeniusNorm(), frobZ));
-	EXPECT_TRUE(putils::areEqual(v.frobeniusNorm(), frobV));
+	EXPECT_TRUE(putils::areEqual(z.getFrobeniusNorm(), frobZ));
+	EXPECT_TRUE(putils::areEqual(v.getFrobeniusNorm(), frobV));
 
 }
 
@@ -508,7 +508,7 @@ TEST(TestMatrixTriangular, TestDeterminant)
 	z.setValue(12.0, 3, 2);
 	z.setValue(13.0, 3, 3);
 
-	EXPECT_TRUE(putils::areEqual(z.determinant(), 585.0));
+	EXPECT_TRUE(putils::areEqual(z.getDeterminant(), 585.0));
 }
 
 TEST(TestMatrixTriangular, TestTranspose)

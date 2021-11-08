@@ -100,8 +100,8 @@ public:
 	Vector operator*(const Vector& vector) const override { return Matrix::operator*(vector); }
 	const unsigned& getSize() const { return Matrix::getRowSize(); }
 	void setValue(const double& value, const unsigned& rowIndex, const unsigned& columnIndex) override;
-	virtual double trace() const;
-	virtual double determinant();
+	virtual double getTrace() const;
+	virtual double getDeterminant();
 	virtual const D_PLU& getPLU();
 	virtual const D_PLU& getStrictLU();
 	virtual const D_SAS& getSAS();
@@ -114,6 +114,6 @@ public:
 	virtual Vector linearSolve(const Vector& rhs);
 	virtual bool isPositiveDefinite();
 	virtual bool isOrthogonal();
-	unsigned rank();
+	unsigned getRank();
 	virtual void fillDiagonalWith(const double& value);
 };

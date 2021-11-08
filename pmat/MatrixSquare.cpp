@@ -262,7 +262,7 @@ void MatrixSquare::setValue(const double& value, const unsigned& rowIndex, const
  *  \f]
  * @return The value of the trace
 */
-double MatrixSquare::trace() const
+double MatrixSquare::getTrace() const
 {
 	double resp = putils::ZERO;
 	for (unsigned i = 0; i < this->getSize(); i++)
@@ -712,7 +712,7 @@ bool MatrixSquare::isOrthogonal()
 	return false;
 }
 
-unsigned MatrixSquare::rank()
+unsigned MatrixSquare::getRank()
 {
 	return this->getPQR().rank;
 }
@@ -728,7 +728,7 @@ void MatrixSquare::fillDiagonalWith(const double& value)
  * @details Determinant is calculated by previously performing a PLU decomposition
  * @return The determinant of this matrix
 */
-double MatrixSquare::determinant()
+double MatrixSquare::getDeterminant()
 {
 	this->decomposeToPlu();
 

@@ -301,7 +301,7 @@
 
 
 
-		EXPECT_TRUE(putils::areEqual(z.frobeniusNorm(), 35.55277767));
+		EXPECT_TRUE(putils::areEqual(z.getFrobeniusNorm(), 35.55277767));
 
 	}
 
@@ -319,7 +319,7 @@
 		z.setValue(12.0, 3, 2);
 		z.setValue(13.0, 3, 3);
 
-		EXPECT_TRUE(putils::areEqual(z.determinant(), 15384.0000000000));
+		EXPECT_TRUE(putils::areEqual(z.getDeterminant(), 15384.0000000000));
 	}
 
 	TEST(TestMatrixSkewSymmetric, TestTranspose)

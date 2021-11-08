@@ -88,7 +88,7 @@ void AbstractMatrixTriangular::partialSwapColumns(const unsigned& columnIndexA, 
 }
 
 
-double AbstractMatrixTriangular::determinant()
+double AbstractMatrixTriangular::getDeterminant()
 {
 	double resp = putils::ONE;
 
