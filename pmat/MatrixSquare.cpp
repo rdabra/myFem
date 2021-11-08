@@ -331,6 +331,10 @@ void MatrixSquare::decomposeToSas()
 	}
 }
 
+/**
+ * @brief Performs a rank revealing QR decomposition by using column pivoting
+ * @see "Matrix Computations", Golub & Van Loan, ISBN  9789380250755, p. 278.
+*/
 void MatrixSquare::decomposeToQr()
 {
 	if (!_calcQR) {
@@ -392,7 +396,7 @@ void MatrixSquare::findInverseByBackSubstitution(const AbstractMatrixTriangular*
 /**
  * @brief Calculates the solution of a linear system where the matrix is triangular
  * @param matrix Triangular matrix on the left-hand side
- * @param rhs Righ-hand side vector
+ * @param rhs Right-hand side vector
  * @return Solution of the linear system
 */
 Vector MatrixSquare::findSolutionByBackSubstitution(const AbstractMatrixTriangular& matrix, const Vector& rhs) const
@@ -417,7 +421,13 @@ Vector MatrixSquare::findSolutionByBackSubstitution(const AbstractMatrixTriangul
 	return resp;
 }
 
-// https://en.wikipedia.org/wiki/QR_decomposition
+/**
+ * @brief Calculates the Householder matrix by using the opposite sign of the column Frobenius norm
+ * @param partialR Partial \f$ R \f$ matrix
+ * @param idxPivot Column and row index from which the Householder matrix is calculated
+ * @return Householder matrix
+ * @see https://en.wikipedia.org/wiki/QR_decomposition
+*/
 MatrixSquare MatrixSquare::calculateHouseholderSubMatrix(const MatrixSquare& partialR,
                                                          const unsigned idxPivot) const
 {
@@ -427,7 +437,10 @@ MatrixSquare MatrixSquare::calculateHouseholderSubMatrix(const MatrixSquare& par
 		alpha += partialR(i, idxPivot) * partialR(i, idxPivot);
 		u.setValue(partialR(i, idxPivot), i - idxPivot);
 	}
+
+	// Using the opposite sign of the Frobenius norm
 	alpha = -putils::ONE * putils::sgnOf(partialR(idxPivot, idxPivot)) * sqrt(alpha);
+
 	u.setValue(u(0) - alpha, 0);
 
 	const double squareNormU = u.dotProduct(u);
@@ -448,6 +461,11 @@ MatrixSquare MatrixSquare::calculateHouseholderSubMatrix(const MatrixSquare& par
 	return resp;
 }
 
+/**
+ * @brief Calculates the inverse when PLU decomposition was already performed
+ * @details If \f$ PA=LU\f$, then \f$ A^{-1}=U^{-1}L^{-1}P\f$ 
+ * @return Inverse of this matrix 
+*/
 MatrixSquare MatrixSquare::calculateInverseByPlu()
 {
 	MatrixUpperTriangular invU(this->getSize());
@@ -469,6 +487,11 @@ MatrixSquare MatrixSquare::calculateInverseByPlu()
 	return resp;
 }
 
+/**
+ * @brief Calculates the inverse when PQR decomposition was already performed
+ * @details If \f$ AP=QR\f$, then \f$ A^{-1}=PR^{-1}Q^{-1}\f$
+ * @return Inverse of this matrix
+*/
 MatrixSquare MatrixSquare::calculateInverseByPQR()
 {
 	MatrixUpperTriangular invR(this->getSize());
@@ -535,6 +558,12 @@ const D_SAS& MatrixSquare::getSAS()
 	return _matsSAS;
 }
 
+/**
+ * @brief Performs the PQR decomposition of this matrix by using column pivoting and Householder projections.
+ * @details Given a matrix \f$ A\f$, it is possible to obtain \f$ AP = QR\f$, where
+ * \f$P\f$ is a permutation matrix, \f$Q\f$ an orthogonal matrix and \f$R\f$ is upper triangular,
+ * @return The results of the PQR decomposition
+ */
 const D_PQR& MatrixSquare::getPQR()
 {
 	this->decomposeToQr();
@@ -562,6 +591,8 @@ bool MatrixSquare::isStrictLUDecomposable()
 
 /**
  * @brief Informs if this matrix is invertible
+ * @details If the PQR decomposition was already performed, this information is obtained from the rank;
+ * otherwise it is obtained from the PLU decomposition.
  * @return True if this matrix is invertible
 */
 bool MatrixSquare::isInvertible()
@@ -606,6 +637,8 @@ MatrixUpperTriangular MatrixSquare::extractUpperPart() const
 
 /**
  * @brief Performs the inverse of this matrix, if possible
+ * @details If this matrix is invertible and the PQR decomposition was already performed the inverse is
+ * obtained from \f$ A^{-1}=PR^{-1}Q^{-1}\f$; otherwise it is obtained from  \f$ A^{-1}=U^{-1}L^{-1}P\f$ 
  * @return The inverse of this matrix
  * @exception std::logic_error This matrix is singular
 */
@@ -682,6 +715,12 @@ bool MatrixSquare::isOrthogonal()
 unsigned MatrixSquare::rank()
 {
 	return this->getPQR().rank;
+}
+
+void MatrixSquare::fillDiagonalWith(const double& value)
+{
+	for (unsigned i = 0; i < this->getSize(); ++i)
+		this->setValue(value, i, i);
 }
 
 /**

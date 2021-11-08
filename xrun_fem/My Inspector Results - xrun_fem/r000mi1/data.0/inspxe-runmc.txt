@@ -1,0 +1,22 @@
+
+=== Start: [2021/11/06 05:45:07] === 
+Analysis started...
+Result file: C:\myWorks\programacao\myFem\xrun_fem\My Inspector Results - xrun_fem\r000mi1\r000mi1.inspxe 
+Analysis started for c:\myworks\programacao\myfem\debug\xrun_fem.exe (pid = 12964) 
+Loaded module: c:\myworks\programacao\myfem\debug\xrun_fem.exe, address range [0xf60000-0xf6dfff] 
+Loaded module: c:\windows\syswow64\kernelbase.dll, address range [0x75e40000-0x76054fff], minimal analysis 
+Loaded module: c:\windows\syswow64\kernel32.dll, address range [0x77050000-0x7713ffff], minimal analysis 
+Loaded module: c:\windows\syswow64\ntdll.dll, address range [0x772b0000-0x77452fff], minimal analysis 
+Loaded module: c:\program files (x86)\intel\oneapi\inspector\2021.3.0\bin32\dnclrprofinfo.dll, address range [0x78c50000-0x78c9dfff], minimal analysis 
+Loaded module: c:\windows\syswow64\msvcp140d.dll, address range [0x7ba30000-0x7bae2fff] 
+Loaded module: c:\windows\syswow64\vcruntime140d.dll, address range [0x7b890000-0x7b8adfff] 
+Loaded module: c:\windows\syswow64\ucrtbased.dll, address range [0x7b8b0000-0x7ba25fff] 
+Loaded module: c:\windows\syswow64\kernel.appcore.dll, address range [0x74ff0000-0x74ffefff] 
+Loaded module: c:\windows\syswow64\msvcrt.dll, address range [0x763e0000-0x7649efff], minimal analysis 
+Loaded module: c:\windows\syswow64\rpcrt4.dll, address range [0x75b30000-0x75beefff], minimal analysis 
+Process c:\myworks\programacao\myfem\debug\xrun_fem.exe exited with code 0. Leak analysis starting. Please wait... 
+Completed analysis for c:\myworks\programacao\myfem\debug\xrun_fem.exe 
+Application exit code: 0 
+Result file: C:\myWorks\programacao\myFem\xrun_fem\My Inspector Results - xrun_fem\r000mi1\r000mi1.inspxe 
+Analysis completed
+=== End: [2021/11/06 05:45:16] === 

@@ -1,0 +1,18 @@
+-r
+C:\myWorks\programacao\myFem\xrun_fem\My Inspector Results - xrun_fem\r000mi1
+--no-access-checks
+--no-analyze-stack
+--leak-maximum=100000
+--leak-check-only
+--leak-check-on-exit
+--check-resource-leaks
+--leak-check-report-reachable
+--freelist-vol=0
+--guard-zone-size=0
+--stack-depth=8
+--no-close-console
+--offload-target=default
+--heartbeat=1
+--app-working-dir=C:\myWorks\programacao\myFem\xrun_fem
+--
+C:\myWorks\programacao\myFem\Debug\xrun_fem.exe

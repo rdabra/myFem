@@ -687,6 +687,10 @@ TEST(TestMatrixSquare, TestDecompQR)
 
 	MatrixSquare resp{ (*qr.matQ) * (*qr.matR) };
 
+	MatrixSquare invA{ A.getInverse() };
+
+	MatrixSquare identity(A.getSize());
+	identity.fillDiagonalWith(putils::ONE);
 
 	MatrixSquare B(3);
 
@@ -704,6 +708,7 @@ TEST(TestMatrixSquare, TestDecompQR)
 
 
 	EXPECT_TRUE(resp == A * (*qr.matP));
-	EXPECT_TRUE(B.rank() < 3);
+	EXPECT_TRUE(B.rank() ==2);
+	EXPECT_TRUE(identity == A * invA);
 
 }

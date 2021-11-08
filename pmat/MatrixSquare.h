@@ -115,4 +115,5 @@ public:
 	virtual bool isPositiveDefinite();
 	virtual bool isOrthogonal();
 	unsigned rank();
+	virtual void fillDiagonalWith(const double& value);
 };
