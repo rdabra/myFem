@@ -16,6 +16,14 @@ MatrixSkewSymmetric::MatrixSkewSymmetric(const MatrixSkewSymmetric& matrix)
 	_matTri = matrix._matTri;
 }
 
+MatrixSkewSymmetric::MatrixSkewSymmetric(const MatrixLowerTriangular& matrix)
+{
+	_rowSize = matrix.getSize();
+	_columnSize = matrix.getSize();
+	_matTri = matrix;
+
+}
+
 MatrixSkewSymmetric::MatrixSkewSymmetric(MatrixSkewSymmetric&& matrix) noexcept
 {
 	_rowSize = matrix._rowSize;
