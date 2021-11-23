@@ -3,8 +3,24 @@
 
 #include <iostream>
 #include <vector>
-#include "MatrixLowerTriangular.h"
+#include "MatrixSquare.h"
 
+
+class WorkerLineTimesColumn
+{
+private:
+	bool stop{false};
+	unsigned _identifier{0};
+	Matrix* _operandA{nullptr};
+	Matrix* _operandB{nullptr};
+	Matrix* _result{nullptr};
+	std::pair<unsigned, unsigned> _lineColumn;
+
+public:
+	WorkerLineTimesColumn(unsigned identifier, Matrix& operandA, Matrix& operandB, Matrix& result);
+	void setLineColumn(std::pair<unsigned, unsigned> lineColumn);
+
+};
 
 int main()
 {
