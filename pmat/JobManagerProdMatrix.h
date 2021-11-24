@@ -2,20 +2,22 @@
 
 #include <mutex>
 #include <thread>
+#include "Matrix.h"
 #include "JobTaskProdMatrix.h"
+#include "utils.h"
 
 class JobManagerProdMatrix
 {
 private:
 	std::mutex _mutex;
+	std::vector<JobTaskProdMatrix> _tasks;
+	unsigned _lastRowA{ 0 };
+	unsigned _lastColumnB{ 0 };
 
 public:
 	const Matrix& _operandA;
 	const Matrix& _operandB;
 	Matrix& _result;
-	std::vector<JobTaskProdMatrix> _tasks;
-	unsigned _lastRowA{ 0 };
-	unsigned _lastColumnB{ 0 };
 
 
 	JobManagerProdMatrix(const Matrix& operandA, const Matrix& operandB, Matrix& result)
@@ -23,11 +25,9 @@ public:
 		  _operandB{operandB},
 		  _result{result}
 	{
-		for (unsigned i = 0; i < putils::NUM_THREADS; ++i) 
-			_tasks.emplace_back(i, (*this));
 	}
 
-	void startJob();
+	void startJob(const unsigned nWorkers);
 
 	void notifyIdleness(unsigned identifier);
 };

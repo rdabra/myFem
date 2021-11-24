@@ -2,32 +2,37 @@
 //
 
 #include <iostream>
-#include <vector>
-#include "MatrixSquare.h"
-
-
-class WorkerLineTimesColumn
-{
-private:
-	bool stop{false};
-	unsigned _identifier{0};
-	Matrix* _operandA{nullptr};
-	Matrix* _operandB{nullptr};
-	Matrix* _result{nullptr};
-	std::pair<unsigned, unsigned> _lineColumn;
-
-public:
-	WorkerLineTimesColumn(unsigned identifier, Matrix& operandA, Matrix& operandB, Matrix& result);
-	void setLineColumn(std::pair<unsigned, unsigned> lineColumn);
-
-};
+#include "JobManagerProdMatrix.h"
+#include "Matrix.h"
+#include <chrono>
 
 int main()
 {
-	unsigned n = 4;
-	for (unsigned i = n; i-- > 0;) {
-		std::cout << "i=" << i << "\n";
-	}
+	Matrix A(1000, 1000);
+	Matrix B(1000, 1000);
+	Matrix R(1000, 1000);
+
+	A.fillRandomly(-1.0, 1.0);
+	B.fillRandomly(1.1, 2.0);
+
+	JobManagerProdMatrix man(A, B, R);
+	auto t1 = std::chrono::high_resolution_clock::now();
+	man.startJob(5);
+	auto t2 = std::chrono::high_resolution_clock::now();
+
+	std::chrono::duration<double, std::milli> ms_double = t2 - t1;
+
+	std::cout << "threads: " << ms_double.count() << "ms\n";
+
+
+	t1 = std::chrono::high_resolution_clock::now();
+	Matrix res(A*B);
+	t2 = std::chrono::high_resolution_clock::now();
+
+	ms_double = t2 - t1;
+
+	std::cout << "normal: " << ms_double.count() << "ms\n";
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

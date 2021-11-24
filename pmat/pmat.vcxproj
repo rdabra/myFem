@@ -157,6 +157,8 @@
   <ItemGroup>
     <ClInclude Include="AbstractArray.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="JobTaskProdMatrix.h" />
+    <ClInclude Include="JobManagerProdMatrix.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MatrixLowerTriangular.h" />
     <ClInclude Include="MatrixSkewSymmetric.h" />
@@ -173,6 +175,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractArray.cpp" />
+    <ClCompile Include="JobTaskProdMatrix.cpp" />
+    <ClCompile Include="JobManagerProdMatrix.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MatrixLowerTriangular.cpp" />
     <ClCompile Include="MatrixSkewSymmetric.cpp" />

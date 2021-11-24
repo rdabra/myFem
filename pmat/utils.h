@@ -15,7 +15,7 @@ namespace putils
 
 	static double ONE_HALF = 0.5000000000;
 
-	static unsigned NUM_THREADS = 4;
+	static unsigned NUM_THREADS = 5;
 
 
 	static inline const double& max(const double& a, const double& b) { return a > b ? a : b; };
