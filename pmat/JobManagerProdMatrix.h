@@ -1,11 +1,8 @@
 #pragma once
 
 #include <mutex>
-#include <thread>
 #include "Matrix.h"
 #include "AbstractJobManager.h"
-#include "WorkerProdMatrix.h"
-#include "utils.h"
 
 class JobManagerProdMatrix final : public AbstractJobManager
 {

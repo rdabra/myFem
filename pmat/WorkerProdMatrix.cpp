@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "WorkerProdMatrix.h"
-#include "JobManagerProdMatrix.h"
 
 
 void WorkerProdMatrix::setRowColumn(unsigned rowA, unsigned columnB)
@@ -12,8 +11,9 @@ void WorkerProdMatrix::setRowColumn(unsigned rowA, unsigned columnB)
 
 void WorkerProdMatrix::makeTask() const
 {
-	double sum{putils::ZERO};
-	for (unsigned j = 0; j < _manager->_operandA->getColumnSize(); ++j)
-		sum += (*_manager->_operandA)(_rowA, j) * (*_manager->_operandB)(j, _columnB);
-	_manager->_result->setValue(sum, _rowA, _columnB);
+	const auto man = dynamic_cast<JobManagerProdMatrix*> (_manager);
+	double sum{ putils::ZERO };
+	for (unsigned j = 0; j < man->_operandA->getColumnSize(); ++j)
+		sum += (*man->_operandA)(_rowA, j) * (*man->_operandB)(j, _columnB);
+	man->_result->setValue(sum, _rowA, _columnB);
 }

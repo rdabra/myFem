@@ -9,9 +9,9 @@
 int main()
 {
 
-	Matrix A(10, 10);
-	Matrix B(10, 10);
-	Matrix R(10, 10);
+	Matrix A(1000, 1000);
+	Matrix B(1000, 1000);
+	Matrix R(1000, 1000);
 
 	A.fillRandomly(-1.0, 1.0);
 	B.fillRandomly(1.1, 2.1); 

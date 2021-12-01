@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "JobManagerProdMatrix.h"
+#include "WorkerProdMatrix.h"
+#include <thread>
 
 
 void JobManagerProdMatrix::setTask(unsigned identifier)

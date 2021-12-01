@@ -1,13 +1,13 @@
 #pragma once
 
-class JobManagerProdMatrix;
+class AbstractJobManager;
 
 class AbstractWorker
 {
 protected:
 	bool _endTask{false};
 	unsigned _identifier{0};
-	JobManagerProdMatrix* _manager { nullptr };
+	AbstractJobManager* _manager { nullptr };
 	virtual void makeTask() const =0;
 
 

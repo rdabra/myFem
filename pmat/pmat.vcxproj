@@ -159,6 +159,7 @@
     <ClInclude Include="AbstractJobManager.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="AbstractWorker.h" />
+    <ClInclude Include="JobManagerSumMatrix.h" />
     <ClInclude Include="WorkerProdMatrix.h" />
     <ClInclude Include="JobManagerProdMatrix.h" />
     <ClInclude Include="Matrix.h" />
@@ -174,10 +175,12 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="Vector.h" />
+    <ClInclude Include="WorkerSumMatrix.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractArray.cpp" />
     <ClCompile Include="AbstractJobManager.cpp" />
+    <ClCompile Include="JobManagerSumMatrix.cpp" />
     <ClCompile Include="WorkerProdMatrix.cpp" />
     <ClCompile Include="JobManagerProdMatrix.cpp" />
     <ClCompile Include="Matrix.cpp" />
@@ -198,6 +201,7 @@
     <ClCompile Include="pmat.cpp" />
     <ClCompile Include="AbstractWorker.cpp" />
     <ClCompile Include="Vector.cpp" />
+    <ClCompile Include="WorkerSumMatrix.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

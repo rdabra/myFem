@@ -1,6 +1,9 @@
 #pragma once
 
 #include "AbstractWorker.h"
+#include "JobManagerProdMatrix.h"
+
+
 class JobManagerProdMatrix;
 
 class WorkerProdMatrix final : public AbstractWorker
@@ -13,7 +16,7 @@ protected:
 	void makeTask() const override;
 
 public:
-	WorkerProdMatrix(unsigned identifier, JobManagerProdMatrix& manager) 
+	WorkerProdMatrix(unsigned identifier, JobManagerProdMatrix& manager)
 	{
 		_identifier = identifier;
 		_manager = &manager;
