@@ -63,7 +63,13 @@
     <ClInclude Include="JobManagerProdMatrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="JobTaskProdMatrix.h">
+    <ClInclude Include="WorkerProdMatrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractWorker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractJobManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -110,7 +116,13 @@
     <ClCompile Include="JobManagerProdMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="JobTaskProdMatrix.cpp">
+    <ClCompile Include="WorkerProdMatrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractWorker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractJobManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

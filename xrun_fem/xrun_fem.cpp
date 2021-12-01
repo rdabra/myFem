@@ -8,28 +8,22 @@
 
 int main()
 {
-	Matrix A(1000, 1000);
-	Matrix B(1000, 1000);
-	Matrix R(1000, 1000);
+
+	Matrix A(10, 10);
+	Matrix B(10, 10);
+	Matrix R(10, 10);
 
 	A.fillRandomly(-1.0, 1.0);
-	B.fillRandomly(1.1, 2.0);
+	B.fillRandomly(1.1, 2.1); 
 
-	JobManagerProdMatrix man(A, B, R);
-	auto t1 = std::chrono::high_resolution_clock::now();
-	man.startJob(5);
-	auto t2 = std::chrono::high_resolution_clock::now();
+	JobManagerProdMatrix man(A, B, R,5);
 
-	std::chrono::duration<double, std::milli> ms_double = t2 - t1;
+	std::cout << "threads: " << man.timeJob() << "ms\n";
 
-	std::cout << "threads: " << ms_double.count() << "ms\n";
-
-
-	t1 = std::chrono::high_resolution_clock::now();
-	Matrix res(A*B);
-	t2 = std::chrono::high_resolution_clock::now();
-
-	ms_double = t2 - t1;
+	const auto t1 = std::chrono::high_resolution_clock::now();
+	Matrix res(A * B);
+	const auto t2 = std::chrono::high_resolution_clock::now();
+	const std::chrono::duration<double, std::milli> ms_double = t2 - t1;
 
 	std::cout << "normal: " << ms_double.count() << "ms\n";
 

@@ -2,34 +2,38 @@
 #include "JobManagerProdMatrix.h"
 
 
-void JobManagerProdMatrix::startJob(const unsigned nWorkers)
+void JobManagerProdMatrix::setTask(unsigned identifier)
 {
-	_tasks.clear();
-	for (unsigned i = 0; i < nWorkers; ++i)
-		_tasks.emplace_back(i, (*this));
-
-	std::vector<std::thread> workers;
-	for (auto& task : _tasks)
-		workers.emplace_back(&JobTaskProdMatrix::startTask, &task);
-	for (auto& worker : workers)
-		worker.join();
-	workers.clear();
-}
-
-void JobManagerProdMatrix::notifyIdleness(unsigned identifier)
-{
-	std::lock_guard<std::mutex> guard{_mutex};
-	if (_lastRowA < _operandA.getRowSize()) {
-		_tasks[identifier].setRowColumn(_lastRowA, _lastColumnB);
-		if (_lastColumnB < _operandB.getColumnSize() - 1) {
+	if (_lastRowA < _operandA->getRowSize()) {
+		const auto worker = dynamic_cast<WorkerProdMatrix*> (_workers[identifier]);
+		worker->setRowColumn(_lastRowA, _lastColumnB);
+		if (_lastColumnB < _operandB->getColumnSize() - 1) {
 			_lastColumnB++;
 		}
 		else {
 			_lastRowA++;
 			_lastColumnB = 0;
 		}
-	}
-	else {
-		_tasks[identifier].endTask();
-	}
+	} else
+		_workers[identifier]->endTask();
 }
+
+JobManagerProdMatrix::~JobManagerProdMatrix()
+{
+
+	for (unsigned i = 0; i < _nWorkers; ++i) 
+		delete dynamic_cast<WorkerProdMatrix*> (_workers[i]);
+}
+
+JobManagerProdMatrix::JobManagerProdMatrix(const Matrix& operandA, const Matrix& operandB, Matrix& result,
+                                           unsigned nWorkers)
+{
+	_operandA = &operandA;
+	_operandB = &operandB;
+	_result = &result;
+	_nWorkers = nWorkers;
+	_workers.clear();
+	for (unsigned i = 0; i < _nWorkers; ++i) 
+		_workers.push_back(new WorkerProdMatrix(i, (*this)));
+}
+

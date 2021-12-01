@@ -3,31 +3,27 @@
 #include <mutex>
 #include <thread>
 #include "Matrix.h"
-#include "JobTaskProdMatrix.h"
+#include "AbstractJobManager.h"
+#include "WorkerProdMatrix.h"
 #include "utils.h"
 
-class JobManagerProdMatrix
+class JobManagerProdMatrix final : public AbstractJobManager
 {
 private:
 	std::mutex _mutex;
-	std::vector<JobTaskProdMatrix> _tasks;
 	unsigned _lastRowA{ 0 };
 	unsigned _lastColumnB{ 0 };
+	unsigned _nWorkers{ 0 };
+
+protected:
+	void setTask(unsigned identifier) override;
 
 public:
-	const Matrix& _operandA;
-	const Matrix& _operandB;
-	Matrix& _result;
+	const Matrix* _operandA;
+	const Matrix* _operandB;
+	Matrix* _result;
 
+	JobManagerProdMatrix(const Matrix& operandA, const Matrix& operandB, Matrix& result, unsigned nWorkers);
+	~JobManagerProdMatrix() override;
 
-	JobManagerProdMatrix(const Matrix& operandA, const Matrix& operandB, Matrix& result)
-		: _operandA{operandA},
-		  _operandB{operandB},
-		  _result{result}
-	{
-	}
-
-	void startJob(const unsigned nWorkers);
-
-	void notifyIdleness(unsigned identifier);
 };

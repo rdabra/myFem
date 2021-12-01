@@ -1,5 +1,6 @@
 #include "pch.h"
 
+#include "JobManagerProdMatrix.h"
 #include "Matrix.h"
 
 TEST(TestMatrix, TestEqualityOperator) {
@@ -252,6 +253,10 @@ TEST(TestMatrix, TestEqualityOperator) {
 		z.times(v, x1);
 		Matrix x2(z * v);
 
+		Matrix respp(4, 4);
+		JobManagerProdMatrix manag(z, v, respp, 5);
+		manag.startJob();
+
 		Matrix x3(4, 3);
 		z.times(2.0, x3);
 		Matrix x4(z * 2.0);
@@ -259,6 +264,7 @@ TEST(TestMatrix, TestEqualityOperator) {
 
 		EXPECT_TRUE(resp == x1);
 		EXPECT_TRUE(resp == x2);
+		EXPECT_TRUE(resp == respp);
 		EXPECT_TRUE(resp2 == x3);
 		EXPECT_TRUE(resp2 == x4);
 		EXPECT_TRUE(resp2 == z);
