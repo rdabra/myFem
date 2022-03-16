@@ -8,7 +8,7 @@
 
 int main()
 {
-
+	/*
 	Matrix A(1000, 1000);
 	Matrix B(1000, 1000);
 	Matrix R(1000, 1000);
@@ -26,6 +26,17 @@ int main()
 	const std::chrono::duration<double, std::milli> ms_double = t2 - t1;
 
 	std::cout << "normal: " << ms_double.count() << "ms\n";
+	*/
+
+	Matrix mat{ 2461,6, R"(C:\myWorks\mega\resultados.csv)"};
+
+	for (unsigned i = 0; i < 2; i++) {
+		for (unsigned j = 0; j < 6; j++)
+			std::cout << mat(i, j) << " ";
+		std::cout << "\n";
+	}
+
+	std::cout << mat.getRowSize() << "\n";
 
 }
 

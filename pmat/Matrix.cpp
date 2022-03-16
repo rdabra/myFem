@@ -2,9 +2,14 @@
 
 #include "Matrix.h"
 
+#include <fstream>
+#include <ios>
+#include <sstream>
+#include <string>
+
 /**
  * @brief Constructs the object by specifying dimensions
- * @param rowSize    Row size 
+ * @param rowSize    Row size
  * @param columnSize Column size
 */
 Matrix::Matrix(const unsigned& rowSize, const unsigned& columnSize)
@@ -12,6 +17,35 @@ Matrix::Matrix(const unsigned& rowSize, const unsigned& columnSize)
 	_rowSize = rowSize;
 	_columnSize = columnSize;
 	_matrix.resize(this->Matrix::getVectorSize());
+}
+
+Matrix::Matrix(const unsigned& rowSize, const unsigned& columnSize, const std::string& fileName)
+{
+	_rowSize = rowSize;
+	_columnSize = columnSize;
+	_matrix.resize(this->Matrix::getVectorSize());
+
+	std::ifstream file;
+	file.open(fileName, std::ios_base::in);
+
+	if (file.is_open()) {
+		unsigned i{0}, j{0};
+		std::string line;
+		std::stringstream lineStream;
+		while (std::getline(file, line)) {
+			lineStream.clear();
+			lineStream.str(line);
+			std::string element;
+			while (std::getline(lineStream, element, ','))
+				this->Matrix::setValue(std::stod(element), i, j++);
+			j = 0;
+			i++;
+		}
+		file.close();
+	}
+	else
+		throw std::logic_error(
+			"Could not open file");
 }
 
 Matrix::Matrix(const Matrix& matrix)
@@ -36,7 +70,7 @@ Matrix::Matrix(Matrix&& matrix) noexcept
 }
 
 /**
- * @brief Resets the object to initial settings           
+ * @brief Resets the object to initial settings
  * @param rowSize    Row size
  * @param columnSize Column size
 */
@@ -121,12 +155,12 @@ bool Matrix::operator==(const Matrix& matrix) const
 /**
  * @brief Calculates the dot product of this matrix with the parameter
  * @param matrix The right operand
- * @details The dot product of matrices \f$ A\f$ and \f$ B\f$ is 
+ * @details The dot product of matrices \f$ A\f$ and \f$ B\f$ is
  *  \f[
- *		A:B = \sum_{i,j}A_{ij}B_{ij}	
+ *		A:B = \sum_{i,j}A_{ij}B_{ij}
  *  \f]
  * @return The result of the dot product
- * @exception std::logic_error Operands are not compatible 
+ * @exception std::logic_error Operands are not compatible
 */
 double Matrix::dotProduct(const Matrix& matrix) const
 {
@@ -172,7 +206,7 @@ Matrix Matrix::operator+(const Matrix& matrix) const
 }
 
 /**
- * @brief Sums the parameter to this matrix 
+ * @brief Sums the parameter to this matrix
  * @param matrix Parameter summed to this matrix
  * @exception std::logic_error Parameter is not compatible
 */
@@ -376,7 +410,7 @@ void Matrix::multiplyColumnBy(const unsigned& columnIndex, const double& scalar)
  * @brief Swaps corresponding elements of two rows of this matrix from an initial column index to a final column index
  * @param rowIndexA A row index
  * @param rowIndexB Another row index
- * @param startColumn Initial column index 
+ * @param startColumn Initial column index
  * @param endColumn Final column index
  * @exception std::logic_error Index out of bounds
 */
@@ -450,7 +484,7 @@ void Matrix::transpose()
  * @brief Calculates the Frobenius Norm of this matrix
  * @details Frobenius Norm of matrix \f$ A\f$ is calculated from the dot product the following way:
  *  \f[
- *		\sqrt{A:A}	
+ *		\sqrt{A:A}
  *  \f]
  * @return The value of the Frobenius Norm
 */
@@ -461,7 +495,7 @@ double Matrix::getFrobeniusNorm() const
 
 /**
  * @brief Fills this matrix with random values
- * @param min Lower limit 
+ * @param min Lower limit
  * @param max Upper limit
 */
 void Matrix::fillRandomly(const double& min, const double& max)
@@ -507,6 +541,58 @@ Vector Matrix::getColumn(const unsigned& index) const
 	return resp;
 }
 
+/**
+ * @brief Gets the number of occurrences of the parameter in this matrix
+ * @param value Value to be searched for
+ * @return Number of occurrences of the parameter 
+ */
+unsigned Matrix::getNumberOfOccurrences(const double& value) const
+{
+	unsigned res{0};
+
+	for (unsigned i = 0; i < this->getRowSize(); i++)
+		for (unsigned j = 0; j < this->getColumnSize(); j++)
+			if (putils::areEqual((*this)(i, j), value)) res++;
+
+	return res;
+}
+
+/**
+ * @brief Gets the number of occurrences of the parameter in specified a row
+ * @param rowIndex Row to search
+ * @param value Value to be searched for
+ * @return Number of occurrences of value in the specified row
+ */
+unsigned Matrix::getNumberOfOccurrencesInRow(const unsigned rowIndex, const double& value) const
+{
+	if (rowIndex >= this->getRowSize()) throw std::logic_error(messages::INDEX_OUT);
+
+	unsigned res{0};
+
+	for (unsigned j = 0; j < this->getColumnSize(); j++)
+		if (putils::areEqual((*this)(rowIndex, j), value)) res++;
+
+	return res;
+}
+
+/**
+ * @brief Gets the number of occurrences of the parameter in specified a column
+ * @param columnIndex Column to search
+ * @param value Value to be searched for
+ * @return Number of occurrences of value in the specified column
+ */
+unsigned Matrix::getNumberOfOccurrencesInColumn(const unsigned columnIndex, const double& value) const
+{
+	if (columnIndex >= this->getColumnSize()) throw std::logic_error(messages::INDEX_OUT);
+
+	unsigned res{0};
+
+	for (unsigned i = 0; i < this->getRowSize(); i++)
+		if (putils::areEqual((*this)(i, columnIndex), value)) res++;
+
+	return res;
+}
+
 
 /**
  * @brief Copies the elements from the parameter to this matrix
@@ -520,7 +606,6 @@ void Matrix::copyElementsFrom(const Matrix& matrix)
 		for (unsigned j = 0; j < this->getColumnSize(); j++)
 			this->setValue(matrix(i, j), i, j);
 }
-
 
 
 void Matrix::validateOperands(const Matrix& matrix) const

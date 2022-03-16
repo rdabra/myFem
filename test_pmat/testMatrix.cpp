@@ -328,6 +328,31 @@ TEST(TestMatrix, TestEqualityOperator) {
 		EXPECT_TRUE(zt == z);
 	}
 
+	TEST(TestMatrix, TestOccurences) {
+		Matrix z(4, 3);
+		z.setValue(1.0, 0, 0);
+		z.setValue(2.0, 0, 1);
+		z.setValue(3.0, 0, 2);
+		z.setValue(8.0, 1, 0);
+		z.setValue(5.0, 1, 1);
+		z.setValue(9.0, 1, 2);
+		z.setValue(7.0, 2, 0);
+		z.setValue(8.0, 2, 1);
+		z.setValue(9.0, 2, 2);
+		z.setValue(10.0, 3, 0);
+		z.setValue(10.0, 3, 1);
+		z.setValue(9.0, 3, 2);
+
+
+		EXPECT_TRUE(z.getNumberOfOccurrences(8.0) == 2);
+		EXPECT_TRUE(z.getNumberOfOccurrences(58.0) == 0);
+		EXPECT_TRUE(z.getNumberOfOccurrencesInColumn(2,9.0) == 3);
+		EXPECT_TRUE(z.getNumberOfOccurrencesInRow(3, 10.0) == 2);
+
+	}
+
+
+
 	TEST(TestMatrix, TestMisc) {
 		Matrix z(4, 3);
 		z.setValue(1.0, 0, 0);

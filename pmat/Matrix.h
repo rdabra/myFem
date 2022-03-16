@@ -29,6 +29,7 @@ protected:
 public:
 	Matrix() = default;
 	Matrix(const unsigned& rowSize, const unsigned& columnSize);
+	Matrix(const unsigned& rowSize, const unsigned& columnSize, const std::string& fileName);
 	Matrix(const Matrix& matrix);
 	Matrix(Matrix&& matrix) noexcept;
 	virtual ~Matrix() = default;
@@ -69,5 +70,9 @@ public:
 	virtual void fillRandomly(const double& min, const double& max);
 	Vector getRow(const unsigned& index) const;
 	Vector getColumn(const unsigned& index) const;
+	virtual unsigned getNumberOfOccurrences(const double& value) const;
+	virtual unsigned getNumberOfOccurrencesInRow(const unsigned rowIndex, const double& value) const;
+	virtual unsigned getNumberOfOccurrencesInColumn(const unsigned columnIndex, const double& value) const;
+
 	void copyElementsFrom(const Matrix& matrix);
 };

@@ -1,0 +1,32 @@
+
+
+											RESHARPER
+
+ - Shortcuts
+Resharper Goto Declaration: CTRL+Z,CTRL+N
+Resharper Clean Up code: CTRL+Z,CTRL+C
+
+ - Alterar shortcuts: Options, Environments, Keyboard 
+
+ - Baixar: ir no rutracker e procurar o ReSharper
+
+
+-----------------------------------------------------------------------
+
+											DOXYGEN
+
+ - Editar e gerenciar o arquivo Doxyfile por meio do doxyWizard (doxygen gui front end)
+
+ - Abrir um arquivo já criado para ser utilizado como modelo 
+ 
+ 
+ 
+ -----------------------------------------------------------------------
+
+									GOOGLE TEST
+
+- Quando se muda o compilador para intel, perde-se a referência para a biblioteca do google test
+- Há um subdiretório no diretório da solução chamado packages.
+- Caminhar por ele até achar o include do gtest. 
+Ex: c:\myWorks\programacao\myFem\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.4\build\native\include\
+- No properties do projeto, fazer referência a esse dieretório no contexto de "Debug". Veja se a compilação está setada para Debug.
