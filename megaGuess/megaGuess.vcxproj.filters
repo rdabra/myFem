@@ -18,12 +18,12 @@
     <ClCompile Include="megaGuess.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MediaPonderada.cpp">
+    <ClCompile Include="WeightedMean.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MediaPonderada.h">
+    <ClInclude Include="WeightedMean.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

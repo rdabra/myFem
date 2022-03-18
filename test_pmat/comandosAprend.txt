@@ -30,3 +30,14 @@ Resharper Clean Up code: CTRL+Z,CTRL+C
 - Caminhar por ele até achar o include do gtest. 
 Ex: c:\myWorks\programacao\myFem\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.4\build\native\include\
 - No properties do projeto, fazer referência a esse dieretório no contexto de "Debug". Veja se a compilação está setada para Debug.
+
+
+
+
+---------------------------------------------------------------------
+				
+								COMANDOS
+
+explicit: https://stackoverflow.com/questions/121162/what-does-the-explicit-keyword-mean
+
+

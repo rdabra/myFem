@@ -366,6 +366,18 @@ Matrix Matrix::operator*(const double& scalar) const
 	return resp;
 }
 
+Matrix Matrix::multiplyHadamardBy(const Matrix& matrix) const
+{
+	this->validateOperands(matrix);
+	Matrix resp{matrix.getRowSize(), matrix.getColumnSize()};
+
+	for (unsigned i = 0; i < this->getRowSize(); i++)
+		for (unsigned j = 0; j < this->getColumnSize(); j++)
+			resp.setValue((*this)(i, j) * matrix(i, j), i, j);
+
+	return resp;
+}
+
 /**
  * @brief Multiplies this matrix by the parameter
  * @param scalar Parameter that multiplies this matrix

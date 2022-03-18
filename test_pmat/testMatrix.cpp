@@ -293,6 +293,56 @@ TEST(TestMatrix, TestEqualityOperator) {
 		EXPECT_TRUE(putils::areEqual(z.getFrobeniusNorm(), frobZ));
 	}
 
+
+	TEST(TestMatrix, TestHadamard) {
+		Matrix A(4, 3);
+		A.setValue(1.0, 0, 0);
+		A.setValue(2.0, 0, 1);
+		A.setValue(3.0, 0, 2);
+		A.setValue(4.0, 1, 0);
+		A.setValue(5.0, 1, 1);
+		A.setValue(6.0, 1, 2);
+		A.setValue(7.0, 2, 0);
+		A.setValue(8.0, 2, 1);
+		A.setValue(9.0, 2, 2);
+		A.setValue(10.0, 3, 0);
+		A.setValue(11.0, 3, 1);
+		A.setValue(12.0, 3, 2);
+
+		Matrix B(4, 3);
+		B.setValue(1.0, 0, 0);
+		B.setValue(2.0, 0, 1);
+		B.setValue(2.0, 0, 2);
+		B.setValue(3.0, 1, 0);
+		B.setValue(2.0, 1, 1);
+		B.setValue(1.0, 1, 2);
+		B.setValue(2.0, 2, 0);
+		B.setValue(3.0, 2, 1);
+		B.setValue(4.0, 2, 2);
+		B.setValue(2.0, 3, 0);
+		B.setValue(10.0, 3, 1);
+		B.setValue(100.0, 3, 2);
+
+		Matrix C(4, 3);
+		C.setValue(1.0, 0, 0);
+		C.setValue(4.0, 0, 1);
+		C.setValue(6.0, 0, 2);
+		C.setValue(12.0, 1, 0);
+		C.setValue(10.0, 1, 1);
+		C.setValue(6.0, 1, 2);
+		C.setValue(14.0, 2, 0);
+		C.setValue(24.0, 2, 1);
+		C.setValue(36.0, 2, 2);
+		C.setValue(20.0, 3, 0);
+		C.setValue(110.0, 3, 1);
+		C.setValue(1200.0, 3, 2);
+
+
+
+		EXPECT_TRUE(C==A.multiplyHadamardBy(B));
+	}
+
+
 	TEST(TestMatrix, TestTranspose) {
 		Matrix z(4, 3);
 		z.setValue(1.0, 0, 0);
@@ -350,7 +400,6 @@ TEST(TestMatrix, TestEqualityOperator) {
 		EXPECT_TRUE(z.getNumberOfOccurrencesInRow(3, 10.0) == 2);
 
 	}
-
 
 
 	TEST(TestMatrix, TestMisc) {

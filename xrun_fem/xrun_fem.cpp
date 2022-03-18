@@ -28,15 +28,14 @@ int main()
 	std::cout << "normal: " << ms_double.count() << "ms\n";
 	*/
 
-	Matrix mat{ 2461,6, R"(C:\myWorks\mega\resultados.csv)"};
+	//Type of random number distribution
+	std::uniform_int_distribution<unsigned> dist(1, 60);
 
-	for (unsigned i = 0; i < 2; i++) {
+	//Mersenne Twister: Good quality random number generator initialized with non-deterministic seeds
+	std::mt19937 rng(std::random_device{}());
+
 		for (unsigned j = 0; j < 6; j++)
-			std::cout << mat(i, j) << " ";
-		std::cout << "\n";
-	}
-
-	std::cout << mat.getRowSize() << "\n";
+			std::cout << dist(rng) << "\n";
 
 }
 

@@ -183,6 +183,76 @@
 	}
 
 
+	TEST(TestVector, TestNormalization) {
+		Vector v(7);
+		v.setValue(1.0, 0);
+		v.setValue(2.0, 1);
+		v.setValue(3.0, 2);
+		v.setValue(4.0, 3);
+		v.setValue(5.0, 4);
+		v.setValue(6.0, 5);
+		v.setValue(7.0, 6);
+
+
+		EXPECT_TRUE(v==v.getUnitaryVector()*v.frobeniusNorm());
+
+	}
+
+	TEST(TestVector, TestOrder) {
+		Vector v(7);
+		v.setValue(5.0, 0);
+		v.setValue(2.0, 1);
+		v.setValue(7.0, 2);
+		v.setValue(1.0, 3);
+		v.setValue(3.0, 4);
+		v.setValue(6.0, 5);
+		v.setValue(4.0, 6);
+
+		Vector asc(7);
+		asc.setValue(1.0, 0);
+		asc.setValue(2.0, 1);
+		asc.setValue(3.0, 2);
+		asc.setValue(4.0, 3);
+		asc.setValue(5.0, 4);
+		asc.setValue(6.0, 5);
+		asc.setValue(7.0, 6);
+
+		Vector dsc(7);
+		dsc.setValue(7.0, 0);
+		dsc.setValue(6.0, 1);
+		dsc.setValue(5.0, 2);
+		dsc.setValue(4.0, 3);
+		dsc.setValue(3.0, 4);
+		dsc.setValue(2.0, 5);
+		dsc.setValue(1.0, 6);
+
+
+		EXPECT_TRUE(v.getAscOrderedVector() == asc);
+		EXPECT_TRUE(v.getDescOrderedVector() == dsc);
+
+
+	}
+
+
+
+	TEST(TestVector, TestOccurrences) {
+		Vector v(7);
+		v.setValue(1.0, 0);
+		v.setValue(5.0, 1);
+		v.setValue(3.0, 2);
+		v.setValue(7.0, 3);
+		v.setValue(5.0, 4);
+		v.setValue(5.0, 5);
+		v.setValue(7.0, 6);
+
+
+		EXPECT_TRUE(v.getNumberOfOccurrences(5.0)==3);
+		EXPECT_TRUE(v.getNumberOfOccurrences(7.0) == 2);
+		EXPECT_TRUE(v.getNumberOfOccurrences(9.0) == 0);
+
+	}
+
+
 	TEST(TestVector, TestMisc) {
 		Vector v(7);
 		v.setValue(1.0, 0);

@@ -245,6 +245,44 @@ double Vector::frobeniusNorm() const
 	return sqrt(this->dotProduct(*this));
 }
 
+unsigned Vector::getNumberOfOccurrences(const double& value) const
+{
+	unsigned res{0};
+
+	for (unsigned i = 0; i < this->getSize(); i++)
+		if (putils::areEqual((*this)(i), value)) res++;
+
+	return res;
+}
+
+Vector Vector::getUnitaryVector() const
+{
+	return {(*this) * (putils::ONE / this->frobeniusNorm())};
+}
+
+Vector Vector::getAscOrderedVector() const
+{
+	Vector resp(*this);
+
+	for (unsigned pivot = 0; pivot < resp.getSize() - 1; pivot++)
+		for (unsigned i = pivot + 1; i < resp.getSize(); i++)
+			if (resp(pivot) > resp(i)) resp.swapElements(pivot, i);
+
+	return resp;
+}
+
+Vector Vector::getDescOrderedVector() const
+{
+	Vector resp(*this);
+
+	for (unsigned pivot = 0; pivot < resp.getSize() - 1; pivot++)
+		for (unsigned i = pivot + 1; i < resp.getSize(); i++)
+			if (resp(pivot) < resp(i)) resp.swapElements(pivot, i);
+
+	return resp;
+
+}
+
 /**
  * @brief Fills this vector with random values
  * @param min Lower limit

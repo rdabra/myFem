@@ -56,6 +56,7 @@ public:
 	virtual Vector operator*(const Vector& vector) const;
 	virtual void times(const double& scalar, Matrix& resp) const;
 	Matrix operator*(const double& scalar) const;
+	Matrix multiplyHadamardBy(const Matrix& matrix) const;
 	virtual void multiplyBy(const double& scalar);
 	virtual void multiplyRowBy(const unsigned& rowIndex, const double& scalar);
 	virtual void multiplyColumnBy(const unsigned& columnIndex, const double& scalar);

@@ -4,10 +4,17 @@
 #include <iostream>
 
 #include "Matrix.h"
+#include "WeightedMean.h"
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	Matrix mat{ 2461,6, R"(C:\myWorks\mega\resultados.csv)" };
+
+
+	WeightedMean w(&mat);
+
+	Vector g = w.getGuess();
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

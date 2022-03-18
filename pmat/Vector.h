@@ -39,6 +39,10 @@ public:
 	void multiplyBy(const double& scalar);
 	virtual void swapElements(const unsigned& elmIndexA, const unsigned& elmIndexB);
 	double frobeniusNorm() const;
+	virtual unsigned getNumberOfOccurrences(const double& value) const;
+	virtual Vector getUnitaryVector() const;
+	virtual Vector getAscOrderedVector() const;
+	virtual Vector getDescOrderedVector() const;
 	virtual void fillRandomly(const double& min, const double& max);
 	void copyElementsFrom(const Vector& vector);
 	Matrix toColumnMatrix() const;
