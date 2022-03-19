@@ -6,6 +6,9 @@
 void WeightedMean::calcWeightedMean()
 {
 	if (!_calcMean) {
+
+		Vector aux(_vecWeightedMean.getSize());
+
 		Vector sumNumerator(6);
 		Vector sumWeights(6);
 
@@ -25,26 +28,30 @@ void WeightedMean::calcWeightedMean()
 		sumWeights.setValue(0.0, 4);
 		sumWeights.setValue(0.0, 5);
 
+		this->calcFreqColumn();
+		this->calcFreqTotal();
 
 		for (unsigned i = 0; i < 60; i++)
 			for (unsigned j = 0; j < 6; j++) {
 				const double weight = _veqFreqTotal(i) * _matFreqColumn(i, j);
-				sumNumerator.setValue(sumNumerator(j) + (i * weight), j);
+				sumNumerator.setValue(sumNumerator(j) + ((i + 1) * weight), j);
 				sumWeights.setValue(sumWeights(j) + weight, j);
 			}
 
 		for (unsigned j = 0; j < 6; j++)
-			_vecWeightedMean.setValue(sumNumerator(j) / sumWeights(j), j);
+			aux.setValue(sumNumerator(j) / sumWeights(j), j);
+
+		_vecWeightedMean.copyElementsFrom(aux.getAscOrderedVector());
 	}
 	_calcMean = true;
 }
 
 void WeightedMean::calcFreqTotal()
 {
-	const auto total = _matHistoric->getRowSize() * 60.0000000000;
+	const auto total = _matHistoric->getRowSize() * 6.0000000000;
 
 	for (unsigned i = 0; i < 60; i++) {
-		double freq = 1000.00 * static_cast<double>(_matHistoric->getNumberOfOccurrences(i)) / total;
+		double freq = 1000.00 * static_cast<double>(_matHistoric->getNumberOfOccurrences(i + 1.0)) / total;
 		_veqFreqTotal.setValue(freq, i);
 	}
 }
@@ -54,7 +61,8 @@ void WeightedMean::calcFreqColumn()
 	const auto total = static_cast<double>(_matHistoric->getRowSize());
 	for (unsigned i = 0; i < 60; i++)
 		for (unsigned j = 0; j < 6; j++) {
-			double freq = 1000.00 * static_cast<double>(_matHistoric->getNumberOfOccurrencesInColumn(j, i)) / total;
+			double freq = 1000.00 * static_cast<double>(_matHistoric->getNumberOfOccurrencesInColumn(j, i + 1.0)) /
+				total;
 			_matFreqColumn.setValue(freq, i, j);
 		}
 }
@@ -66,8 +74,6 @@ Vector WeightedMean::getRandomGuess() const
 	std::mt19937 rng(std::random_device{}());
 
 	Vector resp(6);
-
-	std::cout << "Trying to get a valid random guess.\n";
 
 	unsigned j = 0;
 	do {
@@ -83,28 +89,28 @@ Vector WeightedMean::getRandomGuess() const
 
 	}
 	while (j < 6);
-		
-	std::cout << "Valid random guess found.\n";
+
 
 	return resp.getAscOrderedVector();
 }
 
-Vector WeightedMean::getGuess() 
+Vector WeightedMean::getGuess()
 {
 	this->calcWeightedMean();
 
-	Vector resp = this->getRandomGuess();
-	const Vector vecUnitaryWeightedMean = _vecWeightedMean.getUnitaryVector();
-	double arcCos { abs(resp.getUnitaryVector().dotProduct(vecUnitaryWeightedMean))};
 
-	std::cout << "Trying to find a close guess.\n";
-
-	while (arcCos < 0.7071067811865475) {
-		resp = this->getRandomGuess();
-		arcCos = abs(resp.getUnitaryVector().dotProduct(vecUnitaryWeightedMean));
-		std::cout << "ArcCos "<< arcCos << "\n";
+	double dif = 1.00;
+	const double normWeighted = _vecWeightedMean.frobeniusNorm();
+	Vector resp(6);
+	for (unsigned k = 0; k < _nRandomGuesses; k++) {
+		Vector g = this->getRandomGuess();
+		const double aux = abs(g.frobeniusNorm() - normWeighted) / normWeighted;
+		if (aux < dif) {
+			dif = aux;
+			resp.copyElementsFrom(g);
+		}
 	}
-	std::cout << "Close guess found.\n";
+
 
 	for (unsigned i = 0; i < 6; i++)
 		resp.setValue(round(resp(i)), i);
@@ -112,10 +118,29 @@ Vector WeightedMean::getGuess()
 	return resp;
 }
 
-std::string WeightedMean::getGuessAString()
+std::string WeightedMean::getGuessAsString()
 {
 	std::string resp = "[ ";
 	const Vector g = this->getGuess();
+	for (unsigned i = 0; i < 6; i++)
+		resp += std::to_string(g(i)) + " ";
+	resp += "]\n";
+
+	return resp;
+}
+
+std::string WeightedMean::getGuessesAsString(const unsigned& nGuesses)
+{
+	std::string resp;
+	for (unsigned i = 0; i < nGuesses; i++)
+		resp += this->getGuessAsString();
+	return resp;
+}
+
+std::string WeightedMean::getWeightedMeanAsString()
+{
+	std::string resp = "[ ";
+	const Vector g = this->getWeightedMean();
 	for (unsigned i = 0; i < 6; i++)
 		resp += std::to_string(g(i)) + " ";
 	resp += "]\n";

@@ -8,13 +8,15 @@
 
 int main()
 {
-	Matrix mat{ 2461,6, R"(C:\myWorks\mega\resultados.csv)" };
+	Matrix mat{2463, 6, R"(C:\myWorks\mega\resultados.csv)"};
 
 
-	WeightedMean w(&mat);
+	WeightedMean w(&mat, 10000);
 
-	Vector g = w.getGuess();
+	std::cout << "Weighted Mean: " << w.getWeightedMeanAsString();
 
+
+	std::cout << "Guesses: " << "\n" << w.getGuessesAsString(3) << "\n";
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
