@@ -19,6 +19,7 @@ private:
 	void calcWeightedMean();
 	void calcFreqTotal();
 	void calcFreqColumn();
+	double getMyNorm(const Vector& vec) const;
 
 	Vector getRandomGuess() const;
 

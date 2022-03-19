@@ -67,6 +67,17 @@ void WeightedMean::calcFreqColumn()
 		}
 }
 
+double WeightedMean::getMyNorm(const Vector& vec) const
+{
+	double resp {0.0};
+	for (unsigned i = 0; i < 5; i++) {
+		const double dif = vec(i + 1) - vec(i) ;
+		resp += dif * dif;
+	}
+
+	return sqrt(resp);
+}
+
 Vector WeightedMean::getRandomGuess() const
 {
 	const std::uniform_int_distribution<unsigned> dist(1, 60);
@@ -100,11 +111,11 @@ Vector WeightedMean::getGuess()
 
 
 	double dif = 1.00;
-	const double normWeighted = _vecWeightedMean.frobeniusNorm();
+	const double normWeighted = this->getMyNorm(_vecWeightedMean);
 	Vector resp(6);
 	for (unsigned k = 0; k < _nRandomGuesses; k++) {
 		Vector g = this->getRandomGuess();
-		const double aux = abs(g.frobeniusNorm() - normWeighted) / normWeighted;
+		const double aux = abs(this->getMyNorm(g) - normWeighted) / normWeighted;
 		if (aux < dif) {
 			dif = aux;
 			resp.copyElementsFrom(g);

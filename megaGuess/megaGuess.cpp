@@ -11,7 +11,7 @@ int main()
 	Matrix mat{2463, 6, R"(C:\myWorks\mega\resultados.csv)"};
 
 
-	WeightedMean w(&mat, 10000);
+	WeightedMean w(&mat, 50000);
 
 	std::cout << "Weighted Mean: " << w.getWeightedMeanAsString();
 
