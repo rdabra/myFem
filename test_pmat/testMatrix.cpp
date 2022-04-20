@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "JobManagerProdMatrix.h"
+#include "WorkManagerProdMatrix.h"
 #include "Matrix.h"
 
 TEST(TestMatrix, TestEqualityOperator) {
@@ -254,8 +254,8 @@ TEST(TestMatrix, TestEqualityOperator) {
 		Matrix x2(z * v);
 
 		Matrix respp(4, 4);
-		JobManagerProdMatrix manag(z, v, respp, 5);
-		manag.startJob();
+		WorkManagerProdMatrix manag(z, v, respp, 5);
+		manag.startWork();
 
 		Matrix x3(4, 3);
 		z.times(2.0, x3);

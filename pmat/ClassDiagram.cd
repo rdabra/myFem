@@ -3,35 +3,35 @@
   <Class Name="Matrix" Collapsed="true">
     <Position X="4.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BGCBAgAFAETBAAAAGANAAQIAFgigYIBAmCigCQAAAhA=</HashCode>
+      <HashCode>BGCBCgAFAETBAAAAGANAAQIAHgigYIBAmAigCQAAAhA=</HashCode>
       <FileName>Matrix.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MatrixSquare" Collapsed="true">
     <Position X="4" Y="2.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAYoAYAEQIQUIABAgAIACIBAMkAAAIAQCIAoAAgQAAE=</HashCode>
+      <HashCode>NCctAYAEQIQVoABAgAIhCYBQAmgAAIAQDIAoIAgQAiE=</HashCode>
       <FileName>MatrixSquare.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AbstractMatrixTriangular" Collapsed="true">
     <Position X="3.75" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAJBAQgFQAQBAAAAEANAAAAAIggAAEBACACAAAAAAAA=</HashCode>
+      <HashCode>IAJBAQgFQAQBAAAAEANAAAAQAggAAEBACACAAAAAAAA=</HashCode>
       <FileName>AbstractMatrixTriangular.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MatrixDiagonal" Collapsed="true">
     <Position X="1.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAYIAIABQARAAABAkAMAAQAAIwgCIIBICCAoAAAAAAA=</HashCode>
+      <HashCode>JAYIAIABQARAAABAkAMAAQAACwgCIIBICAAoAAAAAAA=</HashCode>
       <FileName>MatrixDiagonal.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Vector" Collapsed="true">
     <Position X="6.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BEAAAAAAAIRAAAIAEAMIAQAIEgAAIIBAAGAgAAIAAgA=</HashCode>
+      <HashCode>BEAAAAAQAIRAAAIAEAMIAQIIEgAAIINAAGAgAAIAAgA=</HashCode>
       <FileName>Vector.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -52,7 +52,7 @@
   <Class Name="AbstractMatrixSymmetry" Collapsed="true">
     <Position X="8.5" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAAAAQAEAABAAAAAEAMAAQAAAAAAIIBACCAgAQAACAA=</HashCode>
+      <HashCode>BAAAAQAEAABAAAAAEAMAAQAACAAAIIBACAAgAQAACAA=</HashCode>
       <FileName>AbstractMatrixSymmetry.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -66,7 +66,7 @@
   <Class Name="MatrixSymmetric" Collapsed="true">
     <Position X="7" Y="5.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAIACAAAAIQEAAQAEAAABAAAIgAAgAAACIAgAAQAAAA=</HashCode>
+      <HashCode>IAIACAAAQIQEAAQAEAAABAAQAgAAgAAACIAgAAQAAAA=</HashCode>
       <FileName>MatrixSymmetric.h</FileName>
     </TypeIdentifier>
   </Class>

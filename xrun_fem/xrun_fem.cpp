@@ -2,7 +2,7 @@
 //
 
 #include <iostream>
-#include "JobManagerProdMatrix.h"
+#include "WorkManagerProdMatrix.h"
 #include "Matrix.h"
 #include <chrono>
 

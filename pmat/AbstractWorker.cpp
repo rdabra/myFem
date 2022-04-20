@@ -1,19 +1,25 @@
 #include "pch.h"
 #include "AbstractWorker.h"
-#include "JobManagerProdMatrix.h"
+#include "WorkManagerProdMatrix.h"
 
 
-void AbstractWorker::endTask()
+/**
+ * @brief Notifies this worker that a work ended
+*/
+void AbstractWorker::notifyEndOfWork()
 {
-	_endTask = true;
+	_endOfWork = true;
 }
 
+/**
+ * @brief Performs tasks until the work ends;
+*/
 void AbstractWorker::startTask() const
 {
-	_manager->notifyIdleness(_identifier);
-	while (!_endTask) {
-		this->makeTask();
-		_manager->notifyIdleness(_identifier);
+	_manager->dispatchNextTask(_identifier);
+	while (!_endOfWork) {
+		this->performTask();
+		_manager->dispatchNextTask(_identifier);
 	}
 }
 

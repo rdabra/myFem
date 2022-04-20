@@ -1,18 +1,18 @@
 ﻿#include "pch.h"
 #include "WorkerSumMatrix.h"
-#include "JobManagerSumMatrix.h"
+#include "WorkManagerSumMatrix.h"
 
 
-void WorkerSumMatrix::setRow(unsigned row)
+void WorkerSumMatrix::setRow(unsigned rowIndex)
 {
-	_row = row;
-	_endTask = false;
+	_row = rowIndex;
+	_endOfWork = false;
 }
 
 
-void WorkerSumMatrix::makeTask() const
+void WorkerSumMatrix::performTask() const
 {
-	const auto man = dynamic_cast<JobManagerSumMatrix*>(_manager);
+	const auto man = dynamic_cast<WorkManagerSumMatrix*>(_manager);
 	for (unsigned j = 0; j < man->_operandA->getColumnSize(); ++j)
-		man->_result->setValue((*man->_operandA)(_row, j) + (*man->_operandB)(_row, j), _row, j);
+		man->setResultValue((*man->_operandA)(_row, j) + (*man->_operandB)(_row, j), _row, j);
 }

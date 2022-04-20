@@ -5,6 +5,7 @@
  - Shortcuts
 Resharper Goto Declaration: CTRL+Z,CTRL+N
 Resharper Clean Up code: CTRL+Z,CTRL+C
+Resharper Rename: CTRL+Z,CTRL+R
 
  - Alterar shortcuts: Options, Environments, Keyboard 
 
@@ -15,22 +16,39 @@ Resharper Clean Up code: CTRL+Z,CTRL+C
 
 											DOXYGEN
 
+ - Para fazer o VS criar comentários do tipo doxygen ir em Tools > Options > Text Editor > C/C++ > Code Style > General
+
  - Editar e gerenciar o arquivo Doxyfile por meio do doxyWizard (doxygen gui front end)
 
  - Abrir um arquivo já criado para ser utilizado como modelo 
  
- 
- 
+
  -----------------------------------------------------------------------
 
 									GOOGLE TEST
 
 - Quando se muda o compilador para intel, perde-se a referência para a biblioteca do google test
+
 - Há um subdiretório no diretório da solução chamado packages.
+
 - Caminhar por ele até achar o include do gtest. 
 Ex: c:\myWorks\programacao\myFem\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.4\build\native\include\
+
 - No properties do projeto, fazer referência a esse dieretório no contexto de "Debug". Veja se a compilação está setada para Debug.
 
+
+-----------------------------------------------------------------------
+
+								PROGRAMACAO THREAD
+
+- Uma thread é uma classe que realizará algum trabalho e por isso precisa receber uma função para ser criada
+
+- Há 3 esquemas para se criar uma thread no C++ especificando função: via Function Object, via Lambda e via Member Function. 
+  pp. 922-924 do Professional C++ 
+
+- O mutex é um sinalizador que é ligado e desligado. Um mutex ligado ou bloqueado só deixa que o liguem ou bloqueiem após 
+ser desligado ou desbloqueado. Se estiver bloqueado, a thread que pediu bloqueio vai esperar que a thread antecessora desbloqueie o mutex.
+Assim, garante-se que a parcela de código entre o bloqueio e o desbloqueio de mutex não será acessada simultaneamente por várias threads.
 
 
 
@@ -38,6 +56,10 @@ Ex: c:\myWorks\programacao\myFem\packages\Microsoft.googletest.v140.windesktop.m
 				
 								COMANDOS
 
-explicit: https://stackoverflow.com/questions/121162/what-does-the-explicit-keyword-mean
+- explicit: https://stackoverflow.com/questions/121162/what-does-the-explicit-keyword-mean
+Evita que o compilador faça conversões de tipos 
+
+- v.emplace_back(arg1,arg2.....): https://www.cplusplus.com/reference/vector/vector/emplace_back/
+cria um objeto to tipo que o vector v foi criando com os arg_i do seu contrutor e o coloca no final da fila
 
 

@@ -60,7 +60,7 @@
     <ClInclude Include="AbstractArray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="JobManagerProdMatrix.h">
+    <ClInclude Include="WorkManagerProdMatrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WorkerProdMatrix.h">
@@ -69,13 +69,13 @@
     <ClInclude Include="AbstractWorker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AbstractJobManager.h">
+    <ClInclude Include="AbstractWorkManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WorkerSumMatrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="JobManagerSumMatrix.h">
+    <ClInclude Include="WorkManagerSumMatrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -119,7 +119,7 @@
     <ClCompile Include="AbstractArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="JobManagerProdMatrix.cpp">
+    <ClCompile Include="WorkManagerProdMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="WorkerProdMatrix.cpp">
@@ -128,13 +128,13 @@
     <ClCompile Include="AbstractWorker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AbstractJobManager.cpp">
+    <ClCompile Include="AbstractWorkManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="WorkerSumMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="JobManagerSumMatrix.cpp">
+    <ClCompile Include="WorkManagerSumMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

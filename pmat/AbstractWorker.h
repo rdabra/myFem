@@ -1,19 +1,22 @@
 #pragma once
 
-class AbstractJobManager;
+class AbstractWorkManager;
 
+/**
+ * @brief A worker that performs tasks 
+*/
 class AbstractWorker
 {
 protected:
-	bool _endTask{false};
+	bool _endOfWork{false};
 	unsigned _identifier{0};
-	AbstractJobManager* _manager { nullptr };
-	virtual void makeTask() const =0;
+	AbstractWorkManager* _manager { nullptr };
+	virtual void performTask() const =0;
 
 
 public:
 	virtual ~AbstractWorker() = default;
 
 	void startTask() const;
-	void endTask();
+	void notifyEndOfWork();
 };

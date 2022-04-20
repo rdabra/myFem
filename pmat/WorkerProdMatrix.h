@@ -1,11 +1,14 @@
 #pragma once
 
 #include "AbstractWorker.h"
-#include "JobManagerProdMatrix.h"
+#include "WorkManagerProdMatrix.h"
 
 
-class JobManagerProdMatrix;
+class WorkManagerProdMatrix;
 
+/**
+ * @brief A worker that enables matrix multiplication
+*/
 class WorkerProdMatrix final : public AbstractWorker
 {
 private:
@@ -13,10 +16,10 @@ private:
 	unsigned _columnB{0};
 
 protected:
-	void makeTask() const override;
+	void performTask() const override;
 
 public:
-	WorkerProdMatrix(unsigned identifier, JobManagerProdMatrix& manager)
+	WorkerProdMatrix(unsigned identifier, WorkManagerProdMatrix& manager)
 	{
 		_identifier = identifier;
 		_manager = &manager;

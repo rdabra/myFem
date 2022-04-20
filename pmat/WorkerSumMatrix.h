@@ -1,23 +1,30 @@
 ﻿#pragma once
 #include "AbstractWorker.h"
-#include "JobManagerSumMatrix.h"
+#include "WorkManagerSumMatrix.h"
 
-class JobManagerSumMatrix;
+class WorkManagerSumMatrix;
 
+/**
+ * @brief A worker that enables matrix sum
+*/
 class WorkerSumMatrix : public AbstractWorker
 {
 private:
 	unsigned _row{0};
 
 protected:
-	void makeTask() const override;
+	void performTask() const override;
 
 public:
-	WorkerSumMatrix(unsigned identifier, JobManagerSumMatrix& manager)
+	WorkerSumMatrix(unsigned identifier, WorkManagerSumMatrix& manager)
 	{
 		_identifier = identifier;
 		_manager = &manager;
 	}
 
-	void setRow(unsigned row);
+	/**
+	 * @brief Specifies the rows to be summed
+	 * @param rowIndex Rows to be summed
+	*/
+	void setRow(unsigned rowIndex);
 };
