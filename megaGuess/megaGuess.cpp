@@ -8,7 +8,7 @@
 
 int main()
 {
-	Matrix mat{2467, 6, R"(C:\myWorks\mega\resultados.csv)"};
+	Matrix mat{2484, 6, R"(C:\myWorks\mega\resultados.csv)"};
 
 
 	WeightedMean w(&mat, 50000);

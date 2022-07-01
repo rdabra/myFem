@@ -63,3 +63,50 @@ Evita que o compilador faça conversões de tipos
 cria um objeto to tipo que o vector v foi criando com os arg_i do seu contrutor e o coloca no final da fila
 
 
+---------------------------------------------------------------------
+				
+								LINGUAGEM
+
+- Uma variável em C sempre tem um valor e um endereço(&). O valor de um endereço é obtido pelo símbolo *. 
+
+- O valor de uma variável "a" pode ser obtido invocando-se "a", que é uma abreviação para *(&a). 
+
+	int a;  -> variável a do tipo inteiro;
+	cout a;	-> imprimirá no console o valor da variável a;	
+
+- Variantes do comando atribuição: a seguir "valor de x" significa "valor da variável x" e "&x" significa "endereço da variável x"
+
+  int   a = 2;	-> O valor de a é um clone do objeto 2; 
+  int   b = a;	-> O valor de b é um clone do valor da variável a;
+  int  &c = b;	-> O &c é um clone do &b. Assim, o valor de c é o mesmo objeto do valor de b;  (int& diz que a atribuição será por endereço);	
+  
+  int* aa;	-> A variável aa é do tipo endereço para inteiro e seu valor é um lixo;
+  aa = &a;	-> O valor de aa agora é um clone do &a. Assim, o valor de aa aponta para o valor de a, ou seja, *aa e *(&a) são o mesmo objeto;  
+
+  int x = getSoma(2,3);		-> O valor de x é um clone do objeto retornado pela funcao ou por qualquer rvalue;				
+  int &&y = getSoma(2,3);	-> O valor de y é o objeto retornado pela função ou por qualquer rvalue;
+
+  Foo f{};
+  Foo&& e = std::move(f);	-> O objeto que era valor de f é transferido para valor de e. Assim, o valor de f passa a ser lixo;
+
+  const int a = 2;			-> O valor de a é um clone do objeto 2 e este valor não pode ser alterado; 
+  const int *b = &a;		-> O valor de b é um clone do &a e o estado do objeto apontado por esse clone;
+  int const *b = &a;		-> Idem
+  int * const c = &a;		-> O valor de c é um clone do &a e esse valor não pode ser alterado;
+  const int* const d= &a;	-> O valor de c é um clone do &a, e não são alteráveis nem esse valor e nem o estado do objeto apontado por esse valor.
+							   O comando const sempre é aplicado à esquerda, exceto quando ele começa a frase. Nesse exemplo, trata-se de um endereço
+							   const para um int const;
+
+  Produto p {"Abacaxi"};
+  Produto k {"limao"};
+  const Produto q = p;	    -> O valor de q é um clone do valor de p e o estado desse clone não pode ser alterado; 
+  q = k;					-> ATRIBUIÇÃO INVÁLIDA. Diferença de tipos: q é do tipo const Produto e k é do tipo Produto;
+  const Produto* qq = &p;	-> O valor de qq é um clone do &p e o estado do objeto apontado por esse clone não pode ser alterado via qq;     
+  Produto z {"Banana"};
+  qq = &z;					-> ATRIBUIÇÃO VÁLIDA: o compilador aceita conversão de um ponteiro de um não-const (&z) para um ponteiro de const (qq).
+							   O contrário não é possível. Além disso, lembrar que qq e &z são ponteiros não-const.
+  qq->setNome("limao");		-> COMANDO INVÁLIDO porque o estado do objeto apontado por qq não pode ser alterado;
+  z.setNome("limao");		-> COMANDO VÁLIDO. O objeto que é valor de z e apontado pelo valor de qq só é inalterável via qq;
+ 
+
+
