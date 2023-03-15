@@ -67,7 +67,7 @@ cria um objeto to tipo que o vector v foi criando com os arg_i do seu contrutor 
 				
 								LINGUAGEM
 
-- Uma variável em C sempre tem um valor e um endereço(&). O valor de um endereço é obtido pelo símbolo *. 
+- Uma variável em C é um label para uma tupla valor e endereço(&).   
 
 - O valor de uma variável "a" pode ser obtido invocando-se "a", que é uma abreviação para *(&a). 
 
@@ -90,10 +90,10 @@ cria um objeto to tipo que o vector v foi criando com os arg_i do seu contrutor 
   Foo&& e = std::move(f);	-> O objeto que era valor de f é transferido para valor de e. Assim, o valor de f passa a ser lixo;
 
   const int a = 2;			-> O valor de a é um clone do objeto 2 e este valor não pode ser alterado; 
-  const int *b = &a;		-> O valor de b é um clone do &a e o estado do objeto apontado por esse clone;
+  const int* b = &a;		-> O valor de b é um clone do &a e o estado do objeto apontado por esse clone não pode ser alterado;
   int const *b = &a;		-> Idem
   int * const c = &a;		-> O valor de c é um clone do &a e esse valor não pode ser alterado;
-  const int* const d= &a;	-> O valor de c é um clone do &a, e não são alteráveis nem esse valor e nem o estado do objeto apontado por esse valor.
+  const int* const d= &a;	-> O valor de d é um clone do &a, e não são alteráveis nem esse valor e nem o estado do objeto apontado por esse valor.
 							   O comando const sempre é aplicado à esquerda, exceto quando ele começa a frase. Nesse exemplo, trata-se de um endereço
 							   const para um int const;
 
@@ -109,4 +109,30 @@ cria um objeto to tipo que o vector v foi criando com os arg_i do seu contrutor 
   z.setNome("limao");		-> COMANDO VÁLIDO. O objeto que é valor de z e apontado pelo valor de qq só é inalterável via qq;
  
 
+  - Funções
+  
+  Fruit& Fruit::operator=(const Fruit& other)	-> Operador atribuição que copia o estado de other para o objeto (*this) e retorna (*this) para viabilizar 
+												múltiplas atribuições.
+  Fruit& Fruit::operator=(Fruit&& other)		-> Operador atribuição que move o estado de other para o objeto (*this) e retorna (*this) para viabilizar 
+												múltiplas atribuições. Recomenda-se que ao final o método destrua other.
 
+  double Fruit::getAverageWeight() const		-> O comando const indica que o método não altera o estado do objeto (*this)
+
+
+  - Herança
+
+  virtual int getTasteCode() const =0;			-> O comando virtual instrui o compilador para que a função seja chamada em tempo de execução, permitindo
+												que a função seja sobrescrita numa classe filha. O compilador acionará a implementação respectiva a cada 
+												função em tempo de execução. A parcela "=0" informa que a função não terá implementação e assim a classe
+												à qual ela pertence será virtual; não poderá ser instanciada.
+
+   virtual int getTasteCode() const override;	-> O comando override informa ao compilador que a função vai sobrescrever função virtual da classe pai;
+
+
+   - Construtor
+
+   Fruit() = default;			-> Informa explicitamente que a classe tem construção dafault, mesmo que haja outros construtores. Construção default 
+								é chamada quando a instanciação é do tipo Fruit f. Se a classe não possuir nenhum construtor definido, o compilador atribui 
+								implicitamente um default. Se houver pelo menos um construtor definido na classe, então o compilar não cria 
+								implicitamente construtor default. Na construção default da classe filha, o compilador chama também o construtor 
+								default do pai. Construção (default ou não) em classe filha sempre chama construção (default ou não) em classe pai.

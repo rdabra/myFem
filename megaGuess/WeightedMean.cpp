@@ -80,7 +80,7 @@ double WeightedMean::getMyNorm(const Vector& vec) const
 
 Vector WeightedMean::getRandomGuess() const
 {
-	const std::uniform_int_distribution<unsigned> dist(1, 60);
+	std::uniform_int_distribution<unsigned> dist(1, 60);
 
 	std::mt19937 rng(std::random_device{}());
 

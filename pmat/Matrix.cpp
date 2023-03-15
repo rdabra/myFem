@@ -577,7 +577,7 @@ unsigned Matrix::getNumberOfOccurrences(const double& value) const
  */
 unsigned Matrix::getNumberOfOccurrencesInRow(const unsigned rowIndex, const double& value) const
 {
-	if (rowIndex >= this->getRowSize()) throw std::logic_error(messages::INDEX_OUT);
+	if (rowIndex >= this->getRowSize()) throw std::logic_error( messages::INDEX_OUT );
 
 	unsigned res{0};
 

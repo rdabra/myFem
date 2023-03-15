@@ -6,7 +6,7 @@
 
 /**
  * @brief Manages a work to be done by a group of workers
- * @detail A work is a set of equal tasks
+ * @details A work is a set of equal tasks
 */
 class AbstractWorkManager
 {
